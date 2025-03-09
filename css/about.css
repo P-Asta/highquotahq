@@ -1,0 +1,142 @@
+/* General styling for all sections in the About page */
+.content {
+    max-width: 1000px;
+    margin-top: 50px;
+    border-radius: 20px;
+    padding: 20px;
+    background-color: #12121294;
+    color: #E0E0E0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .content:hover {
+    transform: scale(1.005);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+  }
+  
+  /* Section headers */
+  .content h1 {
+    text-align: center;
+    font-size: 3rem;
+    color: #E0E0E0;
+    margin-bottom: 20px;
+  }
+  
+  /* Section cards for team, contact, etc. */
+  #team-section, #contact-section, #discord-section, #donation-section {
+    background-color: #1a1a1ab4;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  #team-section h2, #contact-section h2, #discord-section h2, #donation-section h2 {
+    font-size: 2rem;
+    color: #E0E0E0;
+    margin-bottom: 30px;
+  }
+  
+  #team-section h3 {
+    font-size: 1.5rem;
+    color: #E0E0E0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+/* Styling for team members' profile pictures */
+.team-member-profile-pic {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    object-fit: cover;
+  }
+  
+  /* Adjusting the layout for team members */
+  #admins ul li, #verifiers ul li, #modded-verifiers ul li, #site-developers ul li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  #admins ul li a, #verifiers ul li a, #modded-verifiers ul li a, #site-developers ul li a {
+    color: #ff2222;
+    font-size: 1.2rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+  
+  #admins ul li a:hover, #verifiers ul li a:hover, #modded-verifiers ul li a:hover, #site-developers ul li a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Contact, Discord, Donation section styling */
+  #contact-section p, #discord-section p, #donation-section p {
+    font-size: 1rem;
+    color: #B0B0B0;
+    margin-bottom: 15px;
+  }
+  
+  #discord-section a, #donation-section a {
+    color: #E0E0E0;
+    font-size: 1.2rem;
+    text-decoration: none;
+  }
+  
+  #discord-section a:hover, #donation-section a:hover {
+    text-decoration: underline;
+  }
+
+  /* Image styling for the sections */
+.section-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+  }
+  
+  .section-image:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+  }
+  
+  /* Responsive Design for Mobile */
+  @media (max-width: 768px) {
+    .content {
+      padding: 10px;
+    }
+  
+    .content h1 {
+      font-size: 2.5rem;
+    }
+  
+    #team-section h2, #contact-section h2, #discord-section h2, #donation-section h2 {
+      font-size: 1.8rem;
+    }
+  
+    #team-section h3 {
+      font-size: 1.3rem;
+    }
+  
+    #admins ul li, #verifiers ul li, #modded-verifiers ul li, #site-developers ul li {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    #admins ul li img, #verifiers ul li img, #modded-verifiers ul li img, #site-developers ul li img {
+      margin-bottom: 10px;
+    }
+  
+    #admins ul li a, #verifiers ul li a, #modded-verifiers ul li a, #site-developers ul li a {
+      font-size: 1rem;
+    }
+
+    .section-image {
+        width: 80px;
+        height: 80px;
+      }
+  }
+  

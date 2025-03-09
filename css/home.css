@@ -1,0 +1,39 @@
+/* Homepage container */
+#homepage-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    color: white;
+    padding: 20px;
+    position: relative;
+    margin-top: 80px;  /* Push content down to avoid overlap with navbar */
+    height: calc(100vh - 80px);  /* Adjust height to account for navbar */
+}
+
+/* Central Card */
+.central-card {
+    background-color: #4444447e;
+    padding: 30px;
+    border-radius: 10px;
+    width: 450px;
+    text-align: center;
+    margin-bottom: 30px;
+    z-index: 2;  /* Ensures the central card stays above the surrounding cards */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add transition for hover effect */
+}
+
+.central-card h1 {
+    margin-bottom: 15px;
+    font-size: 28px;
+}
+
+.central-card p {
+    font-size: 18px;
+}
+
+.central-card:hover {
+    transform: scale(1.05); /* Slightly increase size */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5); /* Stronger shadow on hover */
+}

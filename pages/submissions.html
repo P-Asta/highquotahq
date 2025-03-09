@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submissions</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/submissions.css">
+</head>
+<body>
+  <div id="navbar-placeholder"></div>
+
+  <div class="submission-form-container">
+    <h1>Submit Your Run</h1>
+    <form id="runSubmissionForm">
+      <label for="leaderboardType">Leaderboard Type</label>
+      <select id="leaderboardType" name="leaderboardType">
+        <option value="leaderboards_hq" selected>HQ Leaderboard</option>
+        <option value="leaderboards_sdc">SDC Leaderboard</option>
+        <option value="leaderboards_smhq">SMHQ Leaderboard</option>
+      </select>
+    
+<!-- HQ Fields -->
+<div id="hqFields">
+  <label for="quotaAmount">Quota Amount</label>
+  <input type="number" id="quotaAmount" name="quotaAmount" placeholder="Enter the quota amount">
+
+  <label for="quotaFulfilled">Quota Fulfilled</label>
+  <input type="number" id="quotaFulfilled" name="quotaFulfilled" placeholder="Enter quota fulfilled">
+
+  <label for="quotaReached">Quota Reached</label>
+  <input type="number" id="quotaReached" name="quotaReached" placeholder="Enter quota reached">
+
+  <label for="totalScrap">Total Scrap</label>
+  <input type="number" id="totalScrap" name="totalScrap" placeholder="Enter total scrap collected">
+</div>
+
+<!-- SDC Fields -->
+<div id="sdcFields" style="display:none;">
+  <label for="moon">Moon</label>
+  <input type="text" id="moon" name="moon" placeholder="Enter moon name">
+
+  <label for="scrapType">Scrap Type</label>
+  <input type="text" id="scrapType" name="scrapType" placeholder="Enter scrap type">
+
+  <label for="totalScrapSDC">Total Scrap</label>
+  <input type="number" id="totalScrapSDC" name="totalScrapSDC" placeholder="Enter total scrap collected">
+
+  <label for="equipment">Equipment</label>
+  <textarea id="equipment" name="equipment" placeholder="Enter equipment, separated by commas"></textarea>
+</div>
+
+<!-- SMHQ Fields -->
+<div id="smhqFields" style="display:none;">
+  <label for="moonSMHQ">Moon</label>
+  <input type="text" id="moonSMHQ" name="moonSMHQ" placeholder="Enter moon name">
+
+  <label for="quotaAmountSMHQ">Quota Amount</label>
+  <input type="number" id="quotaAmountSMHQ" name="quotaAmountSMHQ" placeholder="Enter the quota amount">
+
+  <label for="quotaFulfilledSMHQ">Quota Fulfilled</label>
+  <input type="number" id="quotaFulfilledSMHQ" name="quotaFulfilledSMHQ" placeholder="Enter quota fulfilled">
+
+  <label for="quotaReachedSMHQ">Quota Reached</label>
+  <input type="number" id="quotaReachedSMHQ" name="quotaReachedSMHQ" placeholder="Enter quota reached">
+
+  <label for="totalScrapSMHQ">Total Scrap</label>
+  <input type="number" id="totalScrapSMHQ" name="totalScrapSMHQ" placeholder="Enter total scrap collected">
+</div>
+
+    
+      <!-- Date Input -->
+      <label for="date">Date</label>
+      <input type="date" id="date" name="date" required>
+    
+      <!-- Player Entries (4 Optional Text Boxes) -->
+      <label for="players">Player Names</label>
+      <input type="text" id="player1" name="player1" placeholder="Player 1">
+      <input type="text" id="player2" name="player2" placeholder="Player 2">
+      <input type="text" id="player3" name="player3" placeholder="Player 3">
+      <input type="text" id="player4" name="player4" placeholder="Player 4">
+    
+      <!-- Video Links for Each Player -->
+      <label for="videos">Video Links</label>
+      <div id="videoFields">
+        <label for="videos1">Videos for Player 1</label>
+        <textarea id="videos1" name="videos1" placeholder="Enter video links for Player 1, separated by commas"></textarea>
+    
+        <label for="videos2">Videos for Player 2</label>
+        <textarea id="videos2" name="videos2" placeholder="Enter video links for Player 2, separated by commas"></textarea>
+    
+        <label for="videos3">Videos for Player 3</label>
+        <textarea id="videos3" name="videos3" placeholder="Enter video links for Player 3, separated by commas"></textarea>
+    
+        <label for="videos4">Videos for Player 4</label>
+        <textarea id="videos4" name="videos4" placeholder="Enter video links for Player 4, separated by commas"></textarea>
+      </div>
+    
+      <label for="version">Version</label>
+      <select id="version" name="version" required>
+        <option value="" disabled selected>Select a version</option>
+        <option value="v40">v40</option>
+        <option value="v45">v45</option>
+        <option value="v49">v49</option>
+        <option value="v50">v50</option>
+        <option value="v56">v56</option>
+        <option value="v62">v62</option>
+        <option value="v64">v64</option>
+        <option value="v68">v68</option>
+      </select>
+    
+      <button type="submit">Submit Run</button>
+    </form>
+  </div>
+
+  <script type="module" src="../js/submissions.js"></script>
+  <script type="module" src="../js/firebase.js"></script>
+  <script type="module" src="../js/auth.js"></script>
+</body>
+</html>

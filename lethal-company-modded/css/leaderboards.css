@@ -1,0 +1,464 @@
+@font-face {
+  font-family: 'systematic_jcool';
+  src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
+       url('/assets/fonts/9systema-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+#filters {
+    margin-bottom: 20px;
+  }
+  
+  .collection-btn,
+  .filter-btn {
+    font-family: 'systematic_jcool';
+    src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
+         url('/assets/fonts/9systema-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    padding: 10px 15px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+  }
+  
+  .collection-btn.active,
+  .filter-btn.active {
+    background-color: #ff6f61;
+    color: white;
+  }
+  
+  .filter-section {
+    display: none;
+  }
+  
+  .filter-section.active {
+    display: block;
+  }
+  
+  #leaderboard {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .run {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  /* Collection Buttons */
+#collection-filters {
+    margin-bottom: 1rem;
+  }
+  
+  .collection-btn {
+    margin-right: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* Filter Categories */
+  .filter-category {
+    margin-bottom: 1rem;
+  }
+  
+  .filter-category h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    color: #333;
+  }
+  
+  /* Filter Buttons */
+  .filter-btn {
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #eee;
+    color: #333;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .filter-btn.active {
+    background-color: #ff5733;
+    color: white;
+  }
+  
+  /* Overall page content wrapper */
+.content {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #1a1a1aa2;
+    color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    position: relative; /* Ensure relative positioning for the details panel */
+    overflow: hidden; /* Prevent any overflow beyond the container */
+  }
+
+  .content:hover {
+    transform: scale(1.01); /* Slightly larger on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Darker shadow for hover effect */
+  }
+  
+  /* Leaderboard Header */
+  .content h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #ff3e3e;
+  }
+  
+  /* Filters section */
+  #filters {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #2a2a2abb;
+    border-radius: 8px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
+  }
+  
+  /* Collection buttons */
+  #collection-filters {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .collection-btn {
+    padding: 10px 20px;
+    margin: 5px;
+    background-color: #333;
+    color: white;
+    border: 2px solid #444;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .collection-btn:hover,
+  .collection-btn.active {
+    background-color: #ff3e3e;
+    border-color: #ff5757;
+    color: #fff;
+  }
+  
+  /* Filter categories */
+  .filter-category {
+    margin-bottom: 20px;
+  }
+  
+  .filter-category h3 {
+    font-family: 'systematic_jcool';
+    src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
+         url('/assets/fonts/9systema-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-size: 1.5rem;
+    color: #ff3e3e;
+    margin-bottom: 10px;
+  }
+  
+  .filter-btn {
+    font-family: 'systematic_jcool';
+    src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
+         url('/assets/fonts/9systema-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    padding: 8px 15px;
+    margin: 5px;
+    background-color: #444;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .filter-btn:hover,
+  .filter-btn.active {
+    background-color: #ff3e3e;
+    border-color: #ff5757;
+  }
+  
+  /* Leaderboard container */
+  #leaderboard {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #2a2a2a;
+    border-radius: 8px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
+  }
+  
+  .run {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #333;
+    border: 1px solid #444;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+  }
+  
+  .run:hover {
+    background-color: #444;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .content {
+      padding: 15px;
+    }
+  
+    .collection-btn,
+    .filter-btn {
+      padding: 8px 10px;
+      font-family: 'systematic_jcool';
+      src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
+           url('/assets/fonts/9systema-webfont.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+      font-size: 0.9rem;
+    }
+  
+    .run {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+  
+/* Leaderboard container */
+#leaderboard {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    background-color: #33333351; /* Dark background for the leaderboard */
+    border-radius: 10px;
+  }
+  
+  /* Style for each run entry */
+  .run-entry {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    margin: 10px 0;
+    background-color: rgba(45, 45, 45, 0.9); /* Dark transparent background */
+    border: 1px solid #555; /* Darker border */
+    border-radius: 8px;
+    color: #fff; /* White text */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  /* Hover effect for run entries */
+  .run-entry:hover {
+    transform: scale(1.002); /* Slightly larger on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Darker shadow for hover effect */
+  }
+  
+  /* Style for players information */
+  .run-players {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #f0f0f0; /* Light grey text */
+    margin-bottom: 8px;
+    text-align: left; /* Left align text */
+  }
+  
+  /* Style for version information */
+  .run-version {
+    font-size: 1rem;
+    color: #ddd; /* Light grey for version */
+    margin-top: 5px;
+    text-align: left; /* Left align text */
+  }
+
+  .run-value {
+    font-size: 2rem;
+    color: #ddd; /* Light grey for version */
+    text-align: center;
+    margin-bottom: 0px;
+  }
+
+/* Position Styling */
+.run-position {
+  font-size: 2em;
+  font-weight: bold;
+  margin-right: 15px;
+  margin-bottom: 5px;
+  width: 50px; /* Consistent spacing for all positions */
+  text-align: left;
+}
+
+/* Special Styling for Top 3 */
+.run-position.gold {
+  color: gold;
+}
+
+.run-position.silver {
+  color: silver;
+}
+
+.run-position.bronze {
+  color: #cd7f32; /* Bronze color */
+}
+
+
+/* Leaderboard Section */
+#leaderboard {
+  margin-top: 20px;
+}
+
+/* Button to view details */
+.view-details-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #fff;
+  padding: 0 10px;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+
+}
+
+/* Apply a fade effect to #leaderboard and #filters */
+#leaderboard, #filters {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#leaderboard.hidden, #filters.hidden {
+  opacity: 0;
+  transform: translateY(-20px); /* Move the elements upwards */
+  pointer-events: none; /* Disable interaction with hidden elements */
+}
+
+#details-panel {
+  display: none; /* Initially hidden */
+  opacity: 0;
+  transition: opacity 0.5s ease; /* Smooth transition */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20px; /* Matching content padding */
+  background-color: #1a1a1aa2; /* Optional background */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 999; /* Ensure it appears above the leaderboard */
+  color: white;
+  overflow-y: auto;
+  pointer-events: none; /* Prevent interaction when not visible */
+}
+
+
+#details-panel.active {
+  display: block; /* Make the panel visible */
+  opacity: 1; /* Fade in */
+  pointer-events: auto; /* Enable interactions when visible */
+}
+
+
+/* Optionally, you can add a scaling effect or any other transition you prefer */
+#details-panel.active {
+  transform: scale(1);
+  transition: all 0.5s ease; /* Smooth transition for scaling */
+}
+
+/* Section Headings */
+.run-details h2, .run-details h3 {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 12px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 5px;
+}
+
+/* Stats Section */
+.stats-section {
+  margin-top: 15px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.06); /* Slight contrast */
+  border-radius: 8px;
+}
+
+.stats-section p {
+  margin: 12px 0;
+  font-size: 20px;
+}
+
+.stats-section strong {
+  color: #ff2f00;
+}
+
+/* Video Section */
+.video-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+  justify-content: center;
+}
+
+.video-card {
+  background: rgba(255, 255, 255, 0.051);
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 200px;
+}
+
+.video-links {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.video-thumbnail {
+  width: 120px;
+  height: 90px;
+  border-radius: 5px;
+  transition: transform 0.3s ease;
+}
+
+.video-thumbnail:hover {
+  transform: scale(1.05);
+}
+
+/* Close Button */
+button.close-btn {
+  font-size: 20px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: none;
+  padding: 8px;
+  transition: color 0.3s ease;
+}
+
+button.close-btn:hover {
+  color: #ff5555;
+}

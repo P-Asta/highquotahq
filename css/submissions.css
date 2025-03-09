@@ -1,0 +1,153 @@
+/* General Page Styling (unchanged) */
+body {
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.submission-form-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #1e1e1e9b;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.submission-form-container:hover {
+  transform: scale(1.006);
+  box-shadow: 0px 12px 14px rgba(0, 0, 0, 0.4);
+}
+
+h1 {
+  text-align: center;
+  color: #ff5722;
+  margin-bottom: 20px;
+}
+
+/* Form Styling */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Add spacing between fields */
+}
+
+label {
+  font-size: 18px;
+  color: #e0e0e0;
+  margin-bottom: 5px;
+}
+
+/* Inputs and Textareas */
+input,
+textarea,
+select {
+  display: block;
+  width: 100%;
+  background-color: #2c2c2c98;
+  color: #ffffff;
+  border: 1px solid #444444;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #b0b0b0;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #ff5722;
+  outline: none;
+  box-shadow: 0 0 5px rgba(255, 87, 34, 0.5);
+}
+
+/* Video Link Fields */
+textarea#videos1,
+textarea#videos2,
+textarea#videos3,
+textarea#videos4 {
+  margin-bottom: 15px; /* Ensure spacing between textareas */
+}
+
+/* Field Groups (HQ, SDC, SMHQ) */
+#hqFields,
+#sdcFields,
+#smhqFields {
+  margin-bottom: 20px;
+}
+
+/* Button Styling */
+button[type="submit"] {
+  background-color: #ff5722;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #e64a19;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .submission-form-container {
+    padding: 15px;
+  }
+
+  input,
+  textarea,
+  select {
+    font-size: 13px;
+  }
+
+  button[type="submit"] {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+/* Make all text bold */
+body,
+label,
+input,
+textarea,
+select,
+button {
+  font-weight: bold;
+}
+
+/* Placeholder text styling */
+input::placeholder,
+textarea::placeholder {
+  color: #b0b0b0; /* Optional: Slightly lighter color for placeholder */
+  font-weight: bold; /* Match the text styling */
+}
+
+/* Ensure input fields remain visually appealing */
+input,
+textarea {
+  padding: 10px;
+  background-color: #2c2c2ca2;
+  color: #ffffff;
+  border: 1px solid #444444;
+  border-radius: 5px;
+  box-sizing: border-box;
+  width: 100%; /* Full-width alignment */
+  margin-bottom: 15px; /* Spacing between fields */
+}

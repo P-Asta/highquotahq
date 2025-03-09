@@ -1,0 +1,267 @@
+/* GLOBAL STYLES */
+
+
+
+@font-face {
+    font-family: 'systematic_jcool';
+    src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
+         url('/assets/fonts/9systema-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    color: white; /* White text */
+    font-family: 'systematic_jcool';
+    src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
+         url('/assets/fonts/9systema-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    margin: 0;
+    padding: 0;
+    position: relative; /* Required for the pseudo-element */
+}
+
+body::before {
+    content: "";
+    position: fixed; /* Fixes the background in place */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* Places the background behind the content */
+    background: url('/assets/factorybg.png') no-repeat center center;
+    background-size: cover;
+    animation: zoomBackground 20s infinite alternate ease-in-out;
+    pointer-events: none; /* Ensures background doesn't interfere with page interaction */
+}
+
+/* Add an animation for zooming in and out */
+@keyframes zoomBackground {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Links and buttons */
+a {
+    color: white; /* White color for links */
+    text-decoration: none; /* No underline on links */
+}
+
+a:hover {
+    color: #ff784e; /* Light orange hover effect */
+}
+
+/* Ensure the rest of the page respects dark mode */
+h1, h2, h3, h4, h5, h6, p {
+    color: white; /* White text for headers and paragraphs */
+}
+
+/* Add dark theme styles for other elements if needed */
+footer {
+    background-color: #1f1f1f; /* Dark footer */
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Page content container */
+.content {
+    max-width: 1200px;  /* Max width to keep content from stretching too wide */
+    margin: 0 auto;  /* Center the content horizontally */
+    padding: 20px;  /* Optional: Add some padding for spacing */
+    text-align: center; /* Center text inside content if needed */
+  }
+
+/* Navbar container */
+.navbar {
+    background: linear-gradient(to bottom, rgba(24, 24, 24, 0.726), rgba(54, 54, 54, 0.721)); /* Gradient */
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    font-family: 'systematic_jcool';
+    src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
+         url('/assets/fonts/9systema-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    border-radius: 10px;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.navbar:hover {
+    box-shadow: 0px 12px 14px rgba(0, 0, 0, 0.4);
+}
+
+
+/* Navbar buttons container (left side) */
+.navbar ul {
+    list-style-type: none;
+    margin-left: 20px;
+    padding: 0;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+/* Navbar buttons (move login/logout to the right) */
+.navbar ul li {
+    display: inline;
+}
+
+/* Move login/logout buttons to the right */
+.navbar .login-logout-buttons {
+    margin-left: auto; /* Pushes the login/logout buttons to the right */
+}
+
+/* Buttons */
+.navbar ul li button {
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    font-family: inherit;
+    font-weight: bold;
+    border-radius: 20px;
+    background-color: transparent;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+}
+
+/* Hover effects */
+.navbar ul li button:hover {
+    background-color: #f0f0f0ad;
+    transform: scale(1.1);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Active button */
+.navbar ul li button.active {
+    background-color: #d84315;
+    box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* General button hover and active effects */
+.navbar button:hover {
+    background-color: #8f8f8f;
+    transform: scale(1.1);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.navbar button:active {
+    background-color: #999999;
+    box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Text links (in navbar) */
+.navbar a {
+    color: white; /* White text for links */
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    color: #bbbbbbcc; /* Light orange hover effect */
+}
+
+/* Move login/logout buttons to the right */
+.navbar .login-logout-buttons {
+    margin-left: auto; /* Pushes the login/logout buttons to the right */
+    display: flex; /* Ensures buttons align horizontally */
+    gap: 15px; /* Adds spacing between the buttons */
+}
+
+/* Ensure navbar stays cohesive */
+.navbar ul {
+    flex: 1; /* Allows the list to take up the remaining space */
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+/* The dropdown container */
+.dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+/* Dropdown button */
+.dropdown-button {
+    cursor: pointer;
+    background-color: #bfbfbf;
+    border: none;
+    padding: 10px;
+    border-radius: 15px;
+  }
+
+.dropdown-button:hover {
+    background-color: #eaeaeaad;
+    transform: scale(1.05);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #1f1f1f; /* Dark background for dropdown */
+    list-style: none;
+    padding: 5px;
+    margin: 0;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    visibility: hidden; /* Hidden by default */
+    opacity: 0; /* Make it fully transparent */
+    transition: visibility 0s, opacity 0.3s ease; /* Smooth transition for showing/hiding */
+    z-index: 10;
+    display: flex; /* Use flexbox to align items vertically */
+    flex-direction: column; /* Ensure items are stacked vertically */
+}
+
+/* Dropdown menu items */
+.dropdown-menu li {
+    padding: 10px; /* Add padding for clickable space */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    display: block; /* Ensures items are block-level */
+}
+
+.dropdown-menu li:hover {
+    background-color: #7f7f7f; /* Highlight on hover */
+}
+
+.dropdown-menu img {
+    height: 40px; /* Uniform logo size */
+    width: auto;
+}
+
+/* Dropdown logo styling */
+.dropdown-logo {
+    display: block;
+    margin: auto;
+}
+
+/* Display the dropdown when active */
+.dropdown.active .dropdown-menu {
+    visibility: visible; /* Show the dropdown */
+    opacity: 1; /* Make it visible */
+}
+
+/* Dropdown logo in button */
+.dropdown .logo {
+    height: 40px;
+    width: auto;
+}

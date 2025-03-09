@@ -22,6 +22,8 @@ export function loadNavbar(onLoadedCallback) {
         // Navigation button event listeners
         if (homeButton) homeButton.addEventListener('click', () => window.location.href = '/');
         if (aboutButton) aboutButton.addEventListener('click', () => window.location.href = '/pages/about.html');
+        if (homeButton) homeButton.addEventListener('click', () => window.location.href = '/highquotahq');
+        if (aboutButton) aboutButton.addEventListener('click', () => window.location.href = '/highquotahq/pages/about.html');
 
         // Dropdown handling
         const dropdown = document.querySelector('.dropdown');
@@ -42,6 +44,7 @@ export function loadNavbar(onLoadedCallback) {
               // Check if the selected item is the Home button
               if (selectedItem.getAttribute('data-home')) {
                 window.location.href = '/index.html'; // Navigate to homepage
+                window.location.href = '/highquotahq/index.html'; // Navigate to homepage
                 return;
               }
 
@@ -52,6 +55,7 @@ export function loadNavbar(onLoadedCallback) {
               const gameRoute = selectedItem.getAttribute('data-game');
               if (gameRoute) {
                 window.location.href = `/${gameRoute}/index.html`; // Adjust paths as needed
+                window.location.href = `/highquotahq/${gameRoute}/index.html`; // Adjust paths as needed
               }
 
               // Collapse the dropdown
@@ -68,6 +72,7 @@ export function loadNavbar(onLoadedCallback) {
             if (profileButton) {
               profileButton.style.display = 'block';
               profileButton.addEventListener('click', () => window.location.href = '/pages/profile.html?username=' + {userId});
+              profileButton.addEventListener('click', () => window.location.href = '/highquotahq/pages/profile.html?username=' + {userId});
             }
 
             // Fetch user roles from Firestore
@@ -83,6 +88,7 @@ export function loadNavbar(onLoadedCallback) {
                 if (profileButton) {
                   profileButton.style.display = 'block';
                   profileButton.addEventListener('click', () => {window.location.href = '/pages/profile.html?username=' + encodeURIComponent(username);});
+                  profileButton.addEventListener('click', () => {window.location.href = '/highquotahq/pages/profile.html?username=' + encodeURIComponent(username);});
                 }
 
                 // Show admin button if the user is an admin
@@ -90,6 +96,7 @@ export function loadNavbar(onLoadedCallback) {
                   if (adminButton) {
                     adminButton.style.display = 'block';
                     adminButton.addEventListener('click', () => window.location.href = '/pages/admin.html');
+                    adminButton.addEventListener('click', () => window.location.href = '/highquotahq/pages/admin.html');
                   }
                 }
 

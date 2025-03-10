@@ -86,7 +86,6 @@ export function loadNavbar(onLoadedCallback) {
                 }
 
                 // Show admin button if the user is an admin
-                if (roles.includes("admin")) {
                 if (roles.includes("admin") || roles.includes("verifier") || roles.includes("modded-verifier") || roles.includes("site-developer")) {
                   if (adminButton) {
                     adminButton.style.display = 'block';

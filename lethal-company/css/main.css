@@ -254,3 +254,66 @@ footer {
     height: 40px;
     width: auto;
 }
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navbar ul {
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+    }
+
+    .navbar ul li {
+        margin: 5px 0;
+    }
+
+    .navbar .login-logout-buttons {
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .dropdown {
+        transform: translateX(1.5%);
+        position: relative; /* Ensure positioning is relative to the parent */
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center everything */
+        justify-content: center; /* Center vertically if needed */
+        width: 100%;
+        text-align: center;
+    }
+
+    .dropdown .dropdown-menu {
+        position: static; /* Remove absolute positioning */
+        display: none; /* Hide dropdown by default */
+        visibility: visible; /* Override visibility */
+        opacity: 1; /* Override opacity */
+        box-shadow: none; /* Remove unnecessary shadows */
+        border-radius: 0; /* Square edges for a cleaner mobile look */
+        width: 90%; /* Make sure it doesn’t stretch too much */
+        max-width: 300px; /* Optional: Prevent it from being too wide */
+        margin: 0 auto; /* Ensures proper centering */
+    }
+
+    .dropdown.active .dropdown-menu {
+        display: flex; /* Show dropdown when active */
+    }
+
+    .dropdown-menu li {
+        padding: 15px; /* Increase tap target size */
+        font-size: 16px; /* Make text more readable */
+    }
+
+    /* Ensure dropdown button is large enough */
+    .dropdown .dropdown-toggle {
+        width: 100%;
+        padding: 12px;
+        font-size: 18px;
+    }
+}

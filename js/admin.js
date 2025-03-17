@@ -345,7 +345,6 @@ export function fetchUnverifiedRuns(role) {
                     const players = run.players || ['Unknown Player'];
                     const date = run.date ? new Date(run.date.seconds * 1000).toLocaleString() : 'Unknown Date';
                     const version = run.version || 'Unknown Version';
-                    const videos = run.videos || {};  // Assuming videos is a map
                     const videos = run.videos || {};
 
                     const runItem = document.createElement('div');

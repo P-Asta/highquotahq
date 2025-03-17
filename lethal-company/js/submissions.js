@@ -46,6 +46,10 @@ document.getElementById("leaderboardType").addEventListener("change", (event) =>
         videos[player] = videosInput.split(",").map(v => v.trim()); // Split videos by commas
       }
     });
+
+    const logs = document.getElementById("logs").value;
+
+    const comments = document.getElementById("comments").value;
   
     let runData = {
       date: new Date(date),
@@ -53,6 +57,8 @@ document.getElementById("leaderboardType").addEventListener("change", (event) =>
       version,
       videos,
       verified: false,
+      logs,
+      comments,
     };
   
     // Add leaderboard-specific fields

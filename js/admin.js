@@ -232,6 +232,9 @@ const banUser = async () => {
         return;
     }
 
+    const confirmBan = window.confirm(`Are you sure you want to ban ${username}?`);
+    if (!confirmBan) return;
+
     try {
         const usersCollectionRef = collection(db, 'users');
         const q = query(usersCollectionRef, where('username', '==', username));
@@ -343,6 +346,7 @@ export function fetchUnverifiedRuns(role) {
                     const date = run.date ? new Date(run.date.seconds * 1000).toLocaleString() : 'Unknown Date';
                     const version = run.version || 'Unknown Version';
                     const videos = run.videos || {};  // Assuming videos is a map
+                    const videos = run.videos || {};
 
                     const runItem = document.createElement('div');
                     runItem.classList.add('run-item');
@@ -500,6 +504,8 @@ export function showRunDetails(runId, collectionName, run, role) {
     const version = run.version || 'Unknown Version';
     const unrestricted = run.unrestricted !== undefined ? run.unrestricted : false;
     const videos = run.videos || {};
+    const logs = run.logs || 'Unknown Logs';
+    const comments = run.comments || 'No Comments';
 
     let additionalInfo = '';
     let equipmentField = '';
@@ -595,6 +601,8 @@ export function showRunDetails(runId, collectionName, run, role) {
             </select>
         </label><br>
         <label>Claimed By: <input type="text" value="${claimedBy}" disabled data-field="claimedBy"></label><br>
+        <label>Logs: <input type="text" value="${logs}" disabled data-field="logs"></label><br>
+        <label>Comments: <input type="text" value="${comments}" disabled data-field="comments"></label><br>
         ${additionalInfo}
         <h5>Video Links:</h5>
     `;
@@ -746,6 +754,9 @@ async function verifyRun(runId, collectionName, role) {
     const username = await getUsername(user.uid);
     if (!username) return;
 
+    const confirmVerify = window.confirm(`Are you sure you want to verify this run?`);
+    if (!confirmVerify) return;
+
     const runRef = doc(db, collectionName, runId);
     const newRunSnap = await getDoc(runRef);
 
@@ -795,6 +806,10 @@ async function verifyRun(runId, collectionName, role) {
  
 // Reject the run by deleting it from Firestore in the correct collection
 export function rejectRun(runId, collectionName, role) {
+
+    const confirmReject = window.confirm(`Are you sure you want to reject this run?`);
+    if (!confirmReject) return;
+
     const runRef = doc(db, collectionName, runId);
     deleteDoc(runRef)
     .then(() => {

@@ -59,11 +59,10 @@ authForm.addEventListener('submit', (e) => {
 });
 
 async function register(email, username, password) {
-  const usernameLower = username.trim().toLowerCase(); // Normalize case
+  const usernameLower = username.trim().toLowerCase(); // Lowercase for searching
 
-  // Check if the username already exists in Firestore
   const usersRef = collection(db, 'users');
-  const q = query(usersRef, where('username', '==', usernameLower));
+  const q = query(usersRef, where('usernameLower', '==', usernameLower));
 
   try {
       const querySnapshot = await getDocs(q);
@@ -73,16 +72,17 @@ async function register(email, username, password) {
           return;
       }
 
-      // Create user with actual email
+      // Create user in Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
       const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
 
-      // Store username in Firestore
+      // Store username in Firestore with both versions
       await setDoc(doc(db, 'users', user.uid), {
-          email: email, // Store email for reference
-          username: usernameLower,
+          email: email,
+          username: username, // Keep capitalization for display
+          usernameLower: usernameLower, // Use this for searching
           createdAt: currentDate,
       });
 
@@ -102,10 +102,10 @@ async function register(email, username, password) {
 async function login(identifier, password) {
   let email = identifier; // Assume it's an email
 
-  // Check if identifier is a username (does not contain "@")
+  // If the user entered a username, get the corresponding email
   if (!identifier.includes("@")) {
       const usersRef = collection(db, 'users');
-      const q = query(usersRef, where('username', '==', identifier.toLowerCase()));
+      const q = query(usersRef, where('usernameLower', '==', identifier.trim().toLowerCase()));
 
       try {
           const querySnapshot = await getDocs(q);

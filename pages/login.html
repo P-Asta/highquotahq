@@ -21,8 +21,10 @@
     <div class="card">
       <h1 id="auth-title">Login</h1> <!-- Initial title for login -->
       <form id="auth-form">
+        <input type="text" id="email" placeholder="Email" required>
         <input type="text" id="username" placeholder="Username" required>
         <input type="password" id="password" placeholder="Password" required>
+        <a href="javascript:void(0);" id="forgot-password" style="display: none;">Forgot password?</a>
         <button type="submit" id="submit-button">Login</button> <!-- Default to Login -->
         <!-- This is the static text container -->
         <p id="toggle-text">Don't have an account?</p>

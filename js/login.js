@@ -1,5 +1,5 @@
 import { doc, getDoc, setDoc, collection, query, getDocs, where } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
-import { onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+import { onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
 import { auth, db } from './firebase.js';
 import { loadNavbar } from './utils.js';
 import { handleAuthButtons } from './auth.js';
@@ -9,6 +9,8 @@ const submitButton = document.getElementById('submit-button');
 const toggleLink = document.getElementById('toggle-login');
 const authTitle = document.getElementById('auth-title'); // For the title of the form
 const toggleText = document.getElementById('toggle-text'); // For the static text part
+const emailField = document.getElementById('email');
+const forgotPasswordLink = document.getElementById('forgot-password');
 
 let isLogin = true; // Track whether the user is in login or register mode
 
@@ -19,18 +21,23 @@ toggleLink.addEventListener('click', () => {
 });
 
 function updateForm() {
-  const buttonText = isLogin ? 'Login' : 'Register';
-  const linkText = isLogin ? 'Register here' : 'Login here';
-  const text = isLogin 
-    ? "Don't have an account?" 
-    : "Already have an account?";
-
-  submitButton.textContent = buttonText;
-  toggleLink.textContent = linkText;
-  toggleText.textContent = text;
-  
-  // Update the title text
-  authTitle.textContent = isLogin ? 'Login' : 'Register';
+  if (isLogin) {
+    authTitle.textContent = 'Login';
+    submitButton.textContent = 'Login';
+    toggleText.textContent = "Don't have an account?";
+    toggleLink.textContent = 'Register here';
+    emailField.style.display = 'none'; // Hide email input on login
+    emailField.removeAttribute('required'); // Make sure email is not required on login
+    forgotPasswordLink.style.display = 'block'; // Show forgot password link
+  } else {
+    authTitle.textContent = 'Register';
+    submitButton.textContent = 'Register';
+    toggleText.textContent = 'Already have an account?';
+    toggleLink.textContent = 'Login here';
+    emailField.style.display = 'block'; // Show email input on register
+    emailField.setAttribute('required', 'true'); // Ensure email is required on register
+    forgotPasswordLink.style.display = 'none'; // Hide forgot password link
+  }
 }
 
 // Initial update when the page loads
@@ -40,17 +47,18 @@ updateForm();
 authForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
+  const email = document.getElementById('email').value;
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
 
   if (isLogin) {
     login(username, password);
   } else {
-    register(username, password);
+    register(email, username, password);
   }
 });
 
-async function register(username, password) {
+async function register(email, username, password) {
   const usernameLower = username.trim().toLowerCase(); // Normalize case
 
   // Check if the username already exists in Firestore
@@ -60,56 +68,95 @@ async function register(username, password) {
   try {
       const querySnapshot = await getDocs(q);
 
-      // Check if username already exists in Firestore
       if (!querySnapshot.empty) {
-          console.error('Username is already taken');
           alert('This username is already taken. Please choose another one.');
-          return; // Exit the function to prevent creating the user
+          return;
       }
 
-      // Proceed with Firebase Authentication registration
-      const userCredential = await createUserWithEmailAndPassword(auth, usernameLower + '@example.com', password); // Use dummy email for username
+      // Create user with actual email
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Get current date for account creation
-      const currentDate = new Date();
-      const formattedDate = `${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getDate().toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
+      const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
 
-      // Store the username in Firestore
+      // Store username in Firestore
       await setDoc(doc(db, 'users', user.uid), {
-          username: usernameLower, // Store username in lowercase
-          createdAt: formattedDate,
+          email: email, // Store email for reference
+          username: usernameLower,
+          createdAt: currentDate,
       });
 
       console.log('User registered successfully');
-      window.location.href = '/'; // Redirect to homepage after registration
+      window.location.href = '/'; // Redirect to homepage
 
   } catch (error) {
-      // Handle different types of errors based on error code or message
       if (error.code === 'auth/email-already-in-use') {
-          // Only show this alert if the issue is with Firebase Authentication
-          alert('This username is already in use. Please try logging in or use a different username.');
-      } else if (error.message.includes('Firestore')) {
-          // If it's related to Firestore (e.g., username query)
-          alert('There was an issue checking the username availability. Please try again later.');
+          alert('This email is already in use. Try logging in or use another email.');
       } else {
-          // Generic error message for anything else
           console.error('Error during registration:', error);
-          alert('An error occurred during registration. Please try again later.');
+          alert('An error occurred. Please try again.');
       }
   }
 }
 
-function login(username, password) {
-  // Log the user in using Firebase Authentication
-  signInWithEmailAndPassword(auth, username + '@example.com', password) // Use the same dummy email
-    .then((userCredential) => {
-      const user = userCredential.user;
-      console.log('User logged in successfully');
-      window.location.href = '/'; // Redirect to homepage after successful login
+async function login(identifier, password) {
+  let email = identifier; // Assume it's an email
+
+  // Check if identifier is a username (does not contain "@")
+  if (!identifier.includes("@")) {
+      const usersRef = collection(db, 'users');
+      const q = query(usersRef, where('username', '==', identifier.toLowerCase()));
+
+      try {
+          const querySnapshot = await getDocs(q);
+
+          if (querySnapshot.empty) {
+              alert("Username not found.");
+              return;
+          }
+
+          // Get the associated email from Firestore
+          email = querySnapshot.docs[0].data().email;
+      } catch (error) {
+          console.error("Error fetching email:", error);
+          alert("Error finding account. Please try again.");
+          return;
+      }
+  }
+
+  // Now login with email
+  signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+          console.log('User logged in successfully');
+          window.location.href = '/';
+      })
+      .catch((error) => {
+          console.error('Error logging in:', error);
+          alert('Invalid email/username or password.');
+      });
+}
+
+// Handle forgot password click
+forgotPasswordLink.addEventListener('click', () => {
+  const email = prompt('Enter your email to reset password:');
+  if (email) {
+    resetPassword(email);
+  }
+});
+
+function resetPassword(email) {
+  if (!email || typeof email !== 'string' || !email.includes('@')) {
+    alert('Please enter a valid email address.');
+    return;
+  }
+
+  sendPasswordResetEmail(auth, email.trim()) // Trim to remove accidental spaces
+    .then(() => {
+      alert('Password reset email sent! Check your inbox.');
     })
     .catch((error) => {
-      console.error('Error logging in:', error);
+      console.error('Error sending reset email:', error);
+      alert('Error: ' + error.message);
     });
 }
 

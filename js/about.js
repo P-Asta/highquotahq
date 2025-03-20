@@ -6,12 +6,10 @@ import { db } from './firebase.js';
 
 const teamSection = document.getElementById('team-section');
 
-// Backup profile picture URL in case the user doesn't have one
-const backupProfilePic = "path/to/backup-image.jpg"; // Replace with your backup image path
+const backupProfilePic = "/assets/default-avatar.png";
 
 const fetchTeamMembers = async () => {
   try {
-    // Fetching all users from the Firestore 'users' collection
     const usersSnapshot = await getDocs(collection(db, 'users'));
     
     const admins = [];
@@ -23,9 +21,7 @@ const fetchTeamMembers = async () => {
       const userData = doc.data();
       const { username, roles, profilePicture } = userData;
 
-      // Ensure the roles field exists and is an array
       if (Array.isArray(roles)) {
-        // Check if the user has specific roles
         if (roles.includes('admin')) {
           admins.push({ username, profilePicture });
         }
@@ -41,7 +37,6 @@ const fetchTeamMembers = async () => {
       }
     });
 
-    // Display team members with links and profile pictures
     displayTeamMembers(admins, verifiers, moddedVerifiers, siteDevelopers);
 
   } catch (error) {
@@ -50,30 +45,25 @@ const fetchTeamMembers = async () => {
 };
 
 const displayTeamMembers = (admins, verifiers, moddedVerifiers, siteDevelopers) => {
-  // Function to create an anchor tag for each username linking to their profile
   const createProfileLink = (username, profilePicURL) => {
     const link = document.createElement('a');
-    link.href = `/pages/profile.html?username=${username}`;  // Assuming profile URL is like /profile/username
-    link.target = "_blank"; // Open in a new tab
+    link.href = `/pages/profile.html?username=${username}`;
+    link.target = "_blank";
 
-    // Create the image element for the profile picture
     const profilePic = document.createElement('img');
-    profilePic.src = profilePicURL || backupProfilePic;  // Use backup image if no profile picture
+    profilePic.src = profilePicURL || backupProfilePic;
     profilePic.alt = `${username}'s Profile Picture`;
-    profilePic.classList.add('team-member-profile-pic'); // Add a class for styling
+    profilePic.classList.add('team-member-profile-pic');
 
-    // Create a span for the username
     const memberName = document.createElement('span');
     memberName.textContent = username;
 
-    // Append the profile picture and name to the anchor tag
     link.appendChild(profilePic);
     link.appendChild(memberName);
 
     return link;
   };
 
-  // Admins
   const adminList = document.getElementById('admin-list');
   admins.forEach(admin => {
     const listItem = document.createElement('li');
@@ -82,7 +72,6 @@ const displayTeamMembers = (admins, verifiers, moddedVerifiers, siteDevelopers) 
     adminList.appendChild(listItem);
   });
 
-  // Verifiers
   const verifierList = document.getElementById('verifier-list');
   verifiers.forEach(verifier => {
     const listItem = document.createElement('li');
@@ -91,7 +80,6 @@ const displayTeamMembers = (admins, verifiers, moddedVerifiers, siteDevelopers) 
     verifierList.appendChild(listItem);
   });
 
-  // Modded Verifiers
   const moddedVerifierList = document.getElementById('modded-verifier-list');
   moddedVerifiers.forEach(moddedVerifier => {
     const listItem = document.createElement('li');
@@ -100,7 +88,6 @@ const displayTeamMembers = (admins, verifiers, moddedVerifiers, siteDevelopers) 
     moddedVerifierList.appendChild(listItem);
   });
 
-  // Site Developers
   const siteDeveloperList = document.getElementById('site-developer-list');
   siteDevelopers.forEach(siteDeveloper => {
     const listItem = document.createElement('li');
@@ -110,7 +97,6 @@ const displayTeamMembers = (admins, verifiers, moddedVerifiers, siteDevelopers) 
   });
 };
 
-// Fetch and display the team members on page load
 window.onload = fetchTeamMembers;
 
 

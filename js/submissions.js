@@ -28,22 +28,20 @@ document.getElementById("leaderboardType").addEventListener("change", (event) =>
     const leaderboardType = document.getElementById("leaderboardType").value;
     const date = document.getElementById("date").value;
     
-    // Collect players (up to 4)
     const players = [
       document.getElementById("player1").value.trim(),
       document.getElementById("player2").value.trim(),
       document.getElementById("player3").value.trim(),
       document.getElementById("player4").value.trim(),
-    ].filter(player => player); // Remove empty fields
+    ].filter(player => player);
     
     const version = document.getElementById("version").value.trim();
     
-    // Handle video inputs for each player
     const videos = {};
     players.forEach((player, index) => {
       const videosInput = document.getElementById(`videos${index + 1}`).value.trim();
       if (videosInput) {
-        videos[player] = videosInput.split(",").map(v => v.trim()); // Split videos by commas
+        videos[player] = videosInput.split(",").map(v => v.trim());
       }
     });
   
@@ -55,7 +53,6 @@ document.getElementById("leaderboardType").addEventListener("change", (event) =>
       verified: false,
     };
   
-    // Add leaderboard-specific fields
     if (leaderboardType === "leaderboards_hq") {
       runData = {
         ...runData,
@@ -70,7 +67,7 @@ document.getElementById("leaderboardType").addEventListener("change", (event) =>
         moon: document.getElementById("moon").value.trim(),
         scrapType: document.getElementById("scrapType").value.trim(),
         totalScrap: parseInt(document.getElementById("totalScrapSDC").value, 10),
-        equipment: document.getElementById("equipment").value.trim().split(",").map(item => item.trim()), // Split input into an array
+        equipment: document.getElementById("equipment").value.trim().split(",").map(item => item.trim()),
       };
     } else if (leaderboardType === "leaderboards_smhq") {
       runData = {
@@ -83,7 +80,6 @@ document.getElementById("leaderboardType").addEventListener("change", (event) =>
       };
     }
   
-  // Use modular SDK syntax to add the document
   try {
     const leaderboardRef = collection(db, leaderboardType);
     await addDoc(leaderboardRef, runData);

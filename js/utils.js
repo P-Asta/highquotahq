@@ -1,6 +1,6 @@
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 import { doc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
-import { db, auth } from "./firebase.js"; // Ensure this points to your Firebase setup
+import { db, auth } from "./firebase.js";
 
 export function loadNavbar(onLoadedCallback) {
   const navbarPlaceholder = document.getElementById('navbar-placeholder');
@@ -10,7 +10,6 @@ export function loadNavbar(onLoadedCallback) {
       .then(async (data) => {
         navbarPlaceholder.innerHTML = data;
 
-        // Add event listeners for navigation
         const homeButton = document.getElementById('home-button');
         const aboutButton = document.getElementById('about-button');
         const profileButton = document.getElementById('profile-button');
@@ -19,48 +18,40 @@ export function loadNavbar(onLoadedCallback) {
         const logoutButton = document.getElementById('logout-button');
         
 
-        // Navigation button event listeners
         if (homeButton) homeButton.addEventListener('click', () => window.location.href = '/');
         if (aboutButton) aboutButton.addEventListener('click', () => window.location.href = '/pages/about.html');
 
-        // Dropdown handling
         const dropdown = document.querySelector('.dropdown');
         if (dropdown) {
           const dropdownButton = dropdown.querySelector('.dropdown-button');
           const dropdownMenu = dropdown.querySelector('.dropdown-menu');
 
-          // Toggle dropdown on click
           dropdownButton.addEventListener('click', () => {
             dropdown.classList.toggle('active');
           });
 
-          // Handle dropdown item selection
           dropdownMenu.addEventListener('click', (event) => {
             const selectedItem = event.target.closest('li');
 
             if (selectedItem) {
-              // Check if the selected item is the Home button
               if (selectedItem.getAttribute('data-home')) {
-                window.location.href = '/index.html'; // Navigate to homepage
+                window.location.href = '/index.html';
                 return;
               }
 
-              // Handle game-specific selections
               const newLogo = selectedItem.getAttribute('data-logo') || 'path/to/missing-logo.png';
               dropdownButton.querySelector('.logo').src = newLogo;
 
               const gameRoute = selectedItem.getAttribute('data-game');
               if (gameRoute) {
-                window.location.href = `/${gameRoute}/index.html`; // Adjust paths as needed
+                window.location.href = `/${gameRoute}/index.html`;
               }
 
-              // Collapse the dropdown
               dropdown.classList.remove('active');
             }
           });
         }
 
-        // Monitor auth state
         onAuthStateChanged(auth, async (user) => {
           if (user) {
             const userId = user.uid;
@@ -70,7 +61,6 @@ export function loadNavbar(onLoadedCallback) {
               profileButton.addEventListener('click', () => window.location.href = '/pages/profile.html?username=' + {userId});
             }
 
-            // Fetch user roles from Firestore
             try {
               const userDocRef = doc(db, "users", userId);
               const userDoc = await getDoc(userDocRef);
@@ -85,7 +75,6 @@ export function loadNavbar(onLoadedCallback) {
                   profileButton.addEventListener('click', () => {window.location.href = '/pages/profile.html?username=' + encodeURIComponent(username);});
                 }
 
-                // Show admin button if the user is an admin
                 if (roles.includes("admin") || roles.includes("verifier") || roles.includes("modded-verifier") || roles.includes("site-developer")) {
                   if (adminButton) {
                     adminButton.style.display = 'block';
@@ -93,7 +82,6 @@ export function loadNavbar(onLoadedCallback) {
                   }
                 }
 
-                // Additional role-based UI logic can go here if needed
               } else {
                 console.log("No user data found for current user.");
               }
@@ -101,24 +89,21 @@ export function loadNavbar(onLoadedCallback) {
               console.error("Error fetching user roles:", error);
             }
 
-            // Show logout button and hide login button
-            if (loginButton) loginButton.setAttribute('hidden', true); // Hide login button
+            if (loginButton) loginButton.setAttribute('hidden', true);
             if (logoutButton) {
-              logoutButton.removeAttribute('hidden'); // Show logout button
+              logoutButton.removeAttribute('hidden');
               logoutButton.addEventListener('click', () => {
                 auth.signOut().then(() => window.location.reload());
               });
             }
           } else {
-            // User is not logged in; show login button and hide logout button
-            if (loginButton) loginButton.removeAttribute('hidden'); // Show login button
-            if (logoutButton) logoutButton.setAttribute('hidden', true); // Hide logout button
+            if (loginButton) loginButton.removeAttribute('hidden');
+            if (logoutButton) logoutButton.setAttribute('hidden', true);
 
-            if (adminButton) adminButton.setAttribute('hidden', true); // Hide admin button for unauthenticated users
+            if (adminButton) adminButton.setAttribute('hidden', true);
           }
         });
 
-        // Callback function after loading the navbar (if provided)
         if (onLoadedCallback) {
           onLoadedCallback();
         }

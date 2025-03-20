@@ -1,4 +1,3 @@
-/* General styling for all sections in the About page */
 .content {
     max-width: 1000px;
     margin-top: 50px;
@@ -103,7 +102,6 @@
     cursor: pointer;
   }
   
-  /* Responsive Design for Mobile */
   @media (max-width: 768px) {
     .content {
       padding: 10px;

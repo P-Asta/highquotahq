@@ -5,7 +5,6 @@ import { auth, db } from './firebase.js';
 import { loadNavbar, countryFlags } from './utils.js';
 import { handleAuthButtons } from './auth.js';
 
-// DOM elements
 const profilePicture = document.getElementById("profile-picture");
 const usernameDisplay = document.getElementById("username-display");
 const createdAtDisplay = document.getElementById("created-at");
@@ -13,7 +12,6 @@ const bioDisplay = document.getElementById("bio");
 const pronounsDisplay = document.getElementById("pronouns");
 const countryDisplay = document.getElementById("country");
 
-// Modal elements
 const editProfileButton = document.getElementById("edit-profile-button");
 const editProfileModal = document.getElementById("edit-profile-modal");
 const saveChangesButton = document.getElementById("save-changes-button");
@@ -27,42 +25,35 @@ const profilePictureInput = document.getElementById("profile-picture-input");
 const runsContainer = document.getElementById("runs-container");
 const moddedRunsContainer = document.getElementById("modded-runs-container")
 
-let profileUid = null; // Will store the UID of the profile being viewed
+let profileUid = null;
 
-// Initialize Firebase Storage
 const storage = getStorage();
 
-// Check auth state and populate profile
 onAuthStateChanged(auth, async (user) => {
   const params = new URLSearchParams(window.location.search);
   const username = params.get("username");
   console.log("Username from URL:", username);
 
   if (username) {
-    // Fetch the user collection from Firestore using modular SDK
     const usersSnapshot = await getDocs(collection(db, "users"));
     
     usersSnapshot.forEach((docSnapshot) => {
       const userData = docSnapshot.data();
 
       if (userData.username === username) {
-        profileUid = docSnapshot.id; // Set the UID for the profile being viewed
+        profileUid = docSnapshot.id;
 
-        // Fetch and display profile data
         profilePicture.src = userData.profilePicture || "/assets/default-avatar.png";
         usernameDisplay.textContent = userData.username;
         createdAtDisplay.textContent = `Joined: ${userData.createdAt}`;
         bioDisplay.textContent = userData.bio || "No bio available.";
         pronounsDisplay.textContent = `${userData.pronouns || "Pronouns: Not set"}`;
 
-        // Get the country flag emoji from the countryFlags object
-        const countryFlag = countryFlags[userData.country] || ''; // Default to an empty string if country not found
+        const countryFlag = countryFlags[userData.country] || '';
 
-        // Display the country and flag
         countryDisplay.innerHTML = `${userData.country || "Country: Not set"} ${countryFlag}`;
 
 
-        // Show edit button only if the logged-in user owns the profile
         if (user && user.uid === profileUid) {
           editProfileButton.style.display = "block";
         }
@@ -71,25 +62,19 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// Show the modal when Edit Profile button is clicked
 editProfileButton.addEventListener("click", () => {
-    // Prefill the modal inputs with current profile data (if available)
     bioInput.value = document.getElementById("bio").textContent || "";
     pronounsInput.value = document.getElementById("pronouns").textContent || "";
     countryInput.value = document.getElementById("country").textContent || "";
   
-    // Show the modal
     editProfileModal.classList.add("show");
 });
 
-// Close the modal when Cancel button is clicked
 cancelEditButton.addEventListener("click", () => {
   editProfileModal.classList.remove("show");
 });
 
-// Save changes to Firestore
 saveChangesButton.addEventListener("click", async () => {
-  // Ensure the user is authenticated
   const user = auth.currentUser;
   if (!user) {
     alert("You must be logged in to update your profile.");
@@ -99,17 +84,14 @@ saveChangesButton.addEventListener("click", async () => {
   const bio = bioInput.value;
   const pronouns = pronounsInput.value;
   const country = countryInput.value;
-    // Get the country flag emoji from the countryFlags object
-  const countryFlag = countryFlags[countryInput.value] || ''; // Default to an empty string if country not found
+  const countryFlag = countryFlags[countryInput.value] || '';
 
   let newProfilePictureUrl = null;
 
-  // Check if a new profile picture was uploaded
   if (profilePictureInput.files.length > 0) {
     const file = profilePictureInput.files[0];
     const storageRef = ref(storage, `profile_pictures/${user.uid}`);
     
-    // Upload the image to Firebase Storage
     try {
       const uploadResult = await uploadBytes(storageRef, file);
       newProfilePictureUrl = await getDownloadURL(uploadResult.ref);
@@ -120,26 +102,21 @@ saveChangesButton.addEventListener("click", async () => {
     }
   }
 
-  // Update the user data in Firestore
   try {
-    const userRef = doc(db, "users", user.uid);  // Use current user's UID for the document reference
+    const userRef = doc(db, "users", user.uid);
     const updates = {
         bio: bio,
         pronouns: pronouns,
         country: country,
       };
     
-    // Only update the profile picture if a new one is uploaded
     if (newProfilePictureUrl) {
         updates.profilePicture = newProfilePictureUrl;
     }
 
-    // Apply the updates to Firestore
     await updateDoc(userRef, updates);
-    // After updating, close the modal and update the profile UI
     editProfileModal.classList.remove("show");
 
-    // Update the profile displays with new data
     bioDisplay.textContent = bio || "No bio available.";
     pronounsDisplay.textContent = pronouns || "Pronouns: Not set";
     countryDisplay.innerHTML = `${countryInput.value || "Country: Not set"} ${countryFlag}`;
@@ -152,9 +129,7 @@ saveChangesButton.addEventListener("click", async () => {
   }
 });
 
-// Function to display the runs on the player's profile
 async function displayPlayerRuns(username) {
-    // Define the leaderboard collections to check
     const leaderboardCollections = [
       "leaderboards_hq",
       "leaderboards_sdc",
@@ -164,31 +139,25 @@ async function displayPlayerRuns(username) {
       "modded_smhq"
     ];
   
-    // Clear previous runs before fetching new ones
     runsContainer.innerHTML = "<h2>Lethal Company</h2>";
     moddedRunsContainer.innerHTML = "<h2>Modded Lethal Company</h2>";
   
-    // Loop through each leaderboard collection
     for (const collectionName of leaderboardCollections) {
       const leaderboardSnapshot = await getDocs(collection(db, collectionName));
   
-      // Loop through each document in the collection
       leaderboardSnapshot.forEach((docSnapshot) => {
         const run = docSnapshot.data();
         console.log("Leaderboard data:", run);
   
 
-        // Check if the player's username exists in the players array
         const playerIndex = run.players.findIndex(player => 
             player.trim().toLowerCase() === username.trim().toLowerCase()
         );
 
   
-        // If the username is found in this collection, display the runs
         if (playerIndex !== -1) {
           const player = run.players[playerIndex];
   
-          // Create an element to display the run information
           const runDiv = document.createElement('div');
           runDiv.classList.add('run-entry');
   
@@ -298,10 +267,8 @@ async function displayPlayerRuns(username) {
 
   
   
-  // Call the function to display runs when the profile page loads
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      // Fetch the username from the URL params
       const username = new URLSearchParams(window.location.search).get("username");
       displayPlayerRuns(username);
     }
@@ -310,7 +277,6 @@ async function displayPlayerRuns(username) {
   export function showRunDetails(run, index) {
     const detailsPanel = document.getElementById('details-panel');
     
-    // Helper function to format timestamps
     const formatTimestamp = (timestamp) => {
       if (timestamp && timestamp.toDate) {
         return new Date(timestamp.toDate()).toLocaleString();
@@ -318,7 +284,6 @@ async function displayPlayerRuns(username) {
       return 'N/A';
     };
   
-    // Helper function to format and display videos
     const formatVideos = (videosMap) => {
       if (videosMap && typeof videosMap === 'object') {
         return Object.keys(videosMap).map(playerName => {
@@ -339,14 +304,12 @@ async function displayPlayerRuns(username) {
       return 'No videos available.';
     };
   
-    // Helper function to extract YouTube video ID from URL
     const getVideoId = (url) => {
       const regex = /(?:https?:\/\/(?:www\.)?youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/([a-zA-Z0-9_-]+))|youtu\.be\/([a-zA-Z0-9_-]+))/;
       const match = url.match(regex);
       return match ? match[1] || match[2] : '';
     };
   
-    // details panel HTML content
     let runDetailsHtml = `
       <button id="close-btn" class="close-btn">←</button>
       <h2>Run Details</h2>
@@ -409,7 +372,6 @@ async function displayPlayerRuns(username) {
 document.addEventListener('DOMContentLoaded', function() {
     loadNavbar(handleAuthButtons);
   
-      // Loop through options and prepend the flag
       for (let option of countryInput.options) {
           let countryName = option.textContent;
           if (countryFlags[countryName]) {

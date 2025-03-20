@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login / Register</title>
   <link rel="icon" type="image/png" href="/assets/high-quota-logo.png">
-  <link rel="stylesheet" href="/css/main.css"> <!-- Link to global styles -->
-  <link rel="stylesheet" href="/css/login.css"> <!-- Link to login-specific styles -->
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/login.css">
 
-    <!-- Firebase SDK -->
     <script type="module" src="https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js"></script>    
@@ -19,16 +18,14 @@
 
   <div id="auth-container">
     <div class="card">
-      <h1 id="auth-title">Login</h1> <!-- Initial title for login -->
+      <h1 id="auth-title">Login</h1>
       <form id="auth-form">
         <input type="text" id="email" placeholder="Email" required>
         <input type="text" id="username" placeholder="Username" required>
         <input type="password" id="password" placeholder="Password" required>
         <a href="javascript:void(0);" id="forgot-password" style="display: none;">Forgot password?</a>
-        <button type="submit" id="submit-button">Login</button> <!-- Default to Login -->
-        <!-- This is the static text container -->
+        <button type="submit" id="submit-button">Login</button>
         <p id="toggle-text">Don't have an account?</p>
-        <!-- The actual link button -->
         <a href="javascript:void(0);" id="toggle-login">Register here</a>
       </form>
     </div>

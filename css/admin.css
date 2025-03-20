@@ -195,7 +195,6 @@
     outline: none;
 }
 
-/* Make sidebar responsive for smaller screens */
 @media (max-width: 768px) {
     .admin-container {
         flex-direction: column;

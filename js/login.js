@@ -7,14 +7,13 @@ import { handleAuthButtons } from './auth.js';
 const authForm = document.getElementById('auth-form');
 const submitButton = document.getElementById('submit-button');
 const toggleLink = document.getElementById('toggle-login');
-const authTitle = document.getElementById('auth-title'); // For the title of the form
-const toggleText = document.getElementById('toggle-text'); // For the static text part
+const authTitle = document.getElementById('auth-title');
+const toggleText = document.getElementById('toggle-text');
 const emailField = document.getElementById('email');
 const forgotPasswordLink = document.getElementById('forgot-password');
 
-let isLogin = true; // Track whether the user is in login or register mode
+let isLogin = true;
 
-// Toggle between Login and Register
 toggleLink.addEventListener('click', () => {
   isLogin = !isLogin;
   updateForm();
@@ -26,24 +25,22 @@ function updateForm() {
     submitButton.textContent = 'Login';
     toggleText.textContent = "Don't have an account?";
     toggleLink.textContent = 'Register here';
-    emailField.style.display = 'none'; // Hide email input on login
-    emailField.removeAttribute('required'); // Make sure email is not required on login
-    forgotPasswordLink.style.display = 'block'; // Show forgot password link
+    emailField.style.display = 'none';
+    emailField.removeAttribute('required');
+    forgotPasswordLink.style.display = 'block';
   } else {
     authTitle.textContent = 'Register';
     submitButton.textContent = 'Register';
     toggleText.textContent = 'Already have an account?';
     toggleLink.textContent = 'Login here';
-    emailField.style.display = 'block'; // Show email input on register
-    emailField.setAttribute('required', 'true'); // Ensure email is required on register
-    forgotPasswordLink.style.display = 'none'; // Hide forgot password link
+    emailField.style.display = 'block';
+    emailField.setAttribute('required', 'true');
+    forgotPasswordLink.style.display = 'none';
   }
 }
 
-// Initial update when the page loads
 updateForm();
 
-// Handle form submission for login or register
 authForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
@@ -59,7 +56,7 @@ authForm.addEventListener('submit', (e) => {
 });
 
 async function register(email, username, password) {
-  const usernameLower = username.trim().toLowerCase(); // Lowercase for searching
+  const usernameLower = username.trim().toLowerCase();
 
   const usersRef = collection(db, 'users');
   const q = query(usersRef, where('usernameLower', '==', usernameLower));
@@ -72,22 +69,20 @@ async function register(email, username, password) {
           return;
       }
 
-      // Create user in Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+      const currentDate = new Date().toISOString().split('T')[0];
 
-      // Store username in Firestore with both versions
       await setDoc(doc(db, 'users', user.uid), {
           email: email,
-          username: username, // Keep capitalization for display
-          usernameLower: usernameLower, // Use this for searching
+          username: username,
+          usernameLower: usernameLower,
           createdAt: currentDate,
       });
 
       console.log('User registered successfully');
-      window.location.href = '/'; // Redirect to homepage
+      window.location.href = '/';
 
   } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
@@ -100,9 +95,8 @@ async function register(email, username, password) {
 }
 
 async function login(identifier, password) {
-  let email = identifier; // Assume it's an email
+  let email = identifier;
 
-  // If the user entered a username, get the corresponding email
   if (!identifier.includes("@")) {
       const usersRef = collection(db, 'users');
       const q = query(usersRef, where('usernameLower', '==', identifier.trim().toLowerCase()));
@@ -115,7 +109,6 @@ async function login(identifier, password) {
               return;
           }
 
-          // Get the associated email from Firestore
           email = querySnapshot.docs[0].data().email;
       } catch (error) {
           console.error("Error fetching email:", error);
@@ -124,7 +117,6 @@ async function login(identifier, password) {
       }
   }
 
-  // Now login with email
   signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
           console.log('User logged in successfully');
@@ -136,7 +128,6 @@ async function login(identifier, password) {
       });
 }
 
-// Handle forgot password click
 forgotPasswordLink.addEventListener('click', () => {
   const email = prompt('Enter your email to reset password:');
   if (email) {
@@ -150,7 +141,7 @@ function resetPassword(email) {
     return;
   }
 
-  sendPasswordResetEmail(auth, email.trim()) // Trim to remove accidental spaces
+  sendPasswordResetEmail(auth, email.trim())
     .then(() => {
       alert('Password reset email sent! Check your inbox.');
     })
@@ -160,7 +151,6 @@ function resetPassword(email) {
     });
 }
 
-// Ensure the navbar is loaded after the document is fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     loadNavbar(handleAuthButtons);
 });

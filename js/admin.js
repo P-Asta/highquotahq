@@ -12,17 +12,14 @@ function loadAdminInterface(user) {
     const sidebar = document.getElementById('sidebar');
 
     if (user) {
-        // Get user data from Firestore
-        const userDocRef = doc(db, 'users', user.uid); // Assuming your users are stored with userId as document ID
+        const userDocRef = doc(db, 'users', user.uid);
         getDoc(userDocRef).then((docSnapshot) => {
             if (docSnapshot.exists()) {
                 const userData = docSnapshot.data();
                 const roles = userData.roles || [];
 
-                // Show appropriate sidebar options based on roles
-                sidebar.innerHTML = ''; // Clear previous buttons
+                sidebar.innerHTML = '';
 
-                // Show only relevant sidebar options
                 if (roles.includes('admin')) {
                     const adminBtn = document.createElement("button");
                     adminBtn.id = "admin-btn";
@@ -52,7 +49,6 @@ function loadAdminInterface(user) {
                     sidebar.appendChild(recentVerifiedRunsBtn);
                 }
 
-                // Now, attach the event listeners to the buttons (after they are added to the DOM)
                 const adminBtn = document.getElementById("admin-btn");
                 const verifierBtn = document.getElementById("verifier-btn");
                 const moddedVerifierBtn = document.getElementById("modded-verifier-btn");
@@ -61,18 +57,18 @@ function loadAdminInterface(user) {
                 if (adminBtn) {
                     adminBtn.addEventListener("click", () => {
                         console.log('Admin button clicked');
-                        hideAllInterfaces(); // Hide all interfaces first
-                        adminSection.classList.add("show"); // Show admin interface using CSS class
-                        highlightActiveButton(adminBtn); // Highlight active button
+                        hideAllInterfaces();
+                        adminSection.classList.add("show");
+                        highlightActiveButton(adminBtn);
                     });
                 }
 
                 if (verifierBtn) {
                     verifierBtn.addEventListener("click", () => {
                         console.log('Verifier button clicked');
-                        hideAllInterfaces(); // Hide all interfaces first
-                        verifierSection.classList.add("show"); // Show verifier interface using CSS class
-                        highlightActiveButton(verifierBtn); // Highlight active button
+                        hideAllInterfaces();
+                        verifierSection.classList.add("show");
+                        highlightActiveButton(verifierBtn);
                         loadVerifierInterface();
                     });
                 }
@@ -80,9 +76,9 @@ function loadAdminInterface(user) {
                 if (moddedVerifierBtn) {
                     moddedVerifierBtn.addEventListener("click", () => {
                         console.log('Modded Verifier button clicked');
-                        hideAllInterfaces(); // Hide all interfaces first
-                        moddedVerifierSection.classList.add("show"); // Show modded verifier interface using CSS class
-                        highlightActiveButton(moddedVerifierBtn); // Highlight active button
+                        hideAllInterfaces();
+                        moddedVerifierSection.classList.add("show");
+                        highlightActiveButton(moddedVerifierBtn);
                         loadModdedVerifierInterface();
                     });
                 }
@@ -97,8 +93,7 @@ function loadAdminInterface(user) {
                     });
                 }
 
-                // Hide all sections by default
-                hideAllInterfaces(); // Call this function to hide all interfaces
+                hideAllInterfaces();
             }
         }).catch((error) => {
             console.error("Error fetching user data: ", error);
@@ -108,13 +103,10 @@ function loadAdminInterface(user) {
     }
 }
 
-// Function to highlight the active button
 const highlightActiveButton = (button) => {
-    // Remove active class from all buttons
     const buttons = document.querySelectorAll(".sidebar-btn");
     buttons.forEach(btn => btn.classList.remove("active"));
     
-    // Add active class to the clicked button
     button.classList.add("active");
 };
 
@@ -143,7 +135,6 @@ const usernameInput = document.getElementById('username');
 const roleSelect = document.getElementById('role');
 const feedbackDiv = document.getElementById('feedback');
 
-// Function to assign a role to a user
 const assignRole = async () => {
     const username = usernameInput.value.trim();
     const role = roleSelect.value;
@@ -183,7 +174,6 @@ const assignRole = async () => {
     }
 };
 
-// Function to remove a role from a user
 const removeRole = async () => {
     const username = usernameInput.value.trim();
     const role = roleSelect.value;
@@ -209,7 +199,6 @@ const removeRole = async () => {
         const userData = userDoc.data();
         const roles = userData.roles || [];
 
-        // Remove the selected role from the user's roles array
         const updatedRoles = roles.filter((roleName) => roleName !== role);
 
         await updateDoc(userDoc.ref, { roles: updatedRoles });
@@ -222,7 +211,6 @@ const removeRole = async () => {
     }
 };
 
-// Function to ban a user and delete all their runs
 const banUser = async () => {
     const username = usernameInput.value.trim();
 
@@ -248,10 +236,8 @@ const banUser = async () => {
 
         const userDoc = querySnapshot.docs[0];
 
-        // Mark user as banned
         await updateDoc(userDoc.ref, { banned: true });
 
-        // Collections to check for runs
         const collections = [
             'leaderboards_hq', 'leaderboards_sdc', 'leaderboards_smhq',
             'modded_hq', 'modded_sdc', 'modded_smhq'
@@ -269,7 +255,7 @@ const banUser = async () => {
             });
         }
 
-        await batch.commit(); // Execute batch delete
+        await batch.commit();
 
         feedbackDiv.textContent = `${username} has been banned, and all their runs have been deleted.`;
         feedbackDiv.style.display = 'block';
@@ -280,7 +266,6 @@ const banUser = async () => {
     }
 };
 
-// Function to unban a user
 const unbanUser = async () => {
     const username = usernameInput.value.trim();
 
@@ -329,7 +314,7 @@ export function fetchUnverifiedRuns(role) {
     }
 
 
-    runListContainer.innerHTML = '';  // Clear any existing runs
+    runListContainer.innerHTML = '';
 
     collections.forEach((collectionName) => {
         const runsRef = collection(db, collectionName);
@@ -355,7 +340,6 @@ export function fetchUnverifiedRuns(role) {
 
                     let additionalInfo = '';
 
-                    // Display the correct fields based on collection
                     if (collectionName === 'leaderboards_hq') {
                         const quotaAmount = run.quotaAmount || 'N/A';
                         const quotaFulfilled = run.quotaFulfilled || 'N/A';
@@ -443,7 +427,6 @@ export function fetchUnverifiedRuns(role) {
                     `;
                     runItem.innerHTML = runItemHTML;
 
-                    // If the run is not claimed, show the "Claim" button
                     if (!claimedBy || claimedBy == "Unclaimed") {
                         const claimButton = document.createElement('button');
                         claimButton.innerText = 'Claim Run';
@@ -454,7 +437,6 @@ export function fetchUnverifiedRuns(role) {
                     
                     runListContainer.appendChild(runItem);
 
-                    // Bind event listener to each run item
                     runItem.addEventListener('click', () => {
                         showRunDetails(runId, collectionName, run, role);
                     });
@@ -482,22 +464,20 @@ export function showRunDetails(runId, collectionName, run, role) {
     }
 
 
-    runListContainer.style.display = 'none'; // Hide the list of runs
+    runListContainer.style.display = 'none';
 
-    runDetailsContainer.style.display = 'block'; // Show the run details container
+    runDetailsContainer.style.display = 'block';
 
-    const claimedBy = run.claimedBy || 'Unclaimed'; // Default to "Unclaimed" if no value is set
+    const claimedBy = run.claimedBy || 'Unclaimed';
     
     const claimButton = document.getElementById('claim-button');
 
-    // Check if the claim button exists before trying to use it
     if (claimButton) {
         if (claimedBy && claimedBy !== user?.username) {
             claimButton.style.display = 'none';
         }
     }
 
-    // Extract common fields from the run object
     const players = run.players || ['Unknown Player'];
     const date = run.date ? run.date.toDate().toLocaleString() : 'Unknown Date';
     const version = run.version || 'Unknown Version';
@@ -509,7 +489,6 @@ export function showRunDetails(runId, collectionName, run, role) {
     let additionalInfo = '';
     let equipmentField = '';
 
-    // Collection-specific fields
     if (collectionName === 'leaderboards_hq') {
         const quotaAmount = run.quotaAmount || 0;
         const quotaFulfilled = run.quotaFulfilled || 0;
@@ -606,7 +585,6 @@ export function showRunDetails(runId, collectionName, run, role) {
         <h5>Video Links:</h5>
     `;
 
-    // Generate video links dynamically from the videos map
     for (const [player, urls] of Object.entries(videos)) {
         runDetails += `<label>${player}: 
             <input type="text" value="${urls.join(', ')}" disabled data-field="videos-${player}">
@@ -629,10 +607,8 @@ export function showRunDetails(runId, collectionName, run, role) {
     runDetailsContainer.innerHTML = runDetails;
 
 
-    // Ensure the buttons are in the correct state when entering the run details interface
     resetButtonStates();
 
-    // Handle button clicks
     runDetailsContainer.addEventListener('click', function (event) {
         const target = event.target;
 
@@ -649,7 +625,7 @@ export function showRunDetails(runId, collectionName, run, role) {
             fields.forEach(field => {
                 const fieldName = field.getAttribute('data-field');
                 if (fieldName === 'date' && field.value) {
-                    updatedRun[fieldName] = Timestamp.fromDate(new Date(field.value)); // directly save as Firestore Timestamp
+                    updatedRun[fieldName] = Timestamp.fromDate(new Date(field.value));
                 } else if (fieldName.startsWith('videos-')) {
                     const player = fieldName.split('-')[1];
                     updatedRun.videos = updatedRun.videos || {};
@@ -691,18 +667,15 @@ export function showRunDetails(runId, collectionName, run, role) {
         }
     });
 
-    // Helper function to reset button visibility states
     function resetButtonStates(buttonClicked = '') {
         const editButton = document.getElementById('edit-button');
         const saveButton = document.getElementById('save-button');
         const cancelButton = document.getElementById('cancel-button');
 
-        // Reset all button states
         editButton.style.display = 'inline-block';
         saveButton.style.display = 'none';
         cancelButton.style.display = 'none';
 
-        // Adjust button visibility based on the button clicked
         if (buttonClicked === 'edit') {
             editButton.style.display = 'none';
             saveButton.style.display = 'inline-block';
@@ -719,13 +692,11 @@ export function showRunDetails(runId, collectionName, run, role) {
     }
     }
 
-// Helper function to save run details
 async function saveRunDetails(runId, collectionName, updatedRun) {
     const runRef = doc(db, collectionName, runId);
     await updateDoc(runRef, updatedRun);
 }
 
-// Back to the list of runs
 export function backToList(role) {
     console.log(`📌 backToList() triggered for role: ${role}`);
     let runDetailsContainer = null;
@@ -741,8 +712,8 @@ export function backToList(role) {
     }
 
 
-    runDetailsContainer.style.display = 'none'; // Hide the details
-    runListContainer.style.display = 'block'; // Show the list again
+    runDetailsContainer.style.display = 'none';
+    runListContainer.style.display = 'block';
 }
   
 async function verifyRun(runId, collectionName, role) {
@@ -767,7 +738,6 @@ async function verifyRun(runId, collectionName, role) {
     const newRun = newRunSnap.data();
     const batch = writeBatch(db);
 
-    // Build the query to find obsolete runs
     let queryConstraints = [
         where("players", "==", newRun.players),
         where("version", "==", newRun.version)
@@ -786,7 +756,6 @@ async function verifyRun(runId, collectionName, role) {
         }
     });
 
-    // Mark the new run as verified
     batch.update(runRef, {
         verified: true,
         verifiedBy: username,
@@ -802,8 +771,7 @@ async function verifyRun(runId, collectionName, role) {
     }
 }
 
- 
-// Reject the run by deleting it from Firestore in the correct collection
+
 export function rejectRun(runId, collectionName, role) {
 
     const confirmReject = window.confirm(`Are you sure you want to reject this run?`);
@@ -813,7 +781,6 @@ export function rejectRun(runId, collectionName, role) {
     deleteDoc(runRef)
     .then(() => {
         console.log(`Run ${runId} from ${collectionName} rejected.`);
-        // Call fetchUnverifiedRuns to refresh the list
         fetchUnverifiedRuns(role);
     })
     .catch((error) => {
@@ -821,13 +788,12 @@ export function rejectRun(runId, collectionName, role) {
     });
 }
 
-// Fetch the username from the 'users' collection
 async function getUsername(uid) {
   const userDocRef = doc(db, 'users', uid);
   const userDoc = await getDoc(userDocRef);
 
   if (userDoc.exists()) {
-    return userDoc.data().username; // Assuming the 'username' field exists
+    return userDoc.data().username;
   } else {
     console.log('No user document found');
     return null;
@@ -838,17 +804,16 @@ async function claimRun(runId, collectionName, role) {
     const user = auth.currentUser;
 
     if (user) {
-        const username = await getUsername(user.uid);  // Retrieve the username
+        const username = await getUsername(user.uid);
 
         if (username) {
             const runRef = doc(db, collectionName, runId);
             await updateDoc(runRef, {
-                claimedBy: username,  // Store who claimed the run
-                claimedAt: new Date()  // Timestamp when it was claimed
+                claimedBy: username,
+                claimedAt: new Date()
             })
             .then(() => {
                 console.log(`Run ${runId} claimed by ${username}`);
-                // Reload the list to reflect the updated state (with claimed runs hidden or disabled)
                 fetchUnverifiedRuns(role);
             })
             .catch((error) => {
@@ -862,10 +827,10 @@ async function displayRecentlyVerifiedRuns() {
     const collections = ['leaderboards_hq', 'leaderboards_sdc', 'leaderboards_smhq', 'modded_hq', 'modded_sdc', 'modded_smhq'];
     const tableBody = document.getElementById("recent-verified-runs").getElementsByTagName("tbody")[0];
     
-    tableBody.innerHTML = ''; // Clear the table once before looping
+    tableBody.innerHTML = '';
     let allRuns = [];
 
-    for (const collectionName of collections) { // FIXED for loop
+    for (const collectionName of collections) {
         const runsRef = collection(db, collectionName);
 
         const q = query(runsRef, where("verifiedAt", ">", new Date(0)), orderBy("verifiedAt", "desc"), limit(10));
@@ -877,7 +842,7 @@ async function displayRecentlyVerifiedRuns() {
                 allRuns.push({
                     id: doc.id,
                     verifiedBy: doc.data().verifiedBy || 'Unknown',
-                    verifiedAt: doc.data().verifiedAt.seconds * 1000, // Convert to timestamp
+                    verifiedAt: doc.data().verifiedAt.seconds * 1000,
                 });
             });
 
@@ -886,10 +851,8 @@ async function displayRecentlyVerifiedRuns() {
         }
     }
 
-    // Sort all results by verifiedAt in descending order
     allRuns.sort((a, b) => b.verifiedAt - a.verifiedAt);
 
-    // Take only the top 10 most recent runs
     allRuns.slice(0, 10).forEach(run => {
         const row = tableBody.insertRow();
         row.insertCell(0).textContent = run.id;
@@ -898,25 +861,21 @@ async function displayRecentlyVerifiedRuns() {
     });
 }
 
-// Function to initialize the verifier interface when the button is clicked
 export function loadVerifierInterface() {
     const verifierSection = document.getElementById('verifier-interface');
-    verifierSection.classList.add('show');  // Show verifier interface
+    verifierSection.classList.add('show');
 
-    // Fetch and display unverified runs
     fetchUnverifiedRuns("verifier");
 }
 
 export function loadModdedVerifierInterface() {
     const moddedVerifierSection = document.getElementById('modded-verifier-interface');
-    moddedVerifierSection.classList.add('show');  // Show verifier interface
+    moddedVerifierSection.classList.add('show');
 
-    // Fetch and display unverified runs
     fetchUnverifiedRuns("moddedVerifier");
 }
 
 
-// Listen for authentication state changes
 onAuthStateChanged(auth, (user) => {
     if (user) {
         loadAdminInterface(user);

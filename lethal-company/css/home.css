@@ -8,20 +8,8 @@
     color: white;
     padding: 20px;
     position: relative;
-    margin-top: 80px;  /* Push content down to avoid overlap with navbar */
-    height: calc(100vh - 80px);  /* Adjust height to account for navbar */
-}
-
-/* Central Card */
-.central-card {
-    background-color: #4444447e;
-    padding: 30px;
-    border-radius: 10px;
-    width: 450px;
-    text-align: center;
-    margin-bottom: 30px;
-    z-index: 2;  /* Ensures the central card stays above the surrounding cards */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add transition for hover effect */
+    margin-top: 80px;
+    height: calc(100vh - 80px);
 }
 
 .central-card h1 {
@@ -34,95 +22,29 @@
 }
 
 .central-card:hover {
-    transform: scale(1.05); /* Slightly increase size */
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5); /* Stronger shadow on hover */
+    transform: scale(1.05);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
 }
 
-/* Wrapper for surrounding cards */
-.cards-wrapper {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 160px; /* Increased gap for more space between the cards */
-    justify-items: center;
-    align-items: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* Center cards around the central card */
-    z-index: 1; /* Ensures surrounding cards are below the central card */
-}
-
-/* Individual cards with 16:9 aspect ratio */
-.card {
-    background-color: #4444447d;
+.central-card {
+    background-color: #4444447e;
+    padding: 30px;
     border-radius: 10px;
-    width: 320px; /* Set card width to a reasonable size */
-    height: calc(320px * 9 / 16); /* Maintain 16:9 aspect ratio */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    z-index: 1;
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add transition for hover effect */
-}
-
-/* YouTube embed */
-.video-card iframe {
     width: 100%;
-    height: 100%;
-    border-radius: 5px;
+    max-width: 450px;
+    text-align: center;
+    margin-bottom: 30px;
+    z-index: 2;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-/* Image card */
-.image-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 5px;
-}
-
-/* Hover effect: scale and box-shadow */
-.card:hover {
-    transform: scale(1.05); /* Slightly increase size */
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5); /* Stronger shadow on hover */
-}
-
-/* Position the cards in a pentagon shape using grid */
-#card1 {
-    grid-column: 2;
-    grid-row: 1;
-    margin-top: -100px;  /* Move this card much higher */
-}
-
-#card2 {
-    grid-column: 1;
-    grid-row: 2;
-    margin-left: 0px; /* Slightly adjust the position */
-    margin-bottom: 50px;
-    margin-top: -50px;
-}
-
-#card3 {
-    grid-column: 3;
-    grid-row: 2;
-    margin-right: 0px; /* Slightly adjust the position */
-    margin-bottom: 50px;
-    margin-top: -50px;
-}
-
-#card4 {
-    grid-column: 1;
-    grid-row: 1;
-    margin-top: 250px;  /* Move this card further down */
-    margin-bottom: -50px;
-}
-
-#card5 {
-    grid-column: 3;
-    grid-row: 1;
-    margin-top: 250px;  /* Move this card further down */
-    margin-bottom: -50px;
+@media (max-width: 480px) {
+    .central-card {
+        padding: 20px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
 }

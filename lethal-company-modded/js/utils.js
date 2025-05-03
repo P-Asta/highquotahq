@@ -3,6 +3,14 @@ import { doc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/fireb
 import { db, auth } from "./firebase.js"; // Ensure this points to your Firebase setup
 
 export function loadNavbar(onLoadedCallback) {
+
+  fetch('/partials/footer.html')
+  .then(res => res.text())
+  .then(data => {
+    document.getElementById('footer-placeholder').innerHTML = data;
+  })
+  .catch(err => console.error('Failed to load footer:', err));
+
   const navbarPlaceholder = document.getElementById('navbar-placeholder');
   if (navbarPlaceholder) {
     fetch('/lethal-company-modded/partials/navbar.html')

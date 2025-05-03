@@ -4,6 +4,14 @@ import { db, auth } from "./firebase.js"; // Ensure this points to your Firebase
 
 export function loadNavbar(onLoadedCallback) {
   const navbarPlaceholder = document.getElementById('navbar-placeholder');
+
+  fetch('/partials/footer.html')
+  .then(res => res.text())
+  .then(data => {
+    document.getElementById('footer-placeholder').innerHTML = data;
+  })
+  .catch(err => console.error('Failed to load footer:', err));
+
   if (navbarPlaceholder) {
     fetch('/lethal-company/partials/navbar.html')
       .then(response => response.text())

@@ -20,28 +20,28 @@ function loadAdminInterface(user) {
 
                 sidebar.innerHTML = '';
 
-                if (roles.includes('admin')) {
+                if (roles.includes('admin') || roles.includes('site-developer')) {
                     const adminBtn = document.createElement("button");
                     adminBtn.id = "admin-btn";
                     adminBtn.classList.add("sidebar-btn");
                     adminBtn.textContent = "Admin";
                     sidebar.appendChild(adminBtn);
                 }
-                if (roles.includes('verifier')) {
+                if (roles.includes('verifier') || roles.includes('site-developer')) {
                     const verifierBtn = document.createElement("button");
                     verifierBtn.id = "verifier-btn";
                     verifierBtn.classList.add("sidebar-btn");
                     verifierBtn.textContent = "Verifier";
                     sidebar.appendChild(verifierBtn);
                 }
-                if (roles.includes('modded-verifier')) {
+                if (roles.includes('modded-verifier') || roles.includes('site-developer')) {
                     const moddedVerifierBtn = document.createElement("button");
                     moddedVerifierBtn.id = "modded-verifier-btn";
                     moddedVerifierBtn.classList.add("sidebar-btn");
                     moddedVerifierBtn.textContent = "Modded Verifier";
                     sidebar.appendChild(moddedVerifierBtn);
                 }
-                if (roles.includes('admin') || roles.includes('verifier') || roles.includes('modded-verifier')) {
+                if (roles.includes('admin') || roles.includes('verifier') || roles.includes('modded-verifier') || roles.includes('site-developer')) {
                     const recentVerifiedRunsBtn = document.createElement("button");
                     recentVerifiedRunsBtn.id = "recent-verified-runs-btn";
                     recentVerifiedRunsBtn.classList.add("sidebar-btn");
@@ -300,7 +300,7 @@ const unbanUser = async () => {
 // Verifier Interface JavaScript
 
 
-export function fetchUnverifiedRuns(role) {
+export async function fetchUnverifiedRuns(role) {
 
     let collections = [];
     let runListContainer = null;
@@ -312,7 +312,6 @@ export function fetchUnverifiedRuns(role) {
         collections = ['modded_hq', 'modded_smhq', 'modded_sdc'];
         runListContainer = document.getElementById('modded-run-list');
     }
-
 
     runListContainer.innerHTML = '';
 

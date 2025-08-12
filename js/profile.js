@@ -1,5 +1,5 @@
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
-import { updateDoc, doc, getDocs, collection } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+import { updateDoc, doc, getDocs, collection, query, where } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js';
 import { auth, db } from './firebase.js';
 import { loadNavbar, countryFlags } from './utils.js';
@@ -29,36 +29,49 @@ let profileUid = null;
 
 const storage = getStorage();
 
+async function fetchUserByUsername(username) {
+  const usersRef = collection(db, "users");
+  const q = query(usersRef, where("username", "==", username));
+  const querySnapshot = await getDocs(q);
+
+  if (querySnapshot.empty) {
+    console.log("User not found");
+    return null;
+  }
+
+  const userDoc = querySnapshot.docs[0];
+  const userData = userDoc.data();
+  return { id: userDoc.id, data: userData };
+}
+
 onAuthStateChanged(auth, async (user) => {
   const params = new URLSearchParams(window.location.search);
   const username = params.get("username");
   console.log("Username from URL:", username);
 
   if (username) {
-    const usersSnapshot = await getDocs(collection(db, "users"));
-    
-    usersSnapshot.forEach((docSnapshot) => {
-      const userData = docSnapshot.data();
+    const userRecord = await fetchUserByUsername(username);
+    if (!userRecord) {
+      console.log("user not found");
+      // Handle user not found (show message, redirect, etc)
+      return;
+    }
 
-      if (userData.username === username) {
-        profileUid = docSnapshot.id;
+    profileUid = userRecord.id;
+    const userData = userRecord.data;
 
-        profilePicture.src = userData.profilePicture || "/assets/default-avatar.png";
-        usernameDisplay.textContent = userData.username;
-        createdAtDisplay.textContent = `Joined: ${userData.createdAt}`;
-        bioDisplay.textContent = userData.bio || "No bio available.";
-        pronounsDisplay.textContent = `${userData.pronouns || "Pronouns: Not set"}`;
+    profilePicture.src = userData.profilePicture || "/assets/default-avatar.png";
+    usernameDisplay.textContent = userData.username;
+    createdAtDisplay.textContent = `Joined: ${userData.createdAt?.toDate ? userData.createdAt.toDate().toLocaleDateString() : userData.createdAt || "N/A"}`;
+    bioDisplay.textContent = userData.bio || "No bio available.";
+    pronounsDisplay.textContent = `${userData.pronouns || "Pronouns: Not set"}`;
 
-        const countryFlag = countryFlags[userData.country] || '';
+    const countryFlag = countryFlags[userData.country] || '';
+    countryDisplay.innerHTML = `${userData.country || "Country: Not set"} ${countryFlag}`;
 
-        countryDisplay.innerHTML = `${userData.country || "Country: Not set"} ${countryFlag}`;
-
-
-        if (user && user.uid === profileUid) {
-          editProfileButton.style.display = "block";
-        }
-      }
-    });
+    if (user && user.uid === profileUid) {
+      editProfileButton.style.display = "block";
+    }
   }
 });
 
@@ -130,147 +143,71 @@ saveChangesButton.addEventListener("click", async () => {
 });
 
 async function displayPlayerRuns(username) {
-    const leaderboardCollections = [
-      "leaderboards_hq",
-      "leaderboards_sdc",
-      "leaderboards_smhq",
-      "modded_hq",
-      "modded_sdc",
-      "modded_smhq"
-    ];
-  
-    runsContainer.innerHTML = "<h2>Lethal Company</h2>";
-    moddedRunsContainer.innerHTML = "<h2>Modded Lethal Company</h2>";
-  
-    for (const collectionName of leaderboardCollections) {
-      const leaderboardSnapshot = await getDocs(collection(db, collectionName));
-  
-      leaderboardSnapshot.forEach((docSnapshot) => {
-        const run = docSnapshot.data();
-        console.log("Leaderboard data:", run);
-  
+  const normalizedUsername = username.trim(); // make sure to match exact casing as stored in Firestore
 
-        const playerIndex = run.players.findIndex(player => 
-            player.trim().toLowerCase() === username.trim().toLowerCase()
-        );
+  const leaderboardCollections = [
+    "leaderboards_hq",
+    "leaderboards_sdc",
+    "leaderboards_smhq",
+    "modded_hq",
+    "modded_sdc",
+    "modded_smhq"
+  ];
 
-  
-        if (playerIndex !== -1) {
-          const player = run.players[playerIndex];
-  
-          const runDiv = document.createElement('div');
-          runDiv.classList.add('run-entry');
-  
+  runsContainer.innerHTML = "<h2>Lethal Company</h2>";
+  moddedRunsContainer.innerHTML = "<h2>Modded Lethal Company</h2>";
 
-          const playersDiv = document.createElement('div');
-          playersDiv.classList.add('run-players');
-          playersDiv.textContent = `Players: ${run.players.join(', ')}`;
-          runDiv.appendChild(playersDiv);
-      
-          const versionDiv = document.createElement('div');
-          versionDiv.classList.add('run-version');
-          versionDiv.textContent = `Version: ${run.version}`;
-          runDiv.appendChild(versionDiv);
+  for (const collectionName of leaderboardCollections) {
+    const runsRef = collection(db, collectionName);
+    const q = query(runsRef, where("players", "array-contains", normalizedUsername));
+    const querySnapshot = await getDocs(q);
 
-          const valueDiv = document.createElement('div');
-          valueDiv.classList.add('run-value');
-      
-          if (collectionName === "leaderboards_hq" || collectionName === "leaderboards_smhq") {
-            valueDiv.textContent = `Quota Amount: ${run.quotaAmount || 0}`;
-          } else if (collectionName === "leaderboards_sdc") {
-            valueDiv.textContent = `Total Scrap: ${run.totalScrap || 0}`;
-          }
+    querySnapshot.forEach((docSnapshot) => {
+      const run = docSnapshot.data();
 
-          if (collectionName === "modded_hq" || collectionName === "modded_smhq") {
-            valueDiv.textContent = `Quota Amount: ${run.quotaAmount || 0}`;
-          } else if (collectionName === "modded_sdc") {
-            valueDiv.textContent = `Total Scrap: ${run.totalScrap || 0}`;
-          }
+      const runDiv = document.createElement('div');
+      runDiv.classList.add('run-entry');
 
-      
-          runDiv.appendChild(valueDiv);
-      
-          const detailsButton = document.createElement('button');
-          detailsButton.classList.add('view-details-btn');
-          detailsButton.innerHTML = '→';
-          detailsButton.onclick = () => showRunDetails(run, index);
-          runDiv.appendChild(detailsButton);
-    
+      // Basic run info
+      const playersDiv = document.createElement('div');
+      playersDiv.classList.add('run-players');
+      playersDiv.textContent = `Players: ${run.players.join(', ')}`;
+      runDiv.appendChild(playersDiv);
 
-          if (collectionName == 'leaderboards_hq') {
-            runDiv.innerHTML = `
-            <h3>High Quota</h3>
-            <p><strong>Players:</strong> ${run.players.join(', ')}</p>
-            <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
-            <p><strong>Version:</strong> ${run.version}</p>
-          `;
-          }
+      const versionDiv = document.createElement('div');
+      versionDiv.classList.add('run-version');
+      versionDiv.textContent = `Version: ${run.version}`;
+      runDiv.appendChild(versionDiv);
 
-          if (collectionName == 'leaderboards_sdc') {
-            runDiv.innerHTML = `
-            <h3>Single Day Clear</h3>
-            <p><strong>Players:</strong> ${run.players.join(', ')}</p>
-            <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
-            <p><strong>Moon:</strong> ${run.moon}</p>
-          `;
-          }
+      const valueDiv = document.createElement('div');
+      valueDiv.classList.add('run-value');
 
-          if (collectionName == 'leaderboards_smhq') {
-            runDiv.innerHTML = `
-            <h3>Single Moon High Quota</h3>
-            <p><strong>Players:</strong> ${run.players.join(', ')}</p>
-            <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
-            <p><strong>Moon:</strong> ${run.moon}</p>
-          `;
-          }
+      if (collectionName === "leaderboards_hq" || collectionName === "leaderboards_smhq" || collectionName === "modded_hq" || collectionName === "modded_smhq") {
+        valueDiv.textContent = `Quota Amount: ${run.quotaAmount || 0}`;
+      } else if (collectionName === "leaderboards_sdc" || collectionName === "modded_sdc") {
+        valueDiv.textContent = `Total Scrap: ${run.totalScrap || 0}`;
+      }
+      runDiv.appendChild(valueDiv);
 
-
-          if (collectionName == 'modded_hq') {
-            runDiv.innerHTML = `
-            <h3>Modded High Quota</h3>
-            <p><strong>Players:</strong> ${run.players.join(', ')}</p>
-            <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
-            <p><strong>Mod:</strong> ${run.mod}</p>
-            <p><strong>Version:</strong> ${run.version}</p>
-          `;
-          }
-
-          if (collectionName == 'modded_sdc') {
-            runDiv.innerHTML = `
-            <h3>Modded Single Day Clear</h3>
-            <p><strong>Players:</strong> ${run.players.join(', ')}</p>
-            <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
-            <p><strong>Mod:</strong> ${run.mod}</p>
-            <p><strong>Moon:</strong> ${run.moon}</p>
-          `;
-          }
-
-          if (collectionName == 'modded_smhq') {
-            runDiv.innerHTML = `
-            <h3>Modded Single Moon High Quota</h3>
-            <p><strong>Players:</strong> ${run.players.join(', ')}</p>
-            <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
-            <p><strong>Mod:</strong> ${run.mod}</p>
-            <p><strong>Moon:</strong> ${run.moon}</p>
-          `;
-          }
-          
-          if (collectionName == 'leaderboards_hq' || collectionName === "leaderboards_smhq" || collectionName === "leaderboards_sdc") {
-            runsContainer.appendChild(runDiv);
-          } else if (collectionName == 'modded_hq' || collectionName === "modded_smhq" || collectionName === "modded_sdc") {
-            moddedRunsContainer.appendChild(runDiv);
-          }
-        }
-      });
-    }
+      // Add the runDiv to the right container
+      if (collectionName.startsWith("modded")) {
+        moddedRunsContainer.appendChild(runDiv);
+      } else {
+        runsContainer.appendChild(runDiv);
+      }
+    });
   }
+}
+
 
   
   
   onAuthStateChanged(auth, (user) => {
     if (user) {
       const username = new URLSearchParams(window.location.search).get("username");
-      displayPlayerRuns(username);
+      if (username) {
+          displayPlayerRuns(username);
+      }
     }
   });
 

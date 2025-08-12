@@ -1,6 +1,6 @@
 import { loadNavbar } from './utils.js';
 import { handleAuthButtons } from './auth.js';
-import { getDocs, collection } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+import { getDocs, collection, query, where } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
 import { db } from './firebase.js';
 
 
@@ -10,8 +10,10 @@ const backupProfilePic = "/assets/default-avatar.png";
 
 const fetchTeamMembers = async () => {
   try {
-    const usersSnapshot = await getDocs(collection(db, 'users'));
-    
+    const rolesToFetch = ['admin', 'verifier', 'modded-verifier', 'site-developer'];
+    const usersQuery = query(collection(db, 'users'), where('roles', 'array-contains-any', rolesToFetch));
+    const usersSnapshot = await getDocs(usersQuery);
+
     const admins = [];
     const verifiers = [];
     const moddedVerifiers = [];
@@ -22,18 +24,10 @@ const fetchTeamMembers = async () => {
       const { username, roles, profilePicture } = userData;
 
       if (Array.isArray(roles)) {
-        if (roles.includes('admin')) {
-          admins.push({ username, profilePicture });
-        }
-        if (roles.includes('verifier')) {
-          verifiers.push({ username, profilePicture });
-        }
-        if (roles.includes('modded-verifier')) {
-          moddedVerifiers.push({ username, profilePicture });
-        }
-        if (roles.includes('site-developer')) {
-          siteDevelopers.push({ username, profilePicture });
-        }
+        if (roles.includes('admin')) admins.push({ username, profilePicture });
+        if (roles.includes('verifier')) verifiers.push({ username, profilePicture });
+        if (roles.includes('modded-verifier')) moddedVerifiers.push({ username, profilePicture });
+        if (roles.includes('site-developer')) siteDevelopers.push({ username, profilePicture });
       }
     });
 

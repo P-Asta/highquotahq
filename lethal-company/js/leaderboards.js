@@ -23,60 +23,97 @@ let activeFilters = {
 // Ensure "Player 1" button is visually active on page load
 document.querySelector('[data-filter="1"]').classList.add('active');
 
-const fetchLeaderboardData = async () => {
-  leaderboard.innerHTML = 'Loading...';
+const CACHE_KEY_PREFIX = 'leaderboard-cache-';
+const CACHE_EXPIRY_MS = 10 * 60 * 1000; // 10 minutes
 
+// Fetch raw runs data from cache or Firestore
+const fetchRawRuns = async () => {
+  const cacheKey = CACHE_KEY_PREFIX + activeCollection;
+  const cached = localStorage.getItem(cacheKey);
+
+  if (cached) {
+    const cachedData = JSON.parse(cached);
+    const age = Date.now() - cachedData.timestamp;
+    if (age < CACHE_EXPIRY_MS) {
+      console.log('Using cached data for', activeCollection);
+      return cachedData.runs;  // raw data, unfiltered
+    }
+  }
+
+  // If no cache or cache expired, fetch fresh data
   try {
     const querySnapshot = await getDocs(collection(db, activeCollection));
     const runs = querySnapshot.docs.map(doc => doc.data());
 
-    // Default filtering logic
-    const filteredRuns = runs.filter(run => {
-      const playerCount = run.players?.length || 0;
-      const matchesPlayerCount = activeFilters.playerCount.length === 0 || 
-                                 activeFilters.playerCount.includes(playerCount.toString());
+    localStorage.setItem(cacheKey, JSON.stringify({
+      runs,
+      timestamp: Date.now()
+    }));
 
-      const version = run.version;
-      const matchesVersion = activeFilters.versions.length === 0 || 
-                             activeFilters.versions.includes(version);
-
-      const moon = run.moon || '';
-      const matchesMoon = activeFilters.moon.length === 0 || 
-                          activeFilters.moon.includes(moon);
-                   
-      const scrapType = run.scrapType || '';
-      const matchesScrapType = activeFilters.scrapType.length === 0 ||
-                               activeFilters.scrapType.includes(scrapType);
-                      
-
-      const isVerified = run.verified === true;
-      const isUnrestricted = run.unrestricted || false;
-      const showUnrestricted = activeFilters.unrestricted;
-
-      const unrestrictedFilter = showUnrestricted || !isUnrestricted;
-
-      return matchesPlayerCount && matchesVersion && matchesMoon && matchesScrapType && isVerified && unrestrictedFilter;
-    });
-
-    // Determine the sort key based on the active collection
-    let sortKey;
-    if (activeCollection === "leaderboards_hq" || activeCollection === "leaderboards_smhq") {
-      sortKey = "quotaAmount";
-    } else if (activeCollection === "leaderboards_sdc") {
-      sortKey = "totalScrap";
-    }
-
-    // Sort runs by the determined key in descending order
-    const sortedRuns = filteredRuns.sort((a, b) => (b[sortKey] || 0) - (a[sortKey] || 0));
-
-    // Add position to each run
-    sortedRuns.forEach((run, index) => {
-      run.position = index + 1;
-    });
-
-    displayLeaderboard(sortedRuns); // Pass the sorted runs with positions to the display function
+    return runs;
   } catch (error) {
     console.error("Error fetching leaderboard data:", error);
+    throw error;
+  }
+};
+
+// Apply filters and sorting in-memory
+const filterAndSortRuns = (runs) => {
+  // Filter
+  const filteredRuns = runs.filter(run => {
+    const playerCount = run.players?.length || 0;
+    const matchesPlayerCount = activeFilters.playerCount.length === 0 || 
+                               activeFilters.playerCount.includes(playerCount.toString());
+
+    const version = run.version;
+    const matchesVersion = activeFilters.versions.length === 0 || 
+                           activeFilters.versions.includes(version);
+
+    const moon = run.moon || '';
+    const matchesMoon = activeFilters.moon.length === 0 || 
+                        activeFilters.moon.includes(moon);
+
+    const scrapType = run.scrapType || '';
+    const matchesScrapType = activeFilters.scrapType.length === 0 ||
+                             activeFilters.scrapType.includes(scrapType);
+
+    const isVerified = run.verified === true;
+    const isUnrestricted = run.unrestricted || false;
+    const showUnrestricted = activeFilters.unrestricted;
+
+    const unrestrictedFilter = showUnrestricted || !isUnrestricted;
+
+    return matchesPlayerCount && matchesVersion && matchesMoon && matchesScrapType && isVerified && unrestrictedFilter;
+  });
+
+  // Determine sort key
+  let sortKey;
+  if (activeCollection === "leaderboards_hq" || activeCollection === "leaderboards_smhq") {
+    sortKey = "quotaAmount";
+  } else if (activeCollection === "leaderboards_sdc") {
+    sortKey = "totalScrap";
+  }
+
+  // Sort descending by key
+  const sortedRuns = filteredRuns.sort((a, b) => (b[sortKey] || 0) - (a[sortKey] || 0));
+
+  // Add position number
+  sortedRuns.forEach((run, index) => {
+    run.position = index + 1;
+  });
+
+  return sortedRuns;
+};
+
+// Main function to fetch data & update leaderboard display
+const fetchLeaderboardData = async () => {
+  leaderboard.innerHTML = 'Loading...';
+
+  try {
+    const rawRuns = await fetchRawRuns();           // get raw cached or fresh runs
+    const filteredSortedRuns = filterAndSortRuns(rawRuns); // filter & sort in-memory
+    displayLeaderboard(filteredSortedRuns);         // show leaderboard
+  } catch {
     leaderboard.innerHTML = 'Error loading leaderboard.';
   }
 };
@@ -186,6 +223,8 @@ collectionBtns.forEach(btn => {
   });
 });
 
+
+
 const displayLeaderboard = (runs) => {
   leaderboard.innerHTML = '';
 
@@ -228,48 +267,24 @@ const displayLeaderboard = (runs) => {
 
     runDiv.appendChild(positionDiv);
 
-    const playerPromises = run.players.map(async (player) => {
-      const userQuery = query(collection(db, "users"), where("username", "==", player));
-      const usersSnapshot = await getDocs(userQuery);
+    const playersDiv = document.createElement('div');
+    playersDiv.classList.add('run-players');
+    playersDiv.textContent = `Players: `;
 
-      let countryFlag = '';
-      if (!usersSnapshot.empty) {
-          const userData = usersSnapshot.docs[0].data();
-          countryFlag = countryFlags[userData.country] || '';
+    run.players.forEach((player, i) => {
+      const playerLink = document.createElement('a');
+      playerLink.href = `/pages/profile.html?username=${encodeURIComponent(player)}`;
+      playerLink.textContent = player;
+      playerLink.classList.add('player-link');
+
+      playersDiv.appendChild(playerLink);
+
+      if (i < run.players.length - 1) {
+        playersDiv.appendChild(document.createTextNode(', '));
       }
-
-      return { name: player, flag: countryFlag };
-  });
-
-  // Wait for all Firestore queries to resolve
-  Promise.all(playerPromises).then((playerData) => {
-      const playersDiv = document.createElement('div');
-      playersDiv.classList.add('run-players');
-      playersDiv.textContent = `Players: `;
-
-      playerData.forEach((playerObj, i) => {
-          const playerLink = document.createElement('a');
-          playerLink.href = `/pages/profile.html?username=${playerObj.name}`;
-          playerLink.textContent = playerObj.name;
-          playerLink.classList.add('player-link');
-
-          const flagSpan = document.createElement('span');
-          flagSpan.textContent = ` ${playerObj.flag}`;
-          flagSpan.classList.add('country-flag');
-
-          playersDiv.appendChild(playerLink);
-          playersDiv.appendChild(flagSpan);
-
-          if (i < playerData.length - 1) {
-              playersDiv.appendChild(document.createTextNode(', '));
-          }
-      });
-
-    
-      runDiv.appendChild(playersDiv);
-    }).catch(error => {
-        console.error("Error fetching user data:", error);
     });
+
+    runDiv.appendChild(playersDiv);
 
     const versionDiv = document.createElement('div');
     versionDiv.classList.add('run-version');

@@ -24,7 +24,7 @@ let activeFilters = {
 document.querySelector('[data-filter="1"]').classList.add('active');
 
 const CACHE_KEY_PREFIX = 'leaderboard-cache-';
-const CACHE_EXPIRY_MS = 10 * 60 * 1000 * 12; // 2 hrs
+const CACHE_EXPIRY_MS = 10 * 60 * 1000 * 144; // 24 hrs
 
 // Fetch raw runs data from cache or Firestore
 const fetchRawRuns = async () => {

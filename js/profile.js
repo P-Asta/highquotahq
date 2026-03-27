@@ -53,7 +53,6 @@ onAuthStateChanged(auth, async (user) => {
     const userRecord = await fetchUserByUsername(username);
     if (!userRecord) {
       console.log("user not found");
-      // Handle user not found (show message, redirect, etc)
       return;
     }
 
@@ -143,7 +142,7 @@ saveChangesButton.addEventListener("click", async () => {
 });
 
 async function displayPlayerRuns(username) {
-  const normalizedUsername = username.trim(); // make sure to match exact casing as stored in Firestore
+  const normalizedUsername = username.trim();
 
   const leaderboardCollections = [
     "leaderboards_hq",
@@ -168,7 +167,7 @@ async function displayPlayerRuns(username) {
       const runDiv = document.createElement('div');
       runDiv.classList.add('run-entry');
 
-      // Basic run info
+      // basic run info
       const playersDiv = document.createElement('div');
       playersDiv.classList.add('run-players');
       playersDiv.textContent = `Players: ${run.players.join(', ')}`;
@@ -189,7 +188,6 @@ async function displayPlayerRuns(username) {
       }
       runDiv.appendChild(valueDiv);
 
-      // Add the runDiv to the right container
       if (collectionName.startsWith("modded")) {
         moddedRunsContainer.appendChild(runDiv);
       } else {

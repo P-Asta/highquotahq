@@ -52,260 +52,249 @@
     background-color: #f9f9f9;
   }
   
-  /* Collection Buttons */
+  /* collection buttons */
 #collection-filters {
     margin-bottom: 1rem;
-  }
-  
-  .collection-btn {
-    margin-right: 0.5rem;
-    padding: 0.5rem 1rem;
-    background-color: #333;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  /* Filter Categories */
-  .filter-category {
-    margin-bottom: 1rem;
-  }
-  
-  .filter-category h3 {
-    margin-bottom: 0.5rem;
-    font-size: 1.2rem;
-    color: #333;
-  }
-  
-  /* Filter Buttons */
-  .filter-btn {
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
-    padding: 0.5rem 1rem;
-    background-color: #eee;
-    color: #333;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .filter-btn.active {
-    background-color: #ff5733;
-    color: white;
-  }
-  
-  /* Overall page content wrapper */
-.content {
-    max-width: 1200px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #1a1a1aa2;
-    color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-    position: relative; /* Ensure relative positioning for the details panel */
-    overflow: hidden; /* Prevent any overflow beyond the container */
-  }
-
-  .content:hover {
-    transform: scale(1.01); /* Slightly larger on hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Darker shadow for hover effect */
-  }
-  
-  /* Leaderboard Header */
-  .content h1 {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    color: #ff3e3e;
-  }
-  
-  /* Filters section */
-  #filters {
-    margin-bottom: 20px;
-    padding: 15px;
-    background-color: #2a2a2abb;
-    border-radius: 8px;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
-  }
-  
-  /* Collection buttons */
-  #collection-filters {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
-  }
-  
-  .collection-btn {
-    padding: 10px 20px;
-    margin: 5px;
-    background-color: #333;
-    color: white;
-    border: 2px solid #444;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  .collection-btn:hover,
-  .collection-btn.active {
-    background-color: #ff3e3e;
-    border-color: #ff5757;
-    color: #fff;
-  }
-  
-  /* Filter categories */
-  .filter-category {
-    margin-bottom: 20px;
-  }
-  
-  .filter-category h3 {
-    font-family: 'systematic_jcool';
-    src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-         url('/assets/fonts/9systema-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    font-size: 1.5rem;
-    color: #ff3e3e;
-    margin-bottom: 10px;
-  }
-  
-  .filter-btn {
-    font-family: 'systematic_jcool';
-    src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-         url('/assets/fonts/9systema-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    padding: 8px 15px;
-    margin: 5px;
-    background-color: #444;
-    color: white;
-    border: 1px solid #555;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  .filter-btn:hover,
-  .filter-btn.active {
-    background-color: #ff3e3e;
-    border-color: #ff5757;
-  }
-  
-  /* Leaderboard container */
-  #leaderboard {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: #2a2a2a;
-    border-radius: 8px;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
-  }
-  
-  .run {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    margin: 10px 0;
-    background-color: #333;
-    border: 1px solid #444;
-    border-radius: 5px;
-    transition: all 0.3s ease;
-  }
-  
-  .run:hover {
-    background-color: #444;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .content {
-      padding: 15px;
-    }
-  
-    .collection-btn,
-    .filter-btn {
-      padding: 8px 10px;
-      font-family: 'systematic_jcool';
-      src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-           url('/assets/fonts/9systema-webfont.woff') format('woff');
-      font-weight: normal;
-      font-style: normal;
-      font-size: 0.9rem;
-    }
-  
-    .run {
-      flex-direction: column;
-      text-align: center;
-    }
-  }
-  
+}
+
+.collection-btn {
+  margin-right: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* filter categories */
+.filter-category {
+  margin-bottom: 1rem;
+}
+
+.filter-category h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+/* filter buttons */
+.filter-btn {
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #eee;
+  color: #333;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.filter-btn.active {
+  background-color: #ff5733;
+  color: white;
+}
+
+/* overall page content wrapper */
+.content {
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #1a1a1aa2;
+  color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.content:hover {
+  transform: scale(1.01);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* leaderboard header */
+.content h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #ff3e3e;
+}
+
+/* filters section */
+#filters {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #2a2a2abb;
+  border-radius: 8px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+.collection-btn {
+  padding: 10px 20px;
+  margin: 5px;
+  background-color: #333;
+  color: white;
+  border: 2px solid #444;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.collection-btn:hover,
+.collection-btn.active {
+  background-color: #ff3e3e;
+  border-color: #ff5757;
+  color: #fff;
+}
+
+/* Filter categories */
+.filter-category {
+  margin-bottom: 20px;
+}
+
+.filter-category h3 {
+  font-family: 'systematic_jcool';
+  src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
+        url('/assets/fonts/9systema-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-size: 1.5rem;
+  color: #ff3e3e;
+  margin-bottom: 10px;
+}
+
+.filter-btn {
+  font-family: 'systematic_jcool';
+  src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
+        url('/assets/fonts/9systema-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  padding: 8px 15px;
+  margin: 5px;
+  background-color: #444;
+  color: white;
+  border: 1px solid #555;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+  background-color: #ff3e3e;
+  border-color: #ff5757;
+}
+
 /* Leaderboard container */
+#leaderboard {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+.run {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #333;
+  border: 1px solid #444;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.run:hover {
+  background-color: #444;
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 15px;
+  }
+
+  .collection-btn,
+  .filter-btn {
+    padding: 8px 10px;
+    font-family: 'systematic_jcool';
+    src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
+          url('/assets/fonts/9systema-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-size: 0.9rem;
+  }
+
+  .run {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+  
 #leaderboard {
     display: flex;
     flex-direction: column;
     gap: 15px;
     padding: 20px;
-    background-color: #33333351; /* Dark background for the leaderboard */
+    background-color: #33333351;
     border-radius: 10px;
   }
   
-  /* Style for each run entry */
   .run-entry {
     display: flex;
     flex-direction: column;
     padding: 15px;
     margin: 10px 0;
-    background-color: rgba(45, 45, 45, 0.9); /* Dark transparent background */
-    border: 1px solid #555; /* Darker border */
+    background-color: rgba(45, 45, 45, 0.9);
+    border: 1px solid #555;
     border-radius: 8px;
-    color: #fff; /* White text */
+    color: #fff;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
   
-  /* Hover effect for run entries */
   .run-entry:hover {
-    transform: scale(1.002); /* Slightly larger on hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Darker shadow for hover effect */
+    transform: scale(1.002);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   }
   
-  /* Style for players information */
   .run-players {
     font-size: 1.1rem;
     font-weight: bold;
-    color: #f0f0f0; /* Light grey text */
+    color: #f0f0f0;
     margin-bottom: 8px;
-    text-align: left; /* Left align text */
+    text-align: left;
   }
   
-  /* Style for version information */
+
   .run-version {
     font-size: 1rem;
-    color: #ddd; /* Light grey for version */
+    color: #ddd;
     margin-top: 5px;
-    text-align: left; /* Left align text */
+    text-align: left;
   }
 
   .run-value {
     font-size: 2rem;
-    color: #ddd; /* Light grey for version */
+    color: #ddd;
     text-align: center;
     margin-bottom: 0px;
   }
 
-/* Position Styling */
+
 .run-position {
   font-size: 2em;
   font-weight: bold;
   margin-right: 15px;
   margin-bottom: 5px;
-  width: 50px; /* Consistent spacing for all positions */
+  width: 50px;
   text-align: left;
 }
 
-/* Special Styling for Top 3 */
 .run-position.gold {
   color: gold;
 }
@@ -315,16 +304,15 @@
 }
 
 .run-position.bronze {
-  color: #cd7f32; /* Bronze color */
+  color: #cd7f32;
 }
 
 
-/* Leaderboard Section */
+/* Leaderboard section */
 #leaderboard {
   margin-top: 20px;
 }
 
-/* Button to view details */
 .view-details-btn {
   background-color: transparent;
   border: none;
@@ -338,7 +326,6 @@
 
 }
 
-/* Apply a fade effect to #leaderboard and #filters */
 #leaderboard, #filters {
   transition: opacity 0.5s ease, transform 0.5s ease;
   opacity: 1;
@@ -347,44 +334,43 @@
 
 #leaderboard.hidden, #filters.hidden {
   opacity: 0;
-  transform: translateY(-20px); /* Move the elements upwards */
-  pointer-events: none; /* Disable interaction with hidden elements */
+  transform: translateY(-20px);
+  pointer-events: none;
 }
 
 #details-panel {
-  display: none; /* Initially hidden */
+  display: none;
   opacity: 0;
-  transition: opacity 0.5s ease; /* Smooth transition */
+  transition: opacity 0.5s ease;
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 20px; /* Matching content padding */
-  background-color: #1a1a1aa2; /* Optional background */
+  padding: 20px;
+  background-color: #1a1a1aa2;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  z-index: 999; /* Ensure it appears above the leaderboard */
+  z-index: 999;
   color: white;
   overflow-y: auto;
-  pointer-events: none; /* Prevent interaction when not visible */
+  pointer-events: none;
 }
 
 
 #details-panel.active {
-  display: block; /* Make the panel visible */
-  opacity: 1; /* Fade in */
-  pointer-events: auto; /* Enable interactions when visible */
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 
-/* Optionally, you can add a scaling effect or any other transition you prefer */
 #details-panel.active {
   transform: scale(1);
-  transition: all 0.5s ease; /* Smooth transition for scaling */
+  transition: all 0.5s ease;
 }
 
-/* Section Headings */
+/* Section headings */
 .run-details h2, .run-details h3 {
   text-align: center;
   font-size: 22px;
@@ -393,11 +379,11 @@
   padding-bottom: 5px;
 }
 
-/* Stats Section */
+/* Stats section */
 .stats-section {
   margin-top: 15px;
   padding: 15px;
-  background: rgba(255, 255, 255, 0.06); /* Slight contrast */
+  background: rgba(255, 255, 255, 0.06);
   border-radius: 8px;
 }
 
@@ -410,7 +396,7 @@
   color: #ff2f00;
 }
 
-/* Video Section */
+/* Video section */
 .video-section {
   display: flex;
   flex-wrap: wrap;
@@ -445,7 +431,7 @@
   transform: scale(1.05);
 }
 
-/* Close Button */
+/* Close button */
 button.close-btn {
   font-size: 20px;
   color: white;

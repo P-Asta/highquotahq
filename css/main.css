@@ -47,36 +47,36 @@ body::before {
     text-align: center;
     padding: 1rem 0;
     z-index: 1000;
-  }
-  
-  .footer-links {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    padding: 0 1rem;
-  }
-  
-  .footer-link {
-    color: #ccc;
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  
-  .footer-link:hover {
-    color: #fff;
-  }
-  
-  /* Mobile */
-  @media (max-width: 600px) {
-    .footer-links {
-      align-items: center;
-    }
+}
 
-    body {
-        margin-bottom: 5rem;
-    }
-  }
+.footer-links {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+gap: 1rem;
+padding: 0 1rem;
+}
+
+.footer-link {
+color: #ccc;
+text-decoration: none;
+transition: color 0.2s;
+}
+
+.footer-link:hover {
+color: #fff;
+}
+
+/* mobile */
+@media (max-width: 600px) {
+.footer-links {
+    align-items: center;
+}
+
+body {
+    margin-bottom: 5rem;
+}
+}
 
 @keyframes zoomBackground {
     0% {
@@ -90,7 +90,7 @@ body::before {
     }
 }
 
-/* Links and buttons */
+/* links and buttons */
 a {
     color: white;
     text-decoration: none;
@@ -111,15 +111,15 @@ footer {
     text-align: center;
 }
 
-/* Page content container */
+/* page content container */
 .content {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
     text-align: center;
-  }
+}
 
-/* Navbar container */
+/* navbar container */
 .navbar {
     background: linear-gradient(to bottom, rgba(24, 24, 24, 0.726), rgba(54, 54, 54, 0.721));
     display: flex;
@@ -143,7 +143,7 @@ footer {
 }
 
 
-/* Navbar buttons container (left side) */
+/* navbar buttons container (left side) */
 .navbar ul {
     list-style-type: none;
     margin-left: 20px;
@@ -153,7 +153,7 @@ footer {
     align-items: center;
 }
 
-/* Navbar buttons (move login/logout to the right) */
+/* navbar buttons (right side) */
 .navbar ul li {
     display: inline;
 }
@@ -162,7 +162,7 @@ footer {
     margin-left: auto;
 }
 
-/* Buttons */
+/* buttons */
 .navbar ul li button {
     padding: 10px 20px;
     color: white;
@@ -178,20 +178,20 @@ footer {
     text-align: center;
 }
 
-/* Hover effects */
+/* hover effects */
 .navbar ul li button:hover {
     background-color: #f0f0f0ad;
     transform: scale(1.1);
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Active button */
+/* active button */
 .navbar ul li button.active {
     background-color: #d84315;
     box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* General button hover and active effects */
+/* general button hover and active effects */
 .navbar button:hover {
     background-color: #8f8f8f;
     transform: scale(1.1);
@@ -218,7 +218,7 @@ footer {
     gap: 15px;
 }
 
-/* Ensure navbar stays cohesive */
+/* navbar */
 .navbar ul {
     flex: 1;
     display: flex;
@@ -232,7 +232,7 @@ footer {
     display: inline-block;
   }
 
-/* Dropdown button */
+/* dropdown button */
 .dropdown-button {
     cursor: pointer;
     background-color: #bfbfbf;
@@ -247,7 +247,7 @@ footer {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Dropdown menu */
+/* dropdown menu */
 .dropdown-menu {
     position: absolute;
     top: 100%;
@@ -266,7 +266,7 @@ footer {
     flex-direction: column;
 }
 
-/* Dropdown menu items */
+/* dropdown menu items */
 .dropdown-menu li {
     padding: 10px;
     cursor: pointer;
@@ -284,19 +284,19 @@ footer {
     width: auto;
 }
 
-/* Dropdown logo styling */
+/* dropdown logo styling */
 .dropdown-logo {
     display: block;
     margin: auto;
 }
 
-/* Display the dropdown when active */
+/* display the dropdown when active */
 .dropdown.active .dropdown-menu {
     visibility: visible;
     opacity: 1;
 }
 
-/* Dropdown logo in button */
+/* dropdown logo in button */
 .dropdown .logo {
     height: 40px;
     width: auto;

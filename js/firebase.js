@@ -3,6 +3,8 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebas
 import { getAuth } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
 import { getFirestore } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
 
+// since we arent working with sensitive info and dont store passwords its fine to have this here
+
 const firebaseConfig = {
     apiKey: "AIzaSyCklz28QDpVHdagTruIxlPc5hdi-fj6QxE",
     authDomain: "highquotahq214.firebaseapp.com",
@@ -13,7 +15,7 @@ const firebaseConfig = {
     measurementId: "G-CFSRWNCQDD"
 }; 
 
-// Initialize Firebase
+// initialize firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);

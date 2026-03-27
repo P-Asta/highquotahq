@@ -45,8 +45,8 @@
   }
   
   .guide-content.active {
-    max-height: 300px; /* Adjust based on content length */
-    padding: 10px; /* Ensures spacing when expanded */
+    max-height: 300px;
+    padding: 10px;
   }
   
   .guide-card {

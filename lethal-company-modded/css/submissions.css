@@ -6,7 +6,6 @@
   font-style: normal;
 }
 
-/* General Page Styling (unchanged) */
 body {
   color: #ffffff;
   font-family: 'systematic_jcool';
@@ -39,11 +38,11 @@ h1 {
   margin-bottom: 20px;
 }
 
-/* Form Styling */
+/* Form */
 form {
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Add spacing between fields */
+  gap: 15px;
 }
 
 label {
@@ -100,7 +99,7 @@ textarea#videos1,
 textarea#videos2,
 textarea#videos3,
 textarea#videos4 {
-  margin-bottom: 15px; /* Ensure spacing between textareas */
+  margin-bottom: 15px;
 }
 
 /* Field Groups (HQ, SDC, SMHQ) */
@@ -131,7 +130,6 @@ button[type="submit"]:hover {
   background-color: #e64a19;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .submission-form-container {
     padding: 15px;
@@ -159,7 +157,6 @@ button[type="submit"]:hover {
   }
 }
 
-/* Make all text bold */
 body,
 label,
 input,
@@ -177,11 +174,10 @@ button {
 /* Placeholder text styling */
 input::placeholder,
 textarea::placeholder {
-  color: #b0b0b0; /* Optional: Slightly lighter color for placeholder */
-  font-weight: bold; /* Match the text styling */
+  color: #b0b0b0;
+  font-weight: bold;
 }
 
-/* Ensure input fields remain visually appealing */
 input,
 textarea {
   padding: 10px;
@@ -190,6 +186,6 @@ textarea {
   border: 1px solid #444444;
   border-radius: 5px;
   box-sizing: border-box;
-  width: 100%; /* Full-width alignment */
-  margin-bottom: 15px; /* Spacing between fields */
+  width: 100%;
+  margin-bottom: 15px;
 }

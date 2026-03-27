@@ -4,6 +4,9 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/fi
 import { doc, getDoc, getDocs, collection, query, where, updateDoc, Timestamp, orderBy, limit, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 import { db, auth } from "./firebase.js";
 
+// THIS IS THE MOST JANK PART OF THE SITE GOOD LUCK
+
+
 function loadAdminInterface(user) {
     const adminSection = document.getElementById('admin-interface');
     const verifierSection = document.getElementById('verifier-interface');
@@ -125,7 +128,7 @@ const hideAllInterfaces = () => {
 
 
 
-// Admin Interface JavaScript
+// admin interface
 
 const assignRolesButton = document.getElementById('assign-roles-button');
 const removeRoleButton = document.getElementById('remove-role-button');
@@ -297,7 +300,7 @@ const unbanUser = async () => {
     }
 };
 
-// Verifier Interface JavaScript
+// verifier interface
 
 
 export async function fetchUnverifiedRuns(role) {

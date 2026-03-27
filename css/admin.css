@@ -6,7 +6,7 @@
     font-style: normal;
 }
 
-/* Admin Panel Layout */
+/* admin panel layout */
 .admin-container {
     font-family: 'systematic_jcool';
     src: url('9systema-webfont.woff2') format('woff2'),
@@ -17,7 +17,7 @@
     margin-left: 20px;
 }
 
-/* Sidebar styles */
+/* sidebar */
 .sidebar {
     width: 400px;
     background-color: rgba(44, 47, 56, 0.678);
@@ -32,7 +32,7 @@
     height: auto;
 }
 
-/* Sidebar heading */
+/* sidebar heading */
 .sidebar h2 {
     font-family: 'systematic_jcool';
     src: url('9systema-webfont.woff2') format('woff2'),
@@ -44,7 +44,7 @@
     color: #f39c12;
 }
 
-/* Sidebar buttons */
+/* sidebar buttons */
 .sidebar button {
     width: 100%;
     background-color: #333;
@@ -74,7 +74,7 @@
     color: white;
 }
 
-/* Main content area */
+/* main content area */
 #admin-placeholder {
     display: flex;
     flex-direction: column;
@@ -85,7 +85,7 @@
     height: 100%;
 }
 
-/* Card-style interface sections */
+/* card-style interface sections */
 .admin-section {
     position: absolute;
     visibility: hidden;
@@ -101,7 +101,7 @@
     width: 100%;
 }
 
-/* Visible section */
+/* visible section */
 .admin-section.show {
     visibility: visible;
     opacity: 1;
@@ -109,7 +109,7 @@
     transition: opacity 0.3s ease-in-out, visibility 0s 0s;
 }
 
-/* Card content styling */
+/* card content */
 .admin-section h3 {
     font-family: 'systematic_jcool';
     src: url('9systema-webfont.woff2') format('woff2'),
@@ -153,7 +153,7 @@
     background-color: #d35400;
 }
 
-/* Input fields styling */
+/* input fields */
 .input-group {
     margin-bottom: 15px;
     width: 100%;
@@ -212,7 +212,7 @@
     }
 }
 
-/* Style for the run list container */
+/* run list container */
 #run-list {
     width: 100%;
     display: flex;
@@ -220,7 +220,7 @@
     gap: 10px;
 }
 
-/* Run Item */
+/* run item */
 .run-item {
     text-align: left;
     background-color: #2c2c2ca1;
@@ -251,14 +251,14 @@
     transition: background-color 0.3s ease;
 }
 
-/* Hover Effect */
+/* hover effect */
 .run-item:hover {
     background-color: #444;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     transform: scale(1.01);
 }
 
-/* Text Content */
+/* text content */
 .run-item span {
     font-family: 'systematic_jcool';
     src: url('9systema-webfont.woff2') format('woff2'),
@@ -269,7 +269,7 @@
     line-height: 1.4;
 }
 
-/* Icon */
+/* icon */
 .run-item::before {
     content: '';
     width: 5px;
@@ -279,7 +279,7 @@
     margin-right: 10px;
 }
 
-/* Style for the input fields */
+/* input fields */
 #run-details-container input[type="text"],
 #run-details-container select {
     width: 100%;
@@ -290,7 +290,7 @@
     border-radius: 4px;
 }
 
-/* Style for the button group */
+/* button group */
 .button-group {
     display: flex;
     gap: 10px;
@@ -312,7 +312,7 @@
     background-color: #0056b3;
 }
 
-/* Back to list button */
+/* back to list button */
 #back-to-list {
     margin-top: 20px;
     padding: 10px 15px;

@@ -8,8 +8,8 @@
     color: white;
     padding: 20px;
     position: relative;
-    margin-top: 80px;  /* Push content down to avoid overlap with navbar */
-    height: calc(100vh - 80px);  /* Adjust height to account for navbar */
+    margin-top: 80px;
+    height: calc(100vh - 80px);
 }
 
 .central-card h1 {

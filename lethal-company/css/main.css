@@ -45,38 +45,37 @@ body::before {
     text-align: center;
     padding: 1rem 0;
     z-index: 1000;
-  }
-  
-  .footer-links {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    padding: 0 1rem;
-  }
-  
-  .footer-link {
-    color: #ccc;
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  
-  .footer-link:hover {
-    color: #fff;
-  }
-  
-  /* Mobile */
-  @media (max-width: 600px) {
-    .footer-links {
-      align-items: center;
-    }
+}
 
-    body {
-        margin-bottom: 5rem;
-    }
-  }
+.footer-links {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+gap: 1rem;
+padding: 0 1rem;
+}
 
-/* Add an animation for zooming in and out */
+.footer-link {
+color: #ccc;
+text-decoration: none;
+transition: color 0.2s;
+}
+
+.footer-link:hover {
+color: #fff;
+}
+
+/* mobile */
+@media (max-width: 600px) {
+.footer-links {
+    align-items: center;
+}
+
+body {
+    margin-bottom: 5rem;
+}
+}
+
 @keyframes zoomBackground {
     0% {
         transform: scale(1);
@@ -89,7 +88,7 @@ body::before {
     }
 }
 
-/* Links and buttons */
+/* links and buttons */
 a {
     color: white;
     text-decoration: none;
@@ -110,7 +109,7 @@ footer {
     text-align: center;
 }
 
-/* Page content container */
+/* page content container */
 .content {
     max-width: 1200px;
     margin: 0 auto;
@@ -118,7 +117,7 @@ footer {
     text-align: center;
   }
 
-/* Navbar container */
+/* navbar container */
 .navbar {
     background: linear-gradient(to bottom, rgba(88, 16, 16, 0.825), rgba(206, 34, 18, 0.721));
     display: flex;
@@ -141,7 +140,7 @@ footer {
     box-shadow: 0px 12px 14px rgba(0, 0, 0, 0.4);
 }
 
-/* Navbar buttons container (left side) */
+/* navbar buttons container */
 .navbar ul {
     list-style-type: none;
     margin-left: 20px;
@@ -155,7 +154,7 @@ footer {
     display: inline;
 }
 
-/* Buttons */
+/* buttons */
 .navbar ul li button {
     padding: 10px 20px;
     color: white;
@@ -171,20 +170,19 @@ footer {
     text-align: center;
 }
 
-/* Hover effects */
+/* hover effects */
 .navbar ul li button:hover {
     background-color: #e64919ad;
     transform: scale(1.1);
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Active button */
+/* active button */
 .navbar ul li button.active {
     background-color: #d84315;
     box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* General button hover and active effects */
 .navbar button:hover {
     background-color: #ffffff80;
     transform: scale(1.1);
@@ -196,7 +194,7 @@ footer {
     box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* Text links */
+/* text links */
 .navbar a {
     color: white;
     text-decoration: none;
@@ -206,14 +204,12 @@ footer {
     color: #d82215;
 }
 
-/* Move login/logout buttons to the right */
 .navbar .login-logout-buttons {
     margin-left: auto;
     display: flex;
     gap: 15px;
 }
 
-/* Ensure navbar stays cohesive */
 .navbar ul {
     flex: 1;
     display: flex;
@@ -221,13 +217,13 @@ footer {
     align-items: center;
 }
 
-/* The dropdown container */
+/* dropdown container */
 .dropdown {
     position: relative;
     display: inline-block;
   }
 
-/* Dropdown button */
+/* dropdown button */
 .dropdown-button {
     cursor: pointer;
     background-color: #e7e7e762;
@@ -242,7 +238,7 @@ footer {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Dropdown menu */
+/* dropdown menu */
 .dropdown-menu {
     position: absolute;
     top: 100%;
@@ -261,7 +257,7 @@ footer {
     flex-direction: column;
 }
 
-/* Dropdown menu items */
+/* dropdown menu items */
 .dropdown-menu li {
     padding: 10px;
     cursor: pointer;
@@ -279,19 +275,17 @@ footer {
     width: auto;
 }
 
-/* Dropdown logo styling */
+/* dropdown logo */
 .dropdown-logo {
     display: block;
     margin: auto;
 }
 
-/* Display the dropdown when active */
 .dropdown.active .dropdown-menu {
     visibility: visible;
     opacity: 1;
 }
 
-/* Dropdown logo in button */
 .dropdown .logo {
     height: 40px;
     width: auto;
@@ -322,37 +316,36 @@ footer {
 
     .dropdown {
         transform: translateX(1.5%);
-        position: relative; /* Ensure positioning is relative to the parent */
+        position: relative;
         display: flex;
         flex-direction: column;
-        align-items: center; /* Center everything */
-        justify-content: center; /* Center vertically if needed */
+        align-items: center;
+        justify-content: center;
         width: 100%;
         text-align: center;
     }
 
     .dropdown .dropdown-menu {
-        position: static; /* Remove absolute positioning */
-        display: none; /* Hide dropdown by default */
-        visibility: visible; /* Override visibility */
-        opacity: 1; /* Override opacity */
-        box-shadow: none; /* Remove unnecessary shadows */
-        border-radius: 0; /* Square edges for a cleaner mobile look */
-        width: 90%; /* Make sure it doesn’t stretch too much */
-        max-width: 300px; /* Optional: Prevent it from being too wide */
-        margin: 0 auto; /* Ensures proper centering */
+        position: static;
+        display: none;
+        visibility: visible;
+        opacity: 1;
+        box-shadow: none;
+        border-radius: 0;
+        width: 90%;
+        max-width: 300px;
+        margin: 0 auto;
     }
 
     .dropdown.active .dropdown-menu {
-        display: flex; /* Show dropdown when active */
+        display: flex;
     }
 
     .dropdown-menu li {
-        padding: 15px; /* Increase tap target size */
-        font-size: 16px; /* Make text more readable */
+        padding: 15px;
+        font-size: 16px;
     }
 
-    /* Ensure dropdown button is large enough */
     .dropdown .dropdown-toggle {
         width: 100%;
         padding: 12px;

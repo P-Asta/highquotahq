@@ -320,7 +320,7 @@ export async function fetchUnverifiedRuns(role) {
 
     collections.forEach((collectionName) => {
         const runsRef = collection(db, collectionName);
-        const q = query(runsRef, where('verified', '==', false));
+        const q = query(runsRef, where('verified', '==', false), orderBy('date', 'asc'));
 
         getDocs(q)
             .then((querySnapshot) => {

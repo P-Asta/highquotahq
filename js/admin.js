@@ -4,8 +4,6 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/fi
 import { doc, getDoc, getDocs, collection, query, where, updateDoc, Timestamp, orderBy, limit, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 import { db, auth } from "./firebase.js";
 
-// THIS IS THE MOST JANK PART OF THE SITE GOOD LUCK
-
 
 function loadAdminInterface(user) {
     const adminSection = document.getElementById('admin-interface');
@@ -307,6 +305,14 @@ export async function fetchUnverifiedRuns(role) {
 
     let collections = [];
     let runListContainer = null;
+    const collectionDisplayNames = {
+        'leaderboards_hq': 'High Quota',
+        'leaderboards_smhq': 'Single Moon High Quota',
+        'leaderboards_sdc': 'Single Day Clear',
+        'modded_hq': 'High Quota',
+        'modded_smhq': 'Single Moon High Quota',
+        'modded_sdc': 'Single Day Clear'
+    };
 
     if (role == "verifier") {
         collections = ['leaderboards_hq', 'leaderboards_smhq', 'leaderboards_sdc'];
@@ -318,13 +324,25 @@ export async function fetchUnverifiedRuns(role) {
 
     runListContainer.innerHTML = '';
 
-    collections.forEach((collectionName) => {
-        const runsRef = collection(db, collectionName);
+    for (const collectionName of collections){
+        const sectionHeader = document.createElement('h3');
+        sectionHeader.textContent = collectionDisplayNames[collectionName] || collectionName;
+        runListContainer.appendChild(sectionHeader);
+
+        const collectionContainer = document.createElement('div');
+        runListContainer.appendChild(collectionContainer);
+
+        const runsRef = collection(db, collectionName); 
         const q = query(runsRef, where('verified', '==', false), orderBy('date', 'asc'));
 
-        getDocs(q)
-            .then((querySnapshot) => {
-                querySnapshot.forEach((docSnapshot) => {
+
+        try {
+            const querySnapshot = await getDocs(q);
+            if (querySnapshot.empty){
+                collectionContainer.innerHTML = `<p>No pending runs.</p>`;
+            }
+
+            querySnapshot.forEach((docSnapshot) => {
                     const run = docSnapshot.data();
                     const runId = docSnapshot.id;
                     const claimedBy = run.claimedBy || 'Unclaimed';
@@ -442,13 +460,11 @@ export async function fetchUnverifiedRuns(role) {
                     runItem.addEventListener('click', () => {
                         showRunDetails(runId, collectionName, run, role);
                     });
-                    
-                });
-            })
-            .catch((error) => {
-                console.error(`Error fetching unverified runs from ${collectionName}:`, error);
             });
-    });
+        } catch (error) {
+            console.error(`Error fetching unverified runs from ${collectionName}:`, error);
+        }
+    }
 }
 
 export function showRunDetails(runId, collectionName, run, role) {

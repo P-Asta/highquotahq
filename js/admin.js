@@ -499,7 +499,6 @@ export function showRunDetails(runId, collectionName, run, role) {
     const players = run.players || ['Unknown Player'];
     const date = run.date ? run.date.toDate().toLocaleString() : 'Unknown Date';
     const version = run.version || 'Unknown Version';
-    const unrestricted = run.unrestricted !== undefined ? run.unrestricted : false;
     const videos = run.videos || {};
     const logs = run.logs || 'Unknown Logs';
     const comments = run.comments || 'No Comments';
@@ -590,12 +589,6 @@ export function showRunDetails(runId, collectionName, run, role) {
         <label>Players: <input type="text" value="${Array.isArray(players) ? players.join(', ') : players}" disabled data-field="players"></label><br>
         <label>Date: <input type="text" value="${date}" disabled data-field="date"></label><br>
         <label>Version: <input type="text" value="${version}" disabled data-field="version"></label><br>
-        <label>Unrestricted: 
-            <select disabled data-field="unrestricted">
-                <option value="true" ${unrestricted ? 'selected' : ''}>Yes</option>
-                <option value="false" ${!unrestricted ? 'selected' : ''}>No</option>
-            </select>
-        </label><br>
         <label>Claimed By: <input type="text" value="${claimedBy}" disabled data-field="claimedBy"></label><br>
         <label>Logs: <input type="text" value="${logs}" disabled data-field="logs"></label><br>
         <label>Comments: <input type="text" value="${comments}" disabled data-field="comments"></label><br>

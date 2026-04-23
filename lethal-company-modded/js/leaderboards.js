@@ -15,7 +15,6 @@ let activeCollection = 'modded_hq';
 let activeFilters = {
   playerCount: ['1'],
   versions: [],
-  unrestricted: false,
   moon: [],
   scrapType: [],
 };
@@ -78,12 +77,8 @@ const filterAndSortRuns = (runs) => {
                              activeFilters.scrapType.includes(scrapType);
 
     const isVerified = run.verified === true;
-    const isUnrestricted = run.unrestricted || false;
-    const showUnrestricted = activeFilters.unrestricted;
 
-    const unrestrictedFilter = showUnrestricted || !isUnrestricted;
-
-    return matchesPlayerCount && matchesVersion && matchesMoon && matchesScrapType && isVerified && unrestrictedFilter;
+    return matchesPlayerCount && matchesVersion && matchesMoon && matchesScrapType && isVerified;
   });
 
   // Determine sort key
@@ -122,7 +117,6 @@ const fetchLeaderboardData = async () => {
 const filterTypeMap = {
   'player-count': 'playerCount',
   'version': 'versions',
-  'unrestricted': 'unrestricted',
   'moon': 'moon',
   'scrap-type': 'scrapType',
 };
@@ -150,10 +144,7 @@ filterBtns.forEach((btn) => {
 
     const filterValue = btn.getAttribute('data-filter');
 
-    if (filterType === 'unrestricted') {
-      activeFilters.unrestricted = !activeFilters.unrestricted;
-      btn.classList.toggle('active', activeFilters.unrestricted);
-    } else if (filterType === 'playerCount') {
+    if (filterType === 'playerCount') {
       activeFilters.playerCount = [filterValue];
 
       filterCategory.querySelectorAll('.filter-btn').forEach(button => button.classList.remove('active'));
@@ -189,7 +180,6 @@ collectionBtns.forEach(btn => {
     activeFilters = {
       playerCount: ['1'],
       versions: [],
-      unrestricted: false,
       moon: [],
       scrapType: [],
     };
@@ -373,7 +363,6 @@ export function showRunDetails(run, index) {
       <p><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
       <p><strong>Quota Reached:</strong> ${run.quotaReached}</p>
       <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
-      <p><strong>Unrestricted:</strong> ${run.unrestricted ? 'Yes' : 'No'}</p>
       <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
       <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
       <p><strong>Version:</strong> ${run.version}</p>
@@ -385,7 +374,6 @@ export function showRunDetails(run, index) {
       <p><strong>Scrap Type:</strong> ${run.scrapType}</p>
       <p><strong>Equipment:</strong> ${run.equipment}</p>
       <p><strong>Moon:</strong> ${run.moon}</p>
-      <p><strong>Unrestricted:</strong> ${run.unrestricted ? 'Yes' : 'No'}</p>
       <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
       <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
       <p><strong>Version:</strong> ${run.version}</p>
@@ -398,7 +386,6 @@ export function showRunDetails(run, index) {
       <p><strong>Quota Reached:</strong> ${run.quotaReached}</p>
       <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
       <p><strong>Moon:</strong> ${run.moon}</p>
-      <p><strong>Unrestricted:</strong> ${run.unrestricted ? 'Yes' : 'No'}</p>
       <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
       <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
       <p><strong>Version:</strong> ${run.version}</p>

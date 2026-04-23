@@ -262,7 +262,6 @@ async function displayPlayerRuns(username) {
         <p><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
         <p><strong>Quota Reached:</strong> ${run.quotaReached}</p>
         <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
-        <p><strong>Unrestricted:</strong> ${run.unrestricted ? 'Yes' : 'No'}</p>
         <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
         <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
         <p><strong>Version:</strong> ${run.version}</p>

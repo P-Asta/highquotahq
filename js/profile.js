@@ -153,6 +153,15 @@ async function displayPlayerRuns(username) {
     "modded_smhq"
   ];
 
+  const collectionDisplayNames = {
+    'leaderboards_hq': 'High Quota',
+    'leaderboards_smhq': 'Single Moon High Quota',
+    'leaderboards_sdc': 'Single Day Clear',
+    'modded_hq': 'High Quota',
+    'modded_smhq': 'Single Moon High Quota',
+    'modded_sdc': 'Single Day Clear'
+  };
+
   runsContainer.innerHTML = "<h2>Lethal Company</h2>";
   moddedRunsContainer.innerHTML = "<h2>Modded Lethal Company</h2>";
 
@@ -160,9 +169,26 @@ async function displayPlayerRuns(username) {
     const runsRef = collection(db, collectionName);
     const q = query(runsRef, where("players", "array-contains", normalizedUsername));
     const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty){
+      continue;
+    }
+    const sectionHeader = document.createElement('h3');
+    sectionHeader.textContent = collectionDisplayNames[collectionName] || collectionName;
+    const collectionContainer = document.createElement('div');
+    if (collectionName.startsWith("modded")){
+        moddedRunsContainer.appendChild(sectionHeader);
+        moddedRunsContainer.appendChild(collectionContainer);
+    }else{
+      runsContainer.appendChild(sectionHeader);
+      runsContainer.appendChild(collectionContainer);
+    }
 
     querySnapshot.forEach((docSnapshot) => {
       const run = docSnapshot.data();
+      const runId = docSnapshot.id;
+      
+      const players = run.players || ['Unknown Player'];
+      const version = run.version || 'Unknown Version';
 
       const runDiv = document.createElement('div');
       runDiv.classList.add('run-entry');
@@ -173,10 +199,14 @@ async function displayPlayerRuns(username) {
       playersDiv.textContent = `Players: ${run.players.join(', ')}`;
       runDiv.appendChild(playersDiv);
 
-      const versionDiv = document.createElement('div');
-      versionDiv.classList.add('run-version');
-      versionDiv.textContent = `Version: ${run.version}`;
-      runDiv.appendChild(versionDiv);
+      const metadataDiv = document.createElement('div');
+      metadataDiv.classList.add('run-metadata');
+      if (collectionName.endsWith("smhq") || collectionName.endsWith("sdc")){
+        metadataDiv.textContent = `Moon: ${run.moon} - Version: ${version}`
+      }else{
+      metadataDiv.textContent = `Version: ${version}`;
+      }
+      runDiv.appendChild(metadataDiv);
 
       const valueDiv = document.createElement('div');
       valueDiv.classList.add('run-value');
@@ -186,121 +216,191 @@ async function displayPlayerRuns(username) {
       } else if (collectionName === "leaderboards_sdc" || collectionName === "modded_sdc") {
         valueDiv.textContent = `Total Scrap: ${run.totalScrap || 0}`;
       }
+
       runDiv.appendChild(valueDiv);
 
-      if (collectionName.startsWith("modded")) {
-        moddedRunsContainer.appendChild(runDiv);
-      } else {
-        runsContainer.appendChild(runDiv);
-      }
+      const detailsButton = document.createElement('button');
+      detailsButton.classList.add('view-details-btn');
+      detailsButton.innerHTML = '→';
+      detailsButton.onclick = () => showRunDetails(run, runId, collectionName);
+      runDiv.appendChild(detailsButton);
+
+      collectionContainer.appendChild(runDiv);
     });
   }
 }
 
-
-  
-  
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      const username = new URLSearchParams(window.location.search).get("username");
-      if (username) {
-          displayPlayerRuns(username);
-      }
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const username = new URLSearchParams(window.location.search).get("username");
+    if (username) {
+        displayPlayerRuns(username);
     }
-  });
+  }
+});
 
-  export function showRunDetails(run, index) {
-    const detailsPanel = document.getElementById('details-panel');
-    
-    const formatTimestamp = (timestamp) => {
-      if (timestamp && timestamp.toDate) {
-        return new Date(timestamp.toDate()).toLocaleString();
-      }
-      return 'N/A';
-    };
+export function showRunDetails(run, index, collectionName) {
+  const detailsPanel = document.getElementById('details-panel');
   
-    const formatVideos = (videosMap) => {
-      if (videosMap && typeof videosMap === 'object') {
-        return Object.keys(videosMap).map(playerName => {
-          const videos = videosMap[playerName];
-          if (Array.isArray(videos)) {
-            return `
-              <div class="video-card">
-                <h4>Videos for ${playerName}</h4>
-                <div class="video-links">
-                  ${videos.map(video => `<a href="${video}" target="_blank"><img src="https://img.youtube.com/vi/${getVideoId(video)}/hqdefault.jpg" alt="${video}" class="video-thumbnail"></a>`).join('')}
-                </div>
+  const formatTimestamp = (timestamp) => {
+    if (timestamp && timestamp.toDate) {
+      return new Date(timestamp.toDate()).toLocaleString();
+    }
+    return 'N/A';
+  };
+
+  const formatVideos = (videosMap) => {
+    if (videosMap && typeof videosMap === 'object') {
+      return Object.keys(videosMap).map(playerName => {
+        const videos = videosMap[playerName];
+        if (Array.isArray(videos)) {
+          return `
+            <div class="video-card">
+              <h4>Videos for ${playerName}</h4>
+              <div class="video-links">
+                ${videos.map(video => `<a href="${video}" target="_blank"><img src="https://img.youtube.com/vi/${getVideoId(video)}/hqdefault.jpg" alt="${video}" class="video-thumbnail"></a>`).join('')}
               </div>
-            `;
-          }
-          return '';
-        }).join('');
-      }
-      return 'No videos available.';
-    };
-  
-    const getVideoId = (url) => {
-      const regex = /(?:https?:\/\/(?:www\.)?youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/([a-zA-Z0-9_-]+))|youtu\.be\/([a-zA-Z0-9_-]+))/;
-      const match = url.match(regex);
-      return match ? match[1] || match[2] : '';
-    };
-  
-    let runDetailsHtml = `
-      <button id="close-btn" class="close-btn">←</button>
-      <h2>Run Details</h2>
-      <div class="run-details">
-        <div class="video-section">${formatVideos(run.videos)}</div>
-        <div class="stats-section">
-          <h3>Run Information</h3>
-          <p><strong>Players:</strong> ${run.players.join(', ')}</p>
-          <p><strong>Date:</strong> ${formatTimestamp(run.date)}</p>
+            </div>
+          `;
+        }
+        return '';
+      }).join('');
+    }
+    return 'No videos available.';
+  };
+
+  const getVideoId = (url) => {
+    const regex = /(?:https?:\/\/(?:www\.)?youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/([a-zA-Z0-9_-]+))|youtu\.be\/([a-zA-Z0-9_-]+))/;
+    const match = url.match(regex);
+    return match ? match[1] || match[2] : '';
+  };
+
+  let runDetailsHtml = `
+    <button id="close-btn" class="close-btn">←</button>
+    <h2>Run Details</h2>
+    <div class="run-details">
+      <div class="video-section">${formatVideos(run.videos)}</div>
+      <div class="stats-section">
+        <h3>Run Information</h3>
+        <p><strong>Players:</strong> 
+          ${run.players.map(player => 
+            `<a href="/pages/profile.html?username=${encodeURIComponent(player)}" class="player-link">${player}</a>`
+          ).join(', ')}
+        </p>
+        <p><strong>Date:</strong> ${formatTimestamp(run.date)}</p>
+  `;
+
+  if (collectionName === 'leaderboards_hq') {
+    runDetailsHtml += `
+      <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
+      <p><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
+      <p><strong>Quota Reached:</strong> ${run.quotaReached}</p>
+      <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
+      <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
+      <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
+      <p><strong>Version:</strong> ${run.version}</p>
     `;
-  
-    if (activeCollection === 'leaderboards_hq') {
-      runDetailsHtml += `
-        <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
-        <p><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
-        <p><strong>Quota Reached:</strong> ${run.quotaReached}</p>
-        <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
-        <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-        <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
-        <p><strong>Version:</strong> ${run.version}</p>
-      `;
-    } else {
-      runDetailsHtml += `
-        <p><strong>Additional Info:</strong> ${run.someOtherDetail || 'No additional info available.'}</p>
-      `;
-    }
-  
-    
-    detailsPanel.innerHTML = runDetailsHtml;
-  
-    setTimeout(() => {
-      detailsPanel.classList.add('active');
-    }, 50);
-  
-    setTimeout(() => {
-      const leaderboard = document.getElementById('leaderboard');
-      const filters = document.getElementById('filters');
-      leaderboard.classList.add('hidden');
-      filters.classList.add('hidden');
-    }, 50);
-  
-    const closeBtn = document.getElementById('close-btn');
-    if (closeBtn) {
-      closeBtn.addEventListener('click', closeRunDetails);
-    }
   }
-  
-  function closeRunDetails() {
-    const detailsPanel = document.getElementById('details-panel');
-    detailsPanel.classList.remove('active');
-    
-    const leaderboard = document.getElementById('leaderboard');
-    const filters = document.getElementById('filters');
-    leaderboard.classList.remove('hidden');
-    filters.classList.remove('hidden');
+  else if (collectionName === 'leaderboards_sdc') {
+    runDetailsHtml += `
+      <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
+      <p><strong>Scrap Type:</strong> ${run.scrapType}</p>
+      <p><strong>Equipment:</strong> ${run.equipment}</p>
+      <p><strong>Moon:</strong> ${run.moon}</p>
+      <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
+      <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
+      <p><strong>Version:</strong> ${run.version}</p>
+    `;
   }
+  else if (collectionName === 'leaderboards_smhq') {
+    runDetailsHtml += `
+      <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
+      <p><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
+      <p><strong>Quota Reached:</strong> ${run.quotaReached}</p>
+      <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
+      <p><strong>Moon:</strong> ${run.moon}</p>
+      <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
+      <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
+      <p><strong>Version:</strong> ${run.version}</p>
+    `;
+  }
+  else if (collectionName === 'modded_hq') {
+    runDetailsHtml += `
+      <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
+      <p><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
+      <p><strong>Quota Reached:</strong> ${run.quotaReached}</p>
+      <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
+      <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
+      <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
+      <p><strong>Version:</strong> ${run.version}</p>
+    `;
+  }
+  else if (collectionName === 'modded_smhq') {
+    runDetailsHtml += `
+      <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
+      <p><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
+      <p><strong>Quota Reached:</strong> ${run.quotaReached}</p>
+      <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
+      <p><strong>Moon:</strong> ${run.moon}</p>
+      <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
+      <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
+      <p><strong>Version:</strong> ${run.version}</p>
+    `;
+  }
+  else if (collectionName === 'modded_sdc') {
+    runDetailsHtml += `
+      <p><strong>Quota Amount:</strong> ${run.totalScrap}</p>
+      <p><strong>Quota Fulfilled:</strong> ${run.scrapType}</p>
+      <p><strong>Quota Reached:</strong> ${run.equipment}</p>
+      <p><strong>Moon:</strong> ${run.moon}</p>
+      <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
+      <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
+      <p><strong>Version:</strong> ${run.version}</p>
+    `;
+  }
+  else {
+    runDetailsHtml += `
+      <p><strong>Additional Info:</strong> ${run.someOtherDetail || 'No additional info available.'}</p>
+    `;
+  }
+
+  
+  detailsPanel.innerHTML = runDetailsHtml;
+
+  setTimeout(() => {
+    detailsPanel.classList.add('active');
+  }, 50);
+
+  setTimeout(() => {
+    const profilecard = document.getElementById('profile-card');
+    const editprofile = document.getElementById('edit-profile-modal');
+    const runscontainer = document.getElementById('runs-container');
+    const modrunscontainer = document.getElementById('modded-runs-container');
+    profilecard.classList.add('hidden');
+    editprofile.classList.add('hidden');
+    runscontainer.classList.add('hidden');
+    modrunscontainer.classList.add('hidden');
+  }, 50);
+
+  const closeBtn = document.getElementById('close-btn');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeRunDetails);
+  }
+}
+
+function closeRunDetails() {
+  const detailsPanel = document.getElementById('details-panel');
+  detailsPanel.classList.remove('active');
+  
+  const profilecard = document.getElementById('profile-card');
+  const editprofile = document.getElementById('edit-profile-modal');
+  const runscontainer = document.getElementById('runs-container');
+  const modrunscontainer = document.getElementById('modded-runs-container');
+  profilecard.classList.remove('hidden');
+  editprofile.classList.remove('hidden');
+  runscontainer.classList.remove('hidden');
+  modrunscontainer.classList.remove('hidden');
+}
 
 
 document.addEventListener('DOMContentLoaded', function() {

@@ -455,7 +455,7 @@ export async function fetchUnverifiedRuns(role) {
                         runItem.appendChild(claimButton);
                     }
                     
-                    runListContainer.appendChild(runItem);
+                    collectionContainer.appendChild(runItem);
 
                     runItem.addEventListener('click', () => {
                         showRunDetails(runId, collectionName, run, role);

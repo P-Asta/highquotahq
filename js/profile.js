@@ -250,7 +250,7 @@ export function showRunDetails(run, index, collectionName) {
             <div class="video-card">
               <h4>Videos for ${playerName}</h4>
               <div class="video-links">
-                ${videos.map(video => `<a href="${video}" target="_blank"><img src="https://img.youtube.com/vi/${getVideoId(video)}/hqdefault.jpg" alt="${video}" class="video-thumbnail"></a>`).join('')}
+                ${videos.map(video => `<div class=video-thumbnail-cropper><a href="${video}" target="_blank"><img src="${getThumbnail(video)}" alt="${video}" class="video-thumbnail"></a></div>`).join('')}
               </div>
             </div>
           `;
@@ -261,8 +261,17 @@ export function showRunDetails(run, index, collectionName) {
     return 'No videos available.';
   };
 
+  const getThumbnail = (url) => {
+    const videoId = getVideoId(url);
+    if (videoId === ''){
+      return `/assets/link_thumbnail.png`;
+    }else{
+      return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+    }
+  }
+
   const getVideoId = (url) => {
-    const regex = /(?:https?:\/\/(?:www\.)?youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/([a-zA-Z0-9_-]+))|youtu\.be\/([a-zA-Z0-9_-]+))/;
+    const regex = /(?:https?:\/\/(?:www\.)?youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?|watch(?:\/|\?\S*v=))([a-zA-Z0-9_-]+))|youtu\.be\/([a-zA-Z0-9_-]+))/;
     const match = url.match(regex);
     return match ? match[1] || match[2] : '';
   };

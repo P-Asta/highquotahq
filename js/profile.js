@@ -71,6 +71,7 @@ onAuthStateChanged(auth, async (user) => {
     if (user && user.uid === profileUid) {
       editProfileButton.style.display = "block";
     }
+    displayPlayerRuns(username);
   }
 });
 
@@ -229,15 +230,6 @@ async function displayPlayerRuns(username) {
     });
   }
 }
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    const username = new URLSearchParams(window.location.search).get("username");
-    if (username) {
-        displayPlayerRuns(username);
-    }
-  }
-});
 
 export function showRunDetails(run, index, collectionName) {
   const detailsPanel = document.getElementById('details-panel');

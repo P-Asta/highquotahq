@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, collection, query, getDocs, where } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+import { doc, getDoc, setDoc, collection, query, getDocs, getDocsFromServer, where } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
 import { onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
 import { auth, db } from './firebase.js';
 import { loadNavbar } from './utils.js';
@@ -62,7 +62,7 @@ async function register(email, username, password) {
   const q = query(usersRef, where('usernameLower', '==', usernameLower));
 
   try {
-      const querySnapshot = await getDocs(q);
+      const querySnapshot = await getDocsFromServer(q);
 
       if (!querySnapshot.empty) {
           alert('This username is already taken. Please choose another one.');
@@ -102,7 +102,7 @@ async function login(identifier, password) {
       const q = query(usersRef, where('usernameLower', '==', identifier.trim().toLowerCase()));
 
       try {
-          const querySnapshot = await getDocs(q);
+          const querySnapshot = await getDocsFromServer(q);
 
           if (querySnapshot.empty) {
               alert("Username not found.");

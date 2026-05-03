@@ -309,20 +309,41 @@ export async function fetchUnverifiedRuns(role) {
         'leaderboards_hq': 'High Quota',
         'leaderboards_smhq': 'Single Moon High Quota',
         'leaderboards_sdc': 'Single Day Clear',
-        'modded_hq': 'High Quota',
-        'modded_smhq': 'Single Moon High Quota',
-        'modded_sdc': 'Single Day Clear'
+        'lc_modded_brutal_hq': 'Brutal Company High Quota',
+        'lc_modded_brutal_smhq': 'Brutal Company Single Moon High Quota',
+        'lc_modded_brutal_sdc': 'Brutal Company Single Day Clear',
+        'lc_modded_eclipsed_hq': 'Eclipsed Only High Quota',
+        'lc_modded_eclipsed_smhq': 'Eclipsed Only Single Moon High Quota',
+        'lc_modded_wesleysmoons_hq': "Wesley's Moons High Quota",
+        'lc_modded_wesleysmoons_smhq': "Wesley's Moons Single Moon High Quota",
+        'lc_modded_wesleysmoons_sdc': "Wesley's Moons Single Day Clear",
+        'lc_modded_classicmoons_hq': 'Classic Moons High Quota',
+        'lc_modded_classicmoons_smhq': 'Classic Moons Single Moon High Quota',
+        'lc_modded_classicmoons_sdc': 'Classic Moons Single Day Clear'
     };
 
     if (role == "verifier") {
         collections = ['leaderboards_hq', 'leaderboards_smhq', 'leaderboards_sdc'];
         runListContainer = document.getElementById('run-list');
     } else if (role == "moddedVerifier") {
-        collections = ['modded_hq', 'modded_smhq', 'modded_sdc'];
+        collections = [
+            'lc_modded_brutal_hq',
+            'lc_modded_brutal_smhq',
+            'lc_modded_brutal_sdc',
+            'lc_modded_eclipsed_hq',
+            'lc_modded_eclipsed_smhq',
+            'lc_modded_wesleysmoons_hq',
+            'lc_modded_wesleysmoons_smhq',
+            'lc_modded_wesleysmoons_sdc',
+            'lc_modded_classicmoons_hq',
+            'lc_modded_classicmoons_smhq',
+            'lc_modded_classicmoons_sdc'
+        ];
         runListContainer = document.getElementById('modded-run-list');
     }
 
     runListContainer.innerHTML = '';
+    let displayNoRunsMessage = true;
 
     for (const collectionName of collections){
         const sectionHeader = document.createElement('h3');
@@ -339,7 +360,9 @@ export async function fetchUnverifiedRuns(role) {
         try {
             const querySnapshot = await getDocs(q);
             if (querySnapshot.empty){
+                sectionHeader.style.display = 'none';
                 collectionContainer.innerHTML = `<p>No pending runs.</p>`;
+                collectionContainer.style.display = 'none';
             }
 
             querySnapshot.forEach((docSnapshot) => {
@@ -460,10 +483,16 @@ export async function fetchUnverifiedRuns(role) {
                     runItem.addEventListener('click', () => {
                         showRunDetails(runId, collectionName, run, role);
                     });
+                    displayNoRunsMessage = false;
             });
         } catch (error) {
             console.error(`Error fetching unverified runs from ${collectionName}:`, error);
         }
+    }
+    if (displayNoRunsMessage){
+        const noRunsMessage = document.createElement('h3');
+        noRunsMessage.textContent = "No runs pending!";
+        runListContainer.appendChild(noRunsMessage);
     }
 }
 
@@ -506,7 +535,7 @@ export function showRunDetails(runId, collectionName, run, role) {
     let additionalInfo = '';
     let equipmentField = '';
 
-    if (collectionName === 'leaderboards_hq') {
+    if (collectionName.endsWith('_hq')) {
         const quotaAmount = run.quotaAmount || 0;
         const quotaFulfilled = run.quotaFulfilled || 0;
         const quotaReached = run.quotaReached || 0;
@@ -518,7 +547,7 @@ export function showRunDetails(runId, collectionName, run, role) {
             <label>Quota Reached: <input type="number" value="${quotaReached}" disabled data-field="quotaReached"></label><br>
             <label>Total Scrap: <input type="number" value="${totalScrap}" disabled data-field="totalScrap"></label><br>
         `;
-    } else if (collectionName === 'leaderboards_sdc') {
+    } else if (collectionName.endsWith('_sdc')) {
         const equipment = Array.isArray(run.equipment) ? run.equipment.join(', ') : (typeof run.equipment === 'string' ? run.equipment : '');
         const moon = run.moon || 'Unknown Moon';
         const scrapType = run.scrapType || 'Unknown Scrap Type';
@@ -530,45 +559,7 @@ export function showRunDetails(runId, collectionName, run, role) {
             <label>Scrap Type: <input type="text" value="${scrapType}" disabled data-field="scrapType"></label><br>
             <label>Total Scrap: <input type="number" value="${totalScrap}" disabled data-field="totalScrap"></label><br>
         `;
-    } else if (collectionName === 'leaderboards_smhq') {
-        const moon = run.moon || 'Unknown Moon';
-        const quotaAmount = run.quotaAmount || 0;
-        const quotaFulfilled = run.quotaFulfilled || 0;
-        const quotaReached = run.quotaReached || 0;
-        const totalScrap = run.totalScrap || 0;
-
-        additionalInfo = `
-            <label>Moon: <input type="text" value="${moon}" disabled data-field="moon"></label><br>
-            <label>Quota Amount: <input type="number" value="${quotaAmount}" disabled data-field="quotaAmount"></label><br>
-            <label>Quota Fulfilled: <input type="number" value="${quotaFulfilled}" disabled data-field="quotaFulfilled"></label><br>
-            <label>Quota Reached: <input type="number" value="${quotaReached}" disabled data-field="quotaReached"></label><br>
-            <label>Total Scrap: <input type="number" value="${totalScrap}" disabled data-field="totalScrap"></label><br>
-        `;
-    } else if (collectionName === 'modded_hq') {
-        const quotaAmount = run.quotaAmount || 0;
-        const quotaFulfilled = run.quotaFulfilled || 0;
-        const quotaReached = run.quotaReached || 0;
-        const totalScrap = run.totalScrap || 0;
-
-        additionalInfo = `
-            <label>Quota Amount: <input type="number" value="${quotaAmount}" disabled data-field="quotaAmount"></label><br>
-            <label>Quota Fulfilled: <input type="number" value="${quotaFulfilled}" disabled data-field="quotaFulfilled"></label><br>
-            <label>Quota Reached: <input type="number" value="${quotaReached}" disabled data-field="quotaReached"></label><br>
-            <label>Total Scrap: <input type="number" value="${totalScrap}" disabled data-field="totalScrap"></label><br>
-        `;
-    } else if (collectionName === 'modded_sdc') {
-        const equipment = Array.isArray(run.equipment) ? run.equipment.join(', ') : (typeof run.equipment === 'string' ? run.equipment : '');
-        const moon = run.moon || 'Unknown Moon';
-        const scrapType = run.scrapType || 'Unknown Scrap Type';
-        const totalScrap = run.totalScrap || 0;
-
-        additionalInfo = `
-            <label>Equipment: <input type="text" value="${equipment}" disabled data-field="equipment"></label><br>
-            <label>Moon: <input type="text" value="${moon}" disabled data-field="moon"></label><br>
-            <label>Scrap Type: <input type="text" value="${scrapType}" disabled data-field="scrapType"></label><br>
-            <label>Total Scrap: <input type="number" value="${totalScrap}" disabled data-field="totalScrap"></label><br>
-        `;
-    } else if (collectionName === 'modded_smhq') {
+    } else if (collectionName.endsWith('_smhq')) {
         const moon = run.moon || 'Unknown Moon';
         const quotaAmount = run.quotaAmount || 0;
         const quotaFulfilled = run.quotaFulfilled || 0;

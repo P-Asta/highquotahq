@@ -18,160 +18,454 @@
 
       <div id="filters">
         <h1>Leaderboards</h1>
-        <!-- Collection Buttons -->
-        <div id="collection-filters">
-          <button class="collection-btn active" data-collection="modded_hq">Classic High Quota</button>
-          <button class="collection-btn" data-collection="modded_sdc">Single Day Clear</button>
-          <button class="collection-btn" data-collection="modded_smhq">Single Moon High Quota</button>
+        <!-- Modpack filters -->
+        <div id="modpack-filters">
+          <button class="modpack-btn active" modpack="brutal" data-collection="lc_modded_brutal_hq">Brutal Company</button>
+          <button class="modpack-btn" modpack="eclipsed" data-collection="lc_modded_eclipsed_hq">Eclipsed Only</button>
+          <button class="modpack-btn" modpack="wesleysmoons" data-collection="lc_modded_wesleysmoons_hq">Wesley's Moons</button>
+          <button class="modpack-btn" modpack="classicmoons" data-collection="lc_modded_classicmoons_hq">Classic Moons</button>
         </div>
-      
-        <!-- Filter Sections for Each Collection -->
-        <div id="modded_hq-filters" class="filter-section active">
-          <!-- Player Count Filters -->
-          <div class="filter-category" id="player-count-filters">
-            <h3>Player Count</h3>
-            <button class="filter-btn" data-filter="1" id="player-count-1">1 Player</button>
-            <button class="filter-btn" data-filter="2" id="player-count-2">2 Players</button>
-            <button class="filter-btn" data-filter="3" id="player-count-3">3 Players</button>            
-            <button class="filter-btn" data-filter="4" id="player-count-4">4 Players</button>        
+        <!-- BRUTAL COMPANY -->
+        <div id="brutal-filters" class="modpack-filter-section active">
+          <div class="collection-section active">
+            <button class="collection-btn active" data-collection="lc_modded_brutal_hq">Classic High Quota</button>
+            <button class="collection-btn" data-collection="lc_modded_brutal_sdc">Single Day Clear</button>
+            <button class="collection-btn" data-collection="lc_modded_brutal_smhq">Single Moon High Quota</button>
           </div>
-      
-          <!-- Version Filters -->
-          <div class="filter-category" id="version-filters">
-            <h3>Version</h3>
-            <button class="filter-btn" data-filter="v40">v40</button>
-            <button class="filter-btn" data-filter="v45">v45</button>
-            <button class="filter-btn" data-filter="v49">v49</button>
-            <button class="filter-btn" data-filter="v50">v50</button>
-            <button class="filter-btn" data-filter="v56">v56</button>
-            <button class="filter-btn" data-filter="v62">v62</button>
-            <button class="filter-btn" data-filter="v64">v64</button>
-            <button class="filter-btn" data-filter="v69">v69</button>
-            <button class="filter-btn" data-filter="v72">v72</button>
-            <button class="filter-btn" data-filter="v73">v73</button>
-            <button class="filter-btn" data-filter="v81">v81</button>
-          </div>
+          <!-- BRUTAL CLASSIC HQ -->
+          <div class="filter-section active" id="lc_modded_brutal_hq">
+            <div class="filter-category" id="player-count-filters">
+              <h3>Player Count</h3>
+              <button class="filter-btn" data-filter="1" id="player-count-1">1 Player</button>
+              <button class="filter-btn" data-filter="2" id="player-count-2">2 Players</button>
+              <button class="filter-btn" data-filter="3" id="player-count-3">3 Players</button>            
+              <button class="filter-btn" data-filter="4" id="player-count-4">4 Players</button>        
+            </div>
 
-        </div>
-      
-        <div id="modded_sdc-filters" class="filter-section">
-          <!-- Player Count Filters -->
-          <div class="filter-category" id="player-count-filters">
-            <h3>Player Count</h3>
-            <button class="filter-btn" data-filter="1" id="player-count-1">1 Player</button>
-            <button class="filter-btn" data-filter="2" id="player-count-2">2 Players</button>
-            <button class="filter-btn" data-filter="3" id="player-count-3">3 Players</button>
-            <button class="filter-btn" data-filter="4" id="player-count-4">4 Players</button>
+            <div class="filter-category" id="version-filters">
+              <h3>Version</h3>
+              <button class="filter-btn" data-filter="v49">v49</button>
+              <button class="filter-btn" data-filter="v50">v50</button>
+              <button class="filter-btn" data-filter="v56">v56</button>
+              <button class="filter-btn" data-filter="v62">v62</button>
+              <button class="filter-btn" data-filter="v64">v64</button>
+              <button class="filter-btn" data-filter="v69">v69</button>
+              <button class="filter-btn" data-filter="v72">v72</button>
+              <button class="filter-btn" data-filter="v73">v73</button>
+            </div>
           </div>
-      
-          <!-- Moon Filters -->
-          <div class="filter-category" id="moon-filters">
-            <h3>Moon</h3>
-            <button class="filter-btn" data-filter="41-Experimentation">41-Experimentation</button>
-            <button class="filter-btn" data-filter="220-Assurance">220-Assurance</button>
-            <button class="filter-btn" data-filter="56-Vow">56-Vow</button>
-            <button class="filter-btn" data-filter="21-Offense">21-Offense</button>
-            <button class="filter-btn" data-filter="61-March">61-March</button>
-            <button class="filter-btn" data-filter="20-Adamance">20-Adamance</button>
-            <button class="filter-btn" data-filter="85-Rend">85-Rend</button>
-            <button class="filter-btn" data-filter="7-Dine">7-Dine</button>
-            <button class="filter-btn" data-filter="8-Titan">8-Titan</button>
-            <button class="filter-btn" data-filter="68-Artifice">68-Artifice</button>
-            <button class="filter-btn" data-filter="5-Embrion">5-Embrion</button>
-            <button class="filter-btn" data-filter="320-Blurance">320-Blurance</button>
-            <button class="filter-btn" data-filter="51-Verdance">51-Verdance</button>
-            <button class="filter-btn" data-filter="184-Derelict">184-Derelict</button>
-            <button class="filter-btn" data-filter="130-Gorgonzola">130-Gorgonzola</button>
-            <button class="filter-btn" data-filter="5-Tandraus">5-Tandraus</button>
-            <button class="filter-btn" data-filter="131-Lertz">131-Lertz</button>
-            <button class="filter-btn" data-filter="143-Scallg">143-Scallg</button>
-            <button class="filter-btn" data-filter="86-Synthesis">86-Synthesis</button>
-            <button class="filter-btn" data-filter="13-Kast">13-Kast</button>
-            <button class="filter-btn" data-filter="154-Etern">154-Etern</button>
-            <button class="filter-btn" data-filter="43-Orion">43-Orion</button>
-            <button class="filter-btn" data-filter="2742-Jabiua">2742-Jabiua</button>
-          </div>
-      
-          <!-- Version Filters -->
-          <div class="filter-category" id="version-filters">
-            <h3>Version</h3>
-            <button class="filter-btn" data-filter="v40">v40</button>
-            <button class="filter-btn" data-filter="v45">v45</button>
-            <button class="filter-btn" data-filter="v49">v49</button>
-            <button class="filter-btn" data-filter="v50">v50</button>
-            <button class="filter-btn" data-filter="v56">v56</button>
-            <button class="filter-btn" data-filter="v62">v62</button>
-            <button class="filter-btn" data-filter="v64">v64</button>
-            <button class="filter-btn" data-filter="v69">v69</button>
-            <button class="filter-btn" data-filter="v72">v72</button>
-            <button class="filter-btn" data-filter="v73">v73</button>
-            <button class="filter-btn" data-filter="v81">v81</button>
-          </div>
+          <!-- BRUTAL SDC -->
+          <div class="filter-section" id="lc_modded_brutal_sdc">
+            <div class="filter-category" id="player-count-filters">
+              <h3>Player Count</h3>
+              <button class="filter-btn" data-filter="1" id="player-count-1">1 Player</button>
+              <button class="filter-btn" data-filter="2" id="player-count-2">2 Players</button>
+              <button class="filter-btn" data-filter="3" id="player-count-3">3 Players</button>
+              <button class="filter-btn" data-filter="4" id="player-count-4">4 Players</button>
+            </div>
+        
+            <div class="filter-category" id="moon-filters">
+              <h3>Moon</h3>
+              <button class="filter-btn" data-filter="41-Experimentation">41-Experimentation</button>
+              <button class="filter-btn" data-filter="220-Assurance">220-Assurance</button>
+              <button class="filter-btn" data-filter="56-Vow">56-Vow</button>
+              <button class="filter-btn" data-filter="21-Offense">21-Offense</button>
+              <button class="filter-btn" data-filter="61-March">61-March</button>
+              <button class="filter-btn" data-filter="20-Adamance">20-Adamance</button>
+              <button class="filter-btn" data-filter="85-Rend">85-Rend</button>
+              <button class="filter-btn" data-filter="7-Dine">7-Dine</button>
+              <button class="filter-btn" data-filter="8-Titan">8-Titan</button>
+              <button class="filter-btn" data-filter="68-Artifice">68-Artifice</button>
+              <button class="filter-btn" data-filter="5-Embrion">5-Embrion</button>
+            </div>
+        
+            <div class="filter-category" id="version-filters">
+              <h3>Version</h3>
+              <button class="filter-btn" data-filter="v49">v49</button>
+              <button class="filter-btn" data-filter="v50">v50</button>
+              <button class="filter-btn" data-filter="v56">v56</button>
+              <button class="filter-btn" data-filter="v62">v62</button>
+              <button class="filter-btn" data-filter="v64">v64</button>
+              <button class="filter-btn" data-filter="v69">v69</button>
+              <button class="filter-btn" data-filter="v72">v72</button>
+              <button class="filter-btn" data-filter="v73">v73</button>
+            </div>
 
-          <!-- Scrap Type Filters -->
-          <div class="filter-category" id="scrap-type-filters">
-            <h3>Scrap Type</h3>
-            <button class="filter-btn" data-filter="Regular">Regular</button>
-            <button class="filter-btn" data-filter="Single">Single</button>
-          </div>
+            <div class="filter-category" id="scrap-type-filters">
+              <h3>Scrap Type</h3>
+              <button class="filter-btn" data-filter="Regular">Regular</button>
+              <button class="filter-btn" data-filter="Single">Single</button>
+            </div>
 
+          </div>
+          <!-- BRUTAL SMHQ -->
+          <div class="filter-section" id="lc_modded_brutal_smhq">
+            <div class="filter-category" id="player-count-filters">
+              <h3>Player Count</h3>
+              <button class="filter-btn" data-filter="1" id="player-count-1">1 Player</button>
+              <button class="filter-btn" data-filter="2" id="player-count-2">2 Players</button>
+              <button class="filter-btn" data-filter="3" id="player-count-3">3 Players</button>
+              <button class="filter-btn" data-filter="4" id="player-count-4">4 Players</button>
+            </div>
+        
+            <div class="filter-category" id="moon-filters">
+              <h3>Moon</h3>
+              <button class="filter-btn" data-filter="41-Experimentation">41-Experimentation</button>
+              <button class="filter-btn" data-filter="220-Assurance">220-Assurance</button>
+              <button class="filter-btn" data-filter="56-Vow">56-Vow</button>
+              <button class="filter-btn" data-filter="21-Offense">21-Offense</button>
+              <button class="filter-btn" data-filter="61-March">61-March</button>
+              <button class="filter-btn" data-filter="20-Adamance">20-Adamance</button>
+              <button class="filter-btn" data-filter="85-Rend">85-Rend</button>
+              <button class="filter-btn" data-filter="7-Dine">7-Dine</button>
+              <button class="filter-btn" data-filter="8-Titan">8-Titan</button>
+              <button class="filter-btn" data-filter="68-Artifice">68-Artifice</button>
+              <button class="filter-btn" data-filter="5-Embrion">5-Embrion</button>
+            </div>
+        
+            <div class="filter-category" id="version-filters">
+              <h3>Version</h3>
+              <button class="filter-btn" data-filter="v49">v49</button>
+              <button class="filter-btn" data-filter="v50">v50</button>
+              <button class="filter-btn" data-filter="v56">v56</button>
+              <button class="filter-btn" data-filter="v62">v62</button>
+              <button class="filter-btn" data-filter="v64">v64</button>
+              <button class="filter-btn" data-filter="v69">v69</button>
+              <button class="filter-btn" data-filter="v72">v72</button>
+              <button class="filter-btn" data-filter="v73">v73</button>
+            </div>
+              
+          </div>
         </div>
-      
-        <div id="modded_smhq-filters" class="filter-section">
-          <!-- Player Count Filters -->
-          <div class="filter-category" id="player-count-filters">
-            <h3>Player Count</h3>
-            <button class="filter-btn" data-filter="1" id="player-count-1">1 Player</button>
-            <button class="filter-btn" data-filter="2" id="player-count-2">2 Players</button>
-            <button class="filter-btn" data-filter="3" id="player-count-3">3 Players</button>
-            <button class="filter-btn" data-filter="4" id="player-count-4">4 Players</button>
+        <!-- ECLIPSED ONLY -->
+        <div id="eclipsed-filters" class="modpack-filter-section">
+          <div class="collection-section">
+            <button class="collection-btn" data-collection="lc_modded_eclipsed_hq">Classic High Quota</button>
+            <button class="collection-btn" data-collection="lc_modded_eclipsed_smhq">Single Moon High Quota</button>
           </div>
-      
-          <!-- Moon Filters -->
-          <div class="filter-category" id="moon-filters">
-            <h3>Moon</h3>
-            <button class="filter-btn" data-filter="41-Experimentation">41-Experimentation</button>
-            <button class="filter-btn" data-filter="220-Assurance">220-Assurance</button>
-            <button class="filter-btn" data-filter="56-Vow">56-Vow</button>
-            <button class="filter-btn" data-filter="21-Offense">21-Offense</button>
-            <button class="filter-btn" data-filter="61-March">61-March</button>
-            <button class="filter-btn" data-filter="20-Adamance">20-Adamance</button>
-            <button class="filter-btn" data-filter="85-Rend">85-Rend</button>
-            <button class="filter-btn" data-filter="7-Dine">7-Dine</button>
-            <button class="filter-btn" data-filter="8-Titan">8-Titan</button>
-            <button class="filter-btn" data-filter="68-Artifice">68-Artifice</button>
-            <button class="filter-btn" data-filter="5-Embrion">5-Embrion</button>
-            <button class="filter-btn" data-filter="320-Blurance">320-Blurance</button>
-            <button class="filter-btn" data-filter="51-Verdance">51-Verdance</button>
-            <button class="filter-btn" data-filter="184-Derelict">184-Derelict</button>
-            <button class="filter-btn" data-filter="130-Gorgonzola">130-Gorgonzola</button>
-            <button class="filter-btn" data-filter="5-Tandraus">5-Tandraus</button>
-            <button class="filter-btn" data-filter="131-Lertz">131-Lertz</button>
-            <button class="filter-btn" data-filter="143-Scallg">143-Scallg</button>
-            <button class="filter-btn" data-filter="86-Synthesis">86-Synthesis</button>
-            <button class="filter-btn" data-filter="13-Kast">13-Kast</button>
-            <button class="filter-btn" data-filter="154-Etern">154-Etern</button>
-            <button class="filter-btn" data-filter="43-Orion">43-Orion</button>
-            <button class="filter-btn" data-filter="2742-Jabiua">2742-Jabiua</button>
+          <!-- ECLIPSED CLASSIC HQ -->
+          <div class="filter-section" id="lc_modded_eclipsed_hq">
+            <div class="filter-category" id="player-count-filters">
+              <h3>Player Count</h3>
+              <button class="filter-btn" data-filter="1" id="player-count-1">1 Player</button>
+              <button class="filter-btn" data-filter="2" id="player-count-2">2 Players</button>
+              <button class="filter-btn" data-filter="3" id="player-count-3">3 Players</button>            
+              <button class="filter-btn" data-filter="4" id="player-count-4">4 Players</button>        
+            </div>
+
+            <div class="filter-category" id="version-filters">
+              <h3>Version</h3>
+              <button class="filter-btn" data-filter="v40">v40</button>
+              <button class="filter-btn" data-filter="v45">v45</button>
+              <button class="filter-btn" data-filter="v49">v49</button>
+              <button class="filter-btn" data-filter="v50">v50</button>
+              <button class="filter-btn" data-filter="v56">v56</button>
+              <button class="filter-btn" data-filter="v62">v62</button>
+              <button class="filter-btn" data-filter="v64">v64</button>
+              <button class="filter-btn" data-filter="v69">v69</button>
+              <button class="filter-btn" data-filter="v72">v72</button>
+              <button class="filter-btn" data-filter="v73">v73</button>
+              <button class="filter-btn" data-filter="v81">v81</button>
+            </div>
           </div>
-      
-          <!-- Version Filters -->
-          <div class="filter-category" id="version-filters">
-            <h3>Version</h3>
-            <button class="filter-btn" data-filter="v40">v40</button>
-            <button class="filter-btn" data-filter="v45">v45</button>
-            <button class="filter-btn" data-filter="v49">v49</button>
-            <button class="filter-btn" data-filter="v50">v50</button>
-            <button class="filter-btn" data-filter="v56">v56</button>
-            <button class="filter-btn" data-filter="v62">v62</button>
-            <button class="filter-btn" data-filter="v64">v64</button>
-            <button class="filter-btn" data-filter="v69">v69</button>
-            <button class="filter-btn" data-filter="v72">v72</button>
-            <button class="filter-btn" data-filter="v73">v73</button>
-            <button class="filter-btn" data-filter="v81">v81</button>
+          <!-- ECLIPSED SMHQ -->
+          <div class="filter-section" id="lc_modded_eclipsed_smhq">
+            <div class="filter-category" id="player-count-filters">
+              <h3>Player Count</h3>
+              <button class="filter-btn" data-filter="1" id="player-count-1">1 Player</button>
+              <button class="filter-btn" data-filter="2" id="player-count-2">2 Players</button>
+              <button class="filter-btn" data-filter="3" id="player-count-3">3 Players</button>
+              <button class="filter-btn" data-filter="4" id="player-count-4">4 Players</button>
+            </div>
+        
+            <div class="filter-category" id="moon-filters">
+              <h3>Moon</h3>
+              <button class="filter-btn" data-filter="41-Experimentation">41-Experimentation</button>
+              <button class="filter-btn" data-filter="220-Assurance">220-Assurance</button>
+              <button class="filter-btn" data-filter="56-Vow">56-Vow</button>
+              <button class="filter-btn" data-filter="21-Offense">21-Offense</button>
+              <button class="filter-btn" data-filter="61-March">61-March</button>
+              <button class="filter-btn" data-filter="20-Adamance">20-Adamance</button>
+              <button class="filter-btn" data-filter="85-Rend">85-Rend</button>
+              <button class="filter-btn" data-filter="7-Dine">7-Dine</button>
+              <button class="filter-btn" data-filter="8-Titan">8-Titan</button>
+              <button class="filter-btn" data-filter="68-Artifice">68-Artifice</button>
+              <button class="filter-btn" data-filter="5-Embrion">5-Embrion</button>
+            </div>
+        
+            <div class="filter-category" id="version-filters">
+              <h3>Version</h3>
+              <button class="filter-btn" data-filter="v40">v40</button>
+              <button class="filter-btn" data-filter="v45">v45</button>
+              <button class="filter-btn" data-filter="v49">v49</button>
+              <button class="filter-btn" data-filter="v50">v50</button>
+              <button class="filter-btn" data-filter="v56">v56</button>
+              <button class="filter-btn" data-filter="v62">v62</button>
+              <button class="filter-btn" data-filter="v64">v64</button>
+              <button class="filter-btn" data-filter="v69">v69</button>
+              <button class="filter-btn" data-filter="v72">v72</button>
+              <button class="filter-btn" data-filter="v73">v73</button>
+              <button class="filter-btn" data-filter="v81">v81</button>
+            </div>
+              
           </div>
-            
         </div>
+        <!-- WESLEYS MOONS -->
+        <div id="wesleysmoons-filters" class="modpack-filter-section">
+          <div class="collection-section">
+            <button class="collection-btn" data-collection="lc_modded_wesleysmoons_hq">Classic High Quota</button>
+            <button class="collection-btn" data-collection="lc_modded_wesleysmoons_sdc">Single Day Clear</button>
+            <button class="collection-btn" data-collection="lc_modded_wesleysmoons_smhq">Single Moon High Quota</button>
+          </div>
+          <!-- WESLEYS MOONS CLASSIC HQ -->
+          <div class="filter-section" id="lc_modded_wesleysmoons_hq">
+            <div class="filter-category" id="player-count-filters">
+              <h3>Player Count</h3>
+              <button class="filter-btn" data-filter="1" id="player-count-1">1 Player</button>
+              <button class="filter-btn" data-filter="2" id="player-count-2">2 Players</button>
+              <button class="filter-btn" data-filter="3" id="player-count-3">3 Players</button>            
+              <button class="filter-btn" data-filter="4" id="player-count-4">4 Players</button>        
+            </div>
+
+            <div class="filter-category" id="version-filters">
+              <h3>Version</h3>
+              <button class="filter-btn" data-filter="v69">v69</button>
+              <button class="filter-btn" data-filter="v72">v72</button>
+              <button class="filter-btn" data-filter="v73">v73</button>
+            </div>
+          </div>
+          <!-- WESLEYS MOONS SDC -->
+          <div class="filter-section" id="lc_modded_wesleysmoons_sdc">
+            <div class="filter-category" id="player-count-filters">
+              <h3>Player Count</h3>
+              <button class="filter-btn" data-filter="1" id="player-count-1">1 Player</button>
+              <button class="filter-btn" data-filter="2" id="player-count-2">2 Players</button>
+              <button class="filter-btn" data-filter="3" id="player-count-3">3 Players</button>
+              <button class="filter-btn" data-filter="4" id="player-count-4">4 Players</button>
+            </div>
+        
+            <div class="filter-category" id="moon-filters">
+              <h3>Moon</h3>
+              <button class="filter-btn" data-filter="76-Acidir">76-Acidir</button>
+              <button class="filter-btn" data-filter="240-Alcatras">240-Alcatras</button>
+              <button class="filter-btn" data-filter="57-Asteroid-13">57-Asteroid-13</button>
+              <button class="filter-btn" data-filter="44-Atlantica">44-Atlantica</button>
+              <button class="filter-btn" data-filter="288-Berunah">288-Berunah</button>
+              <button class="filter-btn" data-filter="235-Calist">235-Calist</button>
+              <button class="filter-btn" data-filter="842-Core">842-Core</button>
+              <button class="filter-btn" data-filter="42-Cosmocos">42-Cosmocos</button>
+              <button class="filter-btn" data-filter="328-Crowd">328-Crowd</button>
+              <button class="filter-btn" data-filter="537-Cubatres">537-Cubatres</button>
+              <button class="filter-btn" data-filter="354-Demetrica">354-Demetrica</button>
+              <button class="filter-btn" data-filter="724-Descent">724-Descent</button>
+              <button class="filter-btn" data-filter="48-Desolation">48-Desolation</button>
+              <button class="filter-btn" data-filter="135-Duckstroid-14">135-Duckstroid-14</button>
+              <button class="filter-btn" data-filter="555-Empra">555-Empra</button>
+              <button class="filter-btn" data-filter="154-Etern">154-Etern</button>
+              <button class="filter-btn" data-filter="475-Extort">475-Extort</button>
+              <button class="filter-btn" data-filter="29-Faith">29-Faith</button>
+              <button class="filter-btn" data-filter="141-Filitrios">141-Filitrios</button>
+              <button class="filter-btn" data-filter="25-Fission-C">25-Fission-C</button>
+              <button class="filter-btn" data-filter="36-Gloom">36-Gloom</button>
+              <button class="filter-btn" data-filter="147-Gratar">147-Gratar</button>
+              <button class="filter-btn" data-filter="58-Hyve">58-Hyve</button>
+              <button class="filter-btn" data-filter="42-Hyx">42-Hyx</button>
+              <button class="filter-btn" data-filter="46-Infernis">46-Infernis</button>
+              <button class="filter-btn" data-filter="84-Junic">84-Junic</button>
+              <button class="filter-btn" data-filter="35-Lecaro">35-Lecaro</button>
+              <button class="filter-btn" data-filter="234-Motra">234-Motra</button>
+              <button class="filter-btn" data-filter="495-Narcotic">495-Narcotic</button>
+              <button class="filter-btn" data-filter="134-Oldred">134-Oldred</button>
+              <button class="filter-btn" data-filter="94-Polarus">94-Polarus</button>
+              <button class="filter-btn" data-filter="214-Release">214-Release</button>
+              <button class="filter-btn" data-filter="648-Repress">648-Repress</button>
+              <button class="filter-btn" data-filter="398-Roart">398-Roart</button>
+              <button class="filter-btn" data-filter="4-Thalasso">4-Thalasso</button>
+              <button class="filter-btn" data-filter="132-Trite">132-Trite</button>
+              <button class="filter-btn" data-filter="67-Utril">67-Utril</button>
+            </div>
+        
+            <div class="filter-category" id="version-filters">
+              <h3>Version</h3>
+              <button class="filter-btn" data-filter="v69">v69</button>
+              <button class="filter-btn" data-filter="v72">v72</button>
+              <button class="filter-btn" data-filter="v73">v73</button>
+            </div>
+
+            <div class="filter-category" id="scrap-type-filters">
+              <h3>Scrap Type</h3>
+              <button class="filter-btn" data-filter="Regular">Regular</button>
+              <button class="filter-btn" data-filter="Single">Single</button>
+            </div>
+
+          </div>
+          <!-- WESLEYS MOONS SMHQ -->
+          <div class="filter-section" id="lc_modded_wesleysmoons_smhq">
+            <div class="filter-category" id="player-count-filters">
+              <h3>Player Count</h3>
+              <button class="filter-btn" data-filter="1" id="player-count-1">1 Player</button>
+              <button class="filter-btn" data-filter="2" id="player-count-2">2 Players</button>
+              <button class="filter-btn" data-filter="3" id="player-count-3">3 Players</button>
+              <button class="filter-btn" data-filter="4" id="player-count-4">4 Players</button>
+            </div>
+        
+            <div class="filter-category" id="moon-filters">
+              <h3>Moon</h3>
+                <button class="filter-btn" data-filter="76-Acidir">76-Acidir</button>
+                <button class="filter-btn" data-filter="240-Alcatras">240-Alcatras</button>
+                <button class="filter-btn" data-filter="57-Asteroid-13">57-Asteroid-13</button>
+                <button class="filter-btn" data-filter="44-Atlantica">44-Atlantica</button>
+                <button class="filter-btn" data-filter="288-Berunah">288-Berunah</button>
+                <button class="filter-btn" data-filter="235-Calist">235-Calist</button>
+                <button class="filter-btn" data-filter="842-Core">842-Core</button>
+                <button class="filter-btn" data-filter="42-Cosmocos">42-Cosmocos</button>
+                <button class="filter-btn" data-filter="328-Crowd">328-Crowd</button>
+                <button class="filter-btn" data-filter="537-Cubatres">537-Cubatres</button>
+                <button class="filter-btn" data-filter="354-Demetrica">354-Demetrica</button>
+                <button class="filter-btn" data-filter="724-Descent">724-Descent</button>
+                <button class="filter-btn" data-filter="48-Desolation">48-Desolation</button>
+                <button class="filter-btn" data-filter="135-Duckstroid-14">135-Duckstroid-14</button>
+                <button class="filter-btn" data-filter="555-Empra">555-Empra</button>
+                <button class="filter-btn" data-filter="154-Etern">154-Etern</button>
+                <button class="filter-btn" data-filter="475-Extort">475-Extort</button>
+                <button class="filter-btn" data-filter="29-Faith">29-Faith</button>
+                <button class="filter-btn" data-filter="141-Filitrios">141-Filitrios</button>
+                <button class="filter-btn" data-filter="25-Fission-C">25-Fission-C</button>
+                <button class="filter-btn" data-filter="36-Gloom">36-Gloom</button>
+                <button class="filter-btn" data-filter="147-Gratar">147-Gratar</button>
+                <button class="filter-btn" data-filter="58-Hyve">58-Hyve</button>
+                <button class="filter-btn" data-filter="42-Hyx">42-Hyx</button>
+                <button class="filter-btn" data-filter="46-Infernis">46-Infernis</button>
+                <button class="filter-btn" data-filter="84-Junic">84-Junic</button>
+                <button class="filter-btn" data-filter="35-Lecaro">35-Lecaro</button>
+                <button class="filter-btn" data-filter="234-Motra">234-Motra</button>
+                <button class="filter-btn" data-filter="495-Narcotic">495-Narcotic</button>
+                <button class="filter-btn" data-filter="134-Oldred">134-Oldred</button>
+                <button class="filter-btn" data-filter="94-Polarus">94-Polarus</button>
+                <button class="filter-btn" data-filter="214-Release">214-Release</button>
+                <button class="filter-btn" data-filter="648-Repress">648-Repress</button>
+                <button class="filter-btn" data-filter="398-Roart">398-Roart</button>
+                <button class="filter-btn" data-filter="4-Thalasso">4-Thalasso</button>
+                <button class="filter-btn" data-filter="132-Trite">132-Trite</button>
+                <button class="filter-btn" data-filter="67-Utril">67-Utril</button>
+            </div>
+        
+            <div class="filter-category" id="version-filters">
+              <h3>Version</h3>
+              <button class="filter-btn" data-filter="v69">v69</button>
+              <button class="filter-btn" data-filter="v72">v72</button>
+              <button class="filter-btn" data-filter="v73">v73</button>
+            </div>
+              
+          </div>
+        </div>
+        <!-- CLASSIC MOONS -->
+        <div id="classicmoons-filters" class="modpack-filter-section">
+          <div class="collection-section">
+            <button class="collection-btn" data-collection="lc_modded_classicmoons_hq">Classic High Quota</button>
+            <button class="collection-btn" data-collection="lc_modded_classicmoons_sdc">Single Day Clear</button>
+            <button class="collection-btn" data-collection="lc_modded_classicmoons_smhq">Single Moon High Quota</button>
+          </div>
+          <!-- CLASSIC MOONS CLASSIC HQ -->
+          <div class="filter-section" id="lc_modded_classicmoons_hq">
+            <div class="filter-category" id="player-count-filters">
+              <h3>Player Count</h3>
+              <button class="filter-btn" data-filter="1" id="player-count-1">1 Player</button>
+              <button class="filter-btn" data-filter="2" id="player-count-2">2 Players</button>
+              <button class="filter-btn" data-filter="3" id="player-count-3">3 Players</button>            
+              <button class="filter-btn" data-filter="4" id="player-count-4">4 Players</button>        
+            </div>
+
+            <div class="filter-category" id="version-filters">
+              <h3>Version</h3>
+              <button class="filter-btn" data-filter="v56">v56</button>
+              <button class="filter-btn" data-filter="v62">v62</button>
+              <button class="filter-btn" data-filter="v64">v64</button>
+              <button class="filter-btn" data-filter="v69">v69</button>
+              <button class="filter-btn" data-filter="v72">v72</button>
+              <button class="filter-btn" data-filter="v73">v73</button>
+            </div>
+          </div>
+          <!-- CLASSIC MOONS SDC -->
+          <div class="filter-section" id="lc_modded_classicmoons_sdc">
+            <div class="filter-category" id="player-count-filters">
+              <h3>Player Count</h3>
+              <button class="filter-btn" data-filter="1" id="player-count-1">1 Player</button>
+              <button class="filter-btn" data-filter="2" id="player-count-2">2 Players</button>
+              <button class="filter-btn" data-filter="3" id="player-count-3">3 Players</button>
+              <button class="filter-btn" data-filter="4" id="player-count-4">4 Players</button>
+            </div>
+        
+            <div class="filter-category" id="moon-filters">
+              <h3>Moon</h3>
+              <button class="filter-btn" data-filter="320-Blurance">320-Blurance</button>
+              <button class="filter-btn" data-filter="51-Verdance">51-Verdance</button>
+              <button class="filter-btn" data-filter="184-Derelict">184-Derelict</button>
+              <button class="filter-btn" data-filter="130-Gorgonzola">130-Gorgonzola</button>
+              <button class="filter-btn" data-filter="5-Tandraus">5-Tandraus</button>
+              <button class="filter-btn" data-filter="131-Lertz">131-Lertz</button>
+              <button class="filter-btn" data-filter="143-Scallg">143-Scallg</button>
+              <button class="filter-btn" data-filter="86-Synthesis">86-Synthesis</button>
+              <button class="filter-btn" data-filter="13-Kast">13-Kast</button>
+              <button class="filter-btn" data-filter="43-Orion">43-Orion</button>
+              <button class="filter-btn" data-filter="2742-Jabiua">2742-Jabiua</button>
+            </div>
+        
+            <div class="filter-category" id="version-filters">
+              <h3>Version</h3>
+              <button class="filter-btn" data-filter="v56">v56</button>
+              <button class="filter-btn" data-filter="v62">v62</button>
+              <button class="filter-btn" data-filter="v64">v64</button>
+              <button class="filter-btn" data-filter="v69">v69</button>
+              <button class="filter-btn" data-filter="v72">v72</button>
+              <button class="filter-btn" data-filter="v73">v73</button>
+            </div>
+
+            <div class="filter-category" id="scrap-type-filters">
+              <h3>Scrap Type</h3>
+              <button class="filter-btn" data-filter="Regular">Regular</button>
+              <button class="filter-btn" data-filter="Single">Single</button>
+            </div>
+
+          </div>
+          <!-- CLASSIC MOONS SMHQ -->
+          <div class="filter-section" id="lc_modded_classicmoons_smhq">
+            <div class="filter-category" id="player-count-filters">
+              <h3>Player Count</h3>
+              <button class="filter-btn" data-filter="1" id="player-count-1">1 Player</button>
+              <button class="filter-btn" data-filter="2" id="player-count-2">2 Players</button>
+              <button class="filter-btn" data-filter="3" id="player-count-3">3 Players</button>
+              <button class="filter-btn" data-filter="4" id="player-count-4">4 Players</button>
+            </div>
+        
+            <div class="filter-category" id="moon-filters">
+              <h3>Moon</h3>
+              <button class="filter-btn" data-filter="320-Blurance">320-Blurance</button>
+              <button class="filter-btn" data-filter="51-Verdance">51-Verdance</button>
+              <button class="filter-btn" data-filter="184-Derelict">184-Derelict</button>
+              <button class="filter-btn" data-filter="130-Gorgonzola">130-Gorgonzola</button>
+              <button class="filter-btn" data-filter="5-Tandraus">5-Tandraus</button>
+              <button class="filter-btn" data-filter="131-Lertz">131-Lertz</button>
+              <button class="filter-btn" data-filter="143-Scallg">143-Scallg</button>
+              <button class="filter-btn" data-filter="86-Synthesis">86-Synthesis</button>
+              <button class="filter-btn" data-filter="13-Kast">13-Kast</button>
+              <button class="filter-btn" data-filter="43-Orion">43-Orion</button>
+              <button class="filter-btn" data-filter="2742-Jabiua">2742-Jabiua</button>
+            </div>
+        
+            <div class="filter-category" id="version-filters">
+              <h3>Version</h3>
+              <button class="filter-btn" data-filter="v56">v56</button>
+              <button class="filter-btn" data-filter="v62">v62</button>
+              <button class="filter-btn" data-filter="v64">v64</button>
+              <button class="filter-btn" data-filter="v69">v69</button>
+              <button class="filter-btn" data-filter="v72">v72</button>
+              <button class="filter-btn" data-filter="v73">v73</button>
+            </div>
+              
+          </div>
+        </div>
+
       </div>
       
       <div id="leaderboard"></div>

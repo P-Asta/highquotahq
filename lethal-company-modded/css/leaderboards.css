@@ -10,6 +10,7 @@
     margin-bottom: 20px;
   }
   
+  .modpack-btn,
   .collection-btn,
   .filter-btn {
     font-family: 'systematic_jcool';
@@ -25,16 +26,19 @@
     cursor: pointer;
   }
   
+  .modpack-btn.active,
   .collection-btn.active,
   .filter-btn.active {
     background-color: #ff6f61;
     color: white;
   }
   
+  .collection-section,
   .filter-section {
     display: none;
   }
   
+  .collection-section.active,
   .filter-section.active {
     display: block;
   }
@@ -57,6 +61,7 @@
     margin-bottom: 1rem;
   }
   
+  .modpack-btn,
   .collection-btn {
     margin-right: 0.5rem;
     padding: 0.5rem 1rem;
@@ -137,6 +142,7 @@
     margin-bottom: 20px;
   }
   
+  .modpack-btn,
   .collection-btn {
     padding: 10px 20px;
     margin: 5px;
@@ -148,6 +154,8 @@
     transition: all 0.3s ease;
   }
   
+  .modpack-btn:hover,
+  .modpack-btn.active,
   .collection-btn:hover,
   .collection-btn.active {
     background-color: #ff3e3e;
@@ -223,6 +231,7 @@
       padding: 15px;
     }
   
+    .modpack-btn,
     .collection-btn,
     .filter-btn {
       padding: 8px 10px;

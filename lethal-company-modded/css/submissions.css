@@ -45,6 +45,7 @@ form {
   gap: 15px;
 }
 
+h3,
 label {
   font-family: 'systematic_jcool';
   src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
@@ -158,6 +159,7 @@ button[type="submit"]:hover {
 }
 
 body,
+h3,
 label,
 input,
 textarea,

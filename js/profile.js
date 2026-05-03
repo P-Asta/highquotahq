@@ -146,21 +146,37 @@ async function displayPlayerRuns(username) {
   const normalizedUsername = username.trim();
 
   const leaderboardCollections = [
-    "leaderboards_hq",
-    "leaderboards_sdc",
-    "leaderboards_smhq",
-    "modded_hq",
-    "modded_sdc",
-    "modded_smhq"
+    'leaderboards_hq',
+    'leaderboards_smhq',
+    'leaderboards_sdc',
+    'lc_modded_brutal_hq',
+    'lc_modded_brutal_smhq',
+    'lc_modded_brutal_sdc',
+    'lc_modded_eclipsed_hq',
+    'lc_modded_eclipsed_smhq',
+    'lc_modded_wesleysmoons_hq',
+    'lc_modded_wesleysmoons_smhq',
+    'lc_modded_wesleysmoons_sdc',
+    'lc_modded_classicmoons_hq',
+    'lc_modded_classicmoons_smhq',
+    'lc_modded_classicmoons_sdc'
   ];
 
   const collectionDisplayNames = {
     'leaderboards_hq': 'High Quota',
     'leaderboards_smhq': 'Single Moon High Quota',
     'leaderboards_sdc': 'Single Day Clear',
-    'modded_hq': 'High Quota',
-    'modded_smhq': 'Single Moon High Quota',
-    'modded_sdc': 'Single Day Clear'
+    'lc_modded_brutal_hq': 'Brutal Company High Quota',
+    'lc_modded_brutal_smhq': 'Brutal Company Single Moon High Quota',
+    'lc_modded_brutal_sdc': 'Brutal Company Single Day Clear',
+    'lc_modded_eclipsed_hq': 'Eclipsed Only High Quota',
+    'lc_modded_eclipsed_smhq': 'Eclipsed Only Single Moon High Quota',
+    'lc_modded_wesleysmoons_hq': "Wesley's Moons High Quota",
+    'lc_modded_wesleysmoons_smhq': "Wesley's Moons Single Moon High Quota",
+    'lc_modded_wesleysmoons_sdc': "Wesley's Moons Single Day Clear",
+    'lc_modded_classicmoons_hq': 'Classic Moons High Quota',
+    'lc_modded_classicmoons_smhq': 'Classic Moons Single Moon High Quota',
+    'lc_modded_classicmoons_sdc': 'Classic Moons Single Day Clear'
   };
 
   runsContainer.innerHTML = "<h2>Lethal Company</h2>";
@@ -176,7 +192,7 @@ async function displayPlayerRuns(username) {
     const sectionHeader = document.createElement('h3');
     sectionHeader.textContent = collectionDisplayNames[collectionName] || collectionName;
     const collectionContainer = document.createElement('div');
-    if (collectionName.startsWith("modded")){
+    if (collectionName.startsWith("lc_modded")){
         moddedRunsContainer.appendChild(sectionHeader);
         moddedRunsContainer.appendChild(collectionContainer);
     }else{
@@ -212,9 +228,9 @@ async function displayPlayerRuns(username) {
       const valueDiv = document.createElement('div');
       valueDiv.classList.add('run-value');
 
-      if (collectionName === "leaderboards_hq" || collectionName === "leaderboards_smhq" || collectionName === "modded_hq" || collectionName === "modded_smhq") {
+      if (collectionName.endsWith('hq')) {
         valueDiv.textContent = `Quota Amount: ${run.quotaAmount || 0}`;
-      } else if (collectionName === "leaderboards_sdc" || collectionName === "modded_sdc") {
+      } else if (collectionName.endsWith('sdc')) {
         valueDiv.textContent = `Total Scrap: ${run.totalScrap || 0}`;
       }
 
@@ -291,7 +307,7 @@ export function showRunDetails(run, index, collectionName) {
         <p><strong>Date:</strong> ${formatTimestamp(run.date)}</p>
   `;
 
-  if (collectionName === 'leaderboards_hq') {
+  if (collectionName.endsWith('_hq')) {
     runDetailsHtml += `
       <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
       <p><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
@@ -302,7 +318,7 @@ export function showRunDetails(run, index, collectionName) {
       <p><strong>Version:</strong> ${run.version}</p>
     `;
   }
-  else if (collectionName === 'leaderboards_sdc') {
+  else if (collectionName.endsWith('_sdc')) {
     runDetailsHtml += `
       <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
       <p><strong>Scrap Type:</strong> ${run.scrapType}</p>
@@ -313,46 +329,12 @@ export function showRunDetails(run, index, collectionName) {
       <p><strong>Version:</strong> ${run.version}</p>
     `;
   }
-  else if (collectionName === 'leaderboards_smhq') {
+  else if (collectionName.endsWith('_smhq')) {
     runDetailsHtml += `
       <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
       <p><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
       <p><strong>Quota Reached:</strong> ${run.quotaReached}</p>
       <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
-      <p><strong>Moon:</strong> ${run.moon}</p>
-      <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-      <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
-      <p><strong>Version:</strong> ${run.version}</p>
-    `;
-  }
-  else if (collectionName === 'modded_hq') {
-    runDetailsHtml += `
-      <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
-      <p><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
-      <p><strong>Quota Reached:</strong> ${run.quotaReached}</p>
-      <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
-      <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-      <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
-      <p><strong>Version:</strong> ${run.version}</p>
-    `;
-  }
-  else if (collectionName === 'modded_smhq') {
-    runDetailsHtml += `
-      <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
-      <p><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
-      <p><strong>Quota Reached:</strong> ${run.quotaReached}</p>
-      <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
-      <p><strong>Moon:</strong> ${run.moon}</p>
-      <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-      <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
-      <p><strong>Version:</strong> ${run.version}</p>
-    `;
-  }
-  else if (collectionName === 'modded_sdc') {
-    runDetailsHtml += `
-      <p><strong>Quota Amount:</strong> ${run.totalScrap}</p>
-      <p><strong>Quota Fulfilled:</strong> ${run.scrapType}</p>
-      <p><strong>Quota Reached:</strong> ${run.equipment}</p>
       <p><strong>Moon:</strong> ${run.moon}</p>
       <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
       <p><strong>Verified By:</strong> ${run.verifiedBy}</p>

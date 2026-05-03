@@ -5,13 +5,15 @@ import { db, auth } from "./firebase.js";
 
 
 // Get the DOM elements
+const modpackBtns = document.querySelectorAll('.modpack-btn');
 const collectionBtns = document.querySelectorAll('.collection-btn');
 const filterSections = document.querySelectorAll('.filter-section');
 const filterBtns = document.querySelectorAll('.filter-btn');
 const leaderboard = document.getElementById('leaderboard');
 
 // Set up active collection
-let activeCollection = 'modded_hq';
+let activeCollection = 'lc_modded_brutal_hq';
+let activePack = 'brutal';
 let activeFilters = {
   playerCount: ['1'],
   versions: [],
@@ -23,7 +25,7 @@ let activeFilters = {
 document.querySelector('[data-filter="1"]').classList.add('active');
 
 const CACHE_KEY_PREFIX = 'leaderboard-cache-';
-const CACHE_EXPIRY_MS = 10 * 60 * 1000 * 144; // 24 hrs
+const CACHE_EXPIRY_MS = 1000 * 60 * 60 * 24; // 24 hrs
 
 // Fetch raw runs data from cache or Firestore
 const fetchRawRuns = async () => {
@@ -83,9 +85,9 @@ const filterAndSortRuns = (runs) => {
 
   // Determine sort key
   let sortKey;
-  if (activeCollection === "leaderboards_hq" || activeCollection === "leaderboards_smhq") {
+  if (activeCollection.endsWith("hq")) {
     sortKey = "quotaAmount";
-  } else if (activeCollection === "leaderboards_sdc") {
+  } else if (activeCollection.endsWith("sdc")) {
     sortKey = "totalScrap";
   }
 
@@ -184,31 +186,95 @@ collectionBtns.forEach(btn => {
       scrapType: [],
     };
 
-    if (activeCollection == 'modded_sdc' || activeCollection == 'modded_smhq') {
-      activeFilters.moon = ['41-Experimentation']
-    }
-
-
     // Update UI to reflect selected collection
     collectionBtns.forEach(button => button.classList.remove('active'));
     btn.classList.add('active');
 
     // Reset filter button states
     document.querySelectorAll('.filter-section .filter-btn').forEach(button => button.classList.remove('active'));
-    
-    const playerOneButton = document.querySelector(`#${activeCollection}-filters [data-filter="1"]`);
-    if (playerOneButton) playerOneButton.classList.add('active');
-
-    const moonButton = document.querySelector(`#${activeCollection}-filters [data-filter="41-Experimentation"]`);
-    if (moonButton) moonButton.classList.add('active');
 
     // Hide/show collection-specific filters
     document.querySelectorAll('.filter-section').forEach(section => {
       section.classList.remove('active');
+      if (section.id == activeCollection){
+        section.classList.add('active');
+      }
     });
-    document.getElementById(`${activeCollection}-filters`).classList.add('active');
+
+    const currentFilterSection = document.getElementById(activeCollection);
+    const playerOneButton = currentFilterSection.querySelector(`#${activePack}-filters [data-filter="1"]`);
+
+    if (playerOneButton) playerOneButton.classList.add('active');
+
+    if (activeCollection == 'lc_modded_wesleysmoons_sdc' || activeCollection == 'lc_modded_wesleysmoons_smhq'){
+      activeFilters.moon = ["76-Acidir"];
+      currentFilterSection.querySelector('#moon-filters').querySelector('.filter-btn').classList.add('active');
+    }else if (activeCollection == 'lc_modded_classicmoons_sdc' || activeCollection == 'lc_modded_classicmoons_smhq'){
+      activeFilters.moon = ["320-Blurance"];
+      currentFilterSection.querySelector('#moon-filters').querySelector('.filter-btn').classList.add('active');
+    }else if (activeCollection == 'lc_modded_brutal_sdc' || activeCollection == 'lc_modded_brutal_smhq' || activeCollection == 'lc_modded_eclipsed_smhq'){
+      activeFilters.moon = ["41-Experimentation"];
+      currentFilterSection.querySelector('#moon-filters').querySelector('.filter-btn').classList.add('active');
+    }
+
 
     // Fetch leaderboard data for the new collection
+    fetchLeaderboardData();
+  });
+});
+
+// Event listener for modpack buttons
+modpackBtns.forEach((btn) => {
+  btn.addEventListener('click', (event) => {
+    event.preventDefault();
+
+    activeCollection = btn.getAttribute('data-collection');
+    activePack = btn.getAttribute('modpack');
+    
+    activeFilters = {
+      playerCount: ['1'],
+      versions: [],
+      moon: [],
+      scrapType: [],
+    };
+
+    if (activeCollection == 'lc_modded_wesleysmoons_sdc' || activeCollection == 'lc_modded_wesleysmoons_smhq'){
+      activeFilters.moon = ["76-Acidir"];
+    }else if (activeCollection == 'lc_modded_classicmoons_sdc' || activeCollection == 'lc_modded_classicmoons_smhq'){
+      activeFilters.moon = ["320-Blurance"];
+    }else if (activeCollection == 'lc_modded_brutal_sdc' || activeCollection == 'lc_modded_brutal_smhq' || activeCollection == 'lc_modded_eclipsed_smhq'){
+      activeFilters.moon = ["41-Experimentation"];
+    }
+
+    collectionBtns.forEach(button => button.classList.remove('active'));
+    modpackBtns.forEach(button => button.classList.remove('active'));
+    btn.classList.add('active');
+
+    document.querySelectorAll('.collection-section .collections-btn').forEach(button => button.classList.remove('active'));
+
+    document.querySelectorAll('.collection-section').forEach(section => {
+      section.classList.remove('active');
+    })
+
+    document.querySelectorAll('.filter-section .filter-btn').forEach(button => button.classList.remove('active'));
+
+    const playerOneButton = document.querySelector(`#${activePack}-filters [data-filter="1"]`);
+    if (playerOneButton) playerOneButton.classList.add('active');
+
+    document.querySelectorAll('.filter-section').forEach(section => {
+      section.classList.remove('active');
+    });
+
+    const parentElement = document.getElementById(`${activePack}-filters`);
+    parentElement.classList.add('active');
+    parentElement.querySelectorAll('.collection-section').forEach(section => {
+      section.classList.add('active');
+    })
+    parentElement.querySelector('.collection-btn').classList.add('active');
+    parentElement.querySelectorAll('.filter-section').forEach(section => {
+      if (section.id == activeCollection) section.classList.add('active');
+    })
+
     fetchLeaderboardData();
   });
 });
@@ -283,9 +349,9 @@ const displayLeaderboard = (runs) => {
     const valueDiv = document.createElement('div');
     valueDiv.classList.add('run-value');
 
-    if (activeCollection === "modded_hq" || activeCollection === "modded_smhq") {
+    if (activeCollection.endsWith('hq')) {
       valueDiv.textContent = `Quota Amount: ${run.quotaAmount || 0}`;
-    } else if (activeCollection === "modded_sdc") {
+    } else if (activeCollection.endsWith('sdc')) {
       valueDiv.textContent = `Total Scrap: ${run.totalScrap || 0}`;
     }
     runDiv.appendChild(valueDiv);
@@ -361,11 +427,10 @@ export function showRunDetails(run, index) {
             `<a href="/pages/profile.html?username=${encodeURIComponent(player)}" class="player-link">${player}</a>`
           ).join(', ')}
         </p>
-        <p><strong>Mod:</strong> ${run.mod}</p>
         <p><strong>Date:</strong> ${formatTimestamp(run.date)}</p>
   `;
 
-  if (activeCollection === 'modded_hq') {
+  if (activeCollection.endsWith('_hq')) {
     runDetailsHtml += `
       <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
       <p><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
@@ -376,7 +441,7 @@ export function showRunDetails(run, index) {
       <p><strong>Version:</strong> ${run.version}</p>
     `;
   }
-  else if (activeCollection === 'modded_sdc') {
+  else if (activeCollection.endsWith('_sdc')) {
     runDetailsHtml += `
       <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
       <p><strong>Scrap Type:</strong> ${run.scrapType}</p>

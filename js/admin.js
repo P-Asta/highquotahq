@@ -830,7 +830,22 @@ async function claimRun(runId, collectionName, role) {
 }
 
 async function displayRecentlyVerifiedRuns() {
-    const collections = ['leaderboards_hq', 'leaderboards_sdc', 'leaderboards_smhq', 'modded_hq', 'modded_sdc', 'modded_smhq'];
+    const collections = [
+        'leaderboards_hq',
+        'leaderboards_sdc',
+        'leaderboards_smhq',
+        'lc_modded_brutal_hq',
+        'lc_modded_brutal_smhq',
+        'lc_modded_brutal_sdc',
+        'lc_modded_eclipsed_hq',
+        'lc_modded_eclipsed_smhq',
+        'lc_modded_wesleysmoons_hq',
+        'lc_modded_wesleysmoons_smhq',
+        'lc_modded_wesleysmoons_sdc',
+        'lc_modded_classicmoons_hq',
+        'lc_modded_classicmoons_smhq',
+        'lc_modded_classicmoons_sdc'
+    ];
     const tableBody = document.getElementById("recent-verified-runs").getElementsByTagName("tbody")[0];
     
     tableBody.innerHTML = '';

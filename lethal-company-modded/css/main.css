@@ -136,11 +136,6 @@ footer {
     margin-right: 5px;
 }
 
-.profile-button {
-    padding: 2px 2px;
-}
-
-
 .navbar:hover {
     box-shadow: 0px 12px 14px rgba(0, 0, 0, 0.4);
 }
@@ -166,6 +161,10 @@ footer {
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #ff0000b6;
+}
+
+.navbar .login-logout-buttons {
+    margin-left: auto;
 }
 
 /* Buttons */
@@ -312,7 +311,7 @@ footer {
 }
 
 @media (max-width: 1200px){
-    .navbar ul li{
+    .navbar ul {
         gap: 12px;
     }
 
@@ -323,7 +322,7 @@ footer {
 }
 
 @media (max-width: 950px){
-    .navbar ul li {
+    .navbar ul {
         gap: 8px;
     }
 

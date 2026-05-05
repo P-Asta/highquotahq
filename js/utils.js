@@ -21,6 +21,7 @@ export function loadNavbar(onLoadedCallback) {
         const homeButton = document.getElementById('home-button');
         const aboutButton = document.getElementById('about-button');
         const profileButton = document.getElementById('profile-button');
+        const profileImage = document.getElementById('profile-image');
         const adminButton = document.getElementById('admin-button');
         const loginButton = document.getElementById('login-button');
         const logoutButton = document.getElementById('logout-button');
@@ -81,6 +82,7 @@ export function loadNavbar(onLoadedCallback) {
                 if (profileButton) {
                   profileButton.style.display = 'block';
                   profileButton.addEventListener('click', () => {window.location.href = '/pages/profile.html?username=' + encodeURIComponent(username);});
+                  profileImage.src = userData.profilePicture || "/assets/default-avatar.png";
                 }
 
                 if (roles.includes("admin") || roles.includes("verifier") || roles.includes("modded-verifier") || roles.includes("site-developer")) {

@@ -142,6 +142,7 @@ footer {
 
 /* navbar buttons container */
 .navbar ul {
+    flex-wrap: wrap;
     list-style-type: none;
     margin-left: 20px;
     padding: 0;
@@ -152,6 +153,18 @@ footer {
 
 .navbar ul li {
     display: inline;
+}
+
+.navbar-profile-image {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ff0000b6;
+}
+
+.navbar .login-logout-buttons {
+    margin-left: auto;
 }
 
 /* buttons */
@@ -205,6 +218,7 @@ footer {
 }
 
 .navbar .login-logout-buttons {
+    align-items: center;
     margin-left: auto;
     display: flex;
     gap: 15px;
@@ -291,6 +305,28 @@ footer {
     width: auto;
 }
 
+@media (max-width: 1200px){
+    .navbar ul {
+        gap: 12px;
+    }
+
+    .navbar ul li button {
+        padding: 6px 10px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 950px){
+    .navbar ul {
+        gap: 8px;
+    }
+
+    .navbar ul li button {
+        padding: 6px 8px;
+        font-size: 13px;
+    }
+}
+/*
 @media (max-width: 768px) {
     .navbar {
         flex-direction: column;
@@ -351,4 +387,4 @@ footer {
         padding: 12px;
         font-size: 18px;
     }
-}
+}*/

@@ -27,6 +27,7 @@ export function loadNavbar(onLoadedCallback) {
         const loginButton = document.getElementById('login-button');
         const logoutButton = document.getElementById('logout-button');
         const profileButton = document.getElementById('profile-button');
+        const profileImage = document.getElementById('profile-image');
 
         // Navigation button event listeners
         if (homeButton) homeButton.addEventListener('click', () => window.location.href = '/lethal-company/index.html');
@@ -93,6 +94,7 @@ export function loadNavbar(onLoadedCallback) {
                 if (profileButton) {
                   profileButton.style.display = 'block';
                   profileButton.addEventListener('click', () => {window.location.href = '/pages/profile.html?username=' + encodeURIComponent(username);});
+                  profileImage.src = userData.profilePicture || "/assets/default-avatar.png";
                 }
 
                 // Show admin button if the user is an admin

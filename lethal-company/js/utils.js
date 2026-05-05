@@ -98,7 +98,7 @@ export function loadNavbar(onLoadedCallback) {
                 // Show admin button if the user is an admin
                 if (roles.includes("admin")) {
                   if (adminButton) {
-                    adminButton.style.display = 'block';
+                    adminButton.style.display = 'inline-block';
                     adminButton.addEventListener('click', () => window.location.href = '/pages/admin.html');
                   }
                 }

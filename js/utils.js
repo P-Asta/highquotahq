@@ -85,7 +85,7 @@ export function loadNavbar(onLoadedCallback) {
 
                 if (roles.includes("admin") || roles.includes("verifier") || roles.includes("modded-verifier") || roles.includes("site-developer")) {
                   if (adminButton) {
-                    adminButton.style.display = 'block';
+                    adminButton.style.display = 'inline-block';
                     adminButton.addEventListener('click', () => window.location.href = '/pages/admin.html');
                   }
                 }

@@ -81,10 +81,12 @@ editProfileButton.addEventListener("click", () => {
     countryInput.value = document.getElementById("country").textContent || "";
   
     editProfileModal.classList.add("show");
+    editProfileModal.classList.remove("hidden");
 });
 
 cancelEditButton.addEventListener("click", () => {
   editProfileModal.classList.remove("show");
+  editProfileModal.classList.add("hidden");
 });
 
 saveChangesButton.addEventListener("click", async () => {
@@ -129,6 +131,7 @@ saveChangesButton.addEventListener("click", async () => {
 
     await updateDoc(userRef, updates);
     editProfileModal.classList.remove("show");
+    editProfileModal.classList.add("hidden");
 
     bioDisplay.textContent = bio || "No bio available.";
     pronounsDisplay.textContent = pronouns || "Pronouns: Not set";

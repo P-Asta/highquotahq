@@ -238,3 +238,8 @@ function populateDropdown(selectId, category) {
 
   selectMenu.appendChild(fragment);
 }
+
+// Since BC is the default option, load BC values
+populateDropdown('moon', 'vanilla_moons');
+populateDropdown('moonSMHQ', 'vanilla_moons');
+populateDropdown('version', 'brutal_versions');

@@ -383,7 +383,7 @@ export async function fetchUnverifiedRuns(role) {
 
                     let additionalInfo = '';
 
-                    if (collectionName === 'leaderboards_hq') {
+                    if (collectionName.endsWith('_hq')) {
                         const quotaAmount = run.quotaAmount || 'N/A';
                         const quotaFulfilled = run.quotaFulfilled || 'N/A';
                         const quotaReached = run.quotaReached || 'N/A';
@@ -395,7 +395,7 @@ export async function fetchUnverifiedRuns(role) {
                             <p><strong>Quota Reached:</strong> ${quotaReached}</p>
                             <p><strong>Total Scrap:</strong> ${totalScrap}</p>
                         `;
-                    } else if (collectionName === 'leaderboards_sdc') {
+                    } else if (collectionName.endsWith('_sdc')) {
                         const equipment = Array.isArray(run.equipment) ? run.equipment.join(', ') : (typeof run.equipment === 'string' ? run.equipment : '');
                         const moon = run.moon || 'Unknown Moon';
                         const scrapType = run.scrapType || 'Unknown Scrap Type';
@@ -407,45 +407,7 @@ export async function fetchUnverifiedRuns(role) {
                             <p><strong>Scrap Type:</strong> ${scrapType}</p>
                             <p><strong>Total Scrap:</strong> ${totalScrap}</p>
                         `;
-                    } else if (collectionName === 'leaderboards_smhq') {
-                        const moon = run.moon || 'Unknown Moon';
-                        const quotaAmount = run.quotaAmount || 'N/A';
-                        const quotaFulfilled = run.quotaFulfilled || 'N/A';
-                        const quotaReached = run.quotaReached || 'N/A';
-                        const totalScrap = run.totalScrap || 'N/A';
-
-                        additionalInfo = `
-                            <p><strong>Moon:</strong> ${moon}</p>
-                            <p><strong>Quota Amount:</strong> ${quotaAmount}</p>
-                            <p><strong>Quota Fulfilled:</strong> ${quotaFulfilled}</p>
-                            <p><strong>Quota Reached:</strong> ${quotaReached}</p>
-                            <p><strong>Total Scrap:</strong> ${totalScrap}</p>
-                        `;
-                    } else if (collectionName === 'modded_hq') {
-                        const quotaAmount = run.quotaAmount || 'N/A';
-                        const quotaFulfilled = run.quotaFulfilled || 'N/A';
-                        const quotaReached = run.quotaReached || 'N/A';
-                        const totalScrap = run.totalScrap || 'N/A';
-
-                        additionalInfo = `
-                            <p><strong>Quota Amount:</strong> ${quotaAmount}</p>
-                            <p><strong>Quota Fulfilled:</strong> ${quotaFulfilled}</p>
-                            <p><strong>Quota Reached:</strong> ${quotaReached}</p>
-                            <p><strong>Total Scrap:</strong> ${totalScrap}</p>
-                        `;
-                    } else if (collectionName === 'modded_sdc') {
-                        const equipment = Array.isArray(run.equipment) ? run.equipment.join(', ') : (typeof run.equipment === 'string' ? run.equipment : '');
-                        const moon = run.moon || 'Unknown Moon';
-                        const scrapType = run.scrapType || 'Unknown Scrap Type';
-                        const totalScrap = run.totalScrap || 'N/A';
-
-                        additionalInfo = `
-                            <p><strong>Equipment:</strong> ${equipment}</p>
-                            <p><strong>Moon:</strong> ${moon}</p>
-                            <p><strong>Scrap Type:</strong> ${scrapType}</p>
-                            <p><strong>Total Scrap:</strong> ${totalScrap}</p>
-                        `;
-                    } else if (collectionName === 'modded_smhq') {
+                    } else if (collectionName.endsWith('_smhq')) {
                         const moon = run.moon || 'Unknown Moon';
                         const quotaAmount = run.quotaAmount || 'N/A';
                         const quotaFulfilled = run.quotaFulfilled || 'N/A';

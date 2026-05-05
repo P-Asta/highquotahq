@@ -18,6 +18,7 @@
          url('/assets/fonts/9systema-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
+    font-size: 0.9rem;
     padding: 10px 15px;
     margin: 5px;
     border: none;

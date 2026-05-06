@@ -22,6 +22,7 @@ export function loadNavbar(onLoadedCallback) {
         const homeButton = document.getElementById('home-button');
         const leaderboardsButton = document.getElementById('leaderboards-button');
         const submissionsButton = document.getElementById('submissions-button');
+        const rulesButton = document.getElementById('rules-button');
         const guidesButton = document.getElementById('guides-button');
         const adminButton = document.getElementById('admin-button');
         const loginButton = document.getElementById('login-button');
@@ -33,6 +34,7 @@ export function loadNavbar(onLoadedCallback) {
         if (homeButton) homeButton.addEventListener('click', () => window.location.href = '/lethal-company-modded/index.html');
         if (leaderboardsButton) leaderboardsButton.addEventListener('click', () => window.location.href = '/lethal-company-modded/pages/leaderboards.html');
         if (submissionsButton) submissionsButton.addEventListener('click', () => window.location.href = '/lethal-company-modded/pages/submissions.html');
+        if (rulesButton) rulesButton.addEventListener('click', () => window.location.href = '/lethal-company-modded/pages/rules.html');
         if (guidesButton) guidesButton.addEventListener('click', () => window.location.href = '/lethal-company-modded/pages/guides.html');
 
         // Dropdown handling

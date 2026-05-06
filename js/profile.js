@@ -222,10 +222,14 @@ async function displayPlayerRuns(username) {
       const metadataDiv = document.createElement('div');
       metadataDiv.classList.add('run-metadata');
       if (collectionName.endsWith("smhq") || collectionName.endsWith("sdc")){
-        metadataDiv.textContent = `Moon: ${run.moon} - Version: ${version}`
+        metadataDiv.textContent = `Moon: ${run.moon} - Version: ${version}`;
       }else{
       metadataDiv.textContent = `Version: ${version}`;
       }
+      if (!run.verified)
+        {
+          metadataDiv.innerHTML += ` - <strong class="pending-verification">Pending verification</strong>`;
+        }
       runDiv.appendChild(metadataDiv);
 
       const valueDiv = document.createElement('div');

@@ -470,3 +470,7 @@ button.close-btn:hover {
 .pending-verification {
   color: #ff4;
 }
+
+.pending-verification.hidden {
+  display: none;
+}

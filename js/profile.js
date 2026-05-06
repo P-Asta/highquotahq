@@ -305,6 +305,9 @@ export function showRunDetails(run, index, collectionName) {
     <div class="run-details">
       <div class="video-section">${formatVideos(run.videos)}</div>
       <div class="stats-section">
+        <div class="pending-text">
+          <p class="pending-verification">⚠ Run pending verification ⚠</p>
+        </div>
         <h3>Run Information</h3>
         <p><strong>Players:</strong> 
           ${run.players.map(player => 
@@ -356,6 +359,10 @@ export function showRunDetails(run, index, collectionName) {
 
   
   detailsPanel.innerHTML = runDetailsHtml;
+
+  if (run.verified) {
+    detailsPanel.querySelector('.pending-verification').classList.add('hidden');
+  }
 
   setTimeout(() => {
     detailsPanel.classList.add('active');

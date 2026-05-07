@@ -1,0 +1,75 @@
+@font-face {
+  font-family: 'systematic_jcool';
+  src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
+       url('/assets/fonts/9systema-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.hidden {
+  display: none;
+}
+
+.buttons-container {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.rules-section-button {
+  font-family: 'systematic_jcool';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 0.9rem;
+  color: white;
+  padding: 10px 20px;
+  margin: 5px;
+  background-color: #333;
+  border: 2px solid #444;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.rules-section-button.active {
+  background-color: #ff3e3e;
+  border-color: #ff5757;
+}
+
+.rules-page {
+  background: #22222298;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  margin-top: 5px;
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  text-align: left;
+  max-width: 1024px;
+  margin: auto;
+  padding: 20px;
+}
+
+.strong-negation {
+  color: #ff7777;
+}
+
+.strong-approval {
+  color: #77ff77
+}
+
+.strong-conditional {
+  color: #ffffaa
+}
+
+.first-h2 {
+  margin-top: 10px;
+}
+
+h2 {
+  margin: 40px 10px;
+}
+
+a {
+  color: #00ccff;
+  text-decoration: none;
+}

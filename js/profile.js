@@ -222,10 +222,14 @@ async function displayPlayerRuns(username) {
       const metadataDiv = document.createElement('div');
       metadataDiv.classList.add('run-metadata');
       if (collectionName.endsWith("smhq") || collectionName.endsWith("sdc")){
-        metadataDiv.textContent = `Moon: ${run.moon} - Version: ${version}`
+        metadataDiv.textContent = `Moon: ${run.moon} - Version: ${version}`;
       }else{
       metadataDiv.textContent = `Version: ${version}`;
       }
+      if (!run.verified)
+        {
+          metadataDiv.innerHTML += ` - <strong class="pending-verification">Pending verification</strong>`;
+        }
       runDiv.appendChild(metadataDiv);
 
       const valueDiv = document.createElement('div');
@@ -301,6 +305,9 @@ export function showRunDetails(run, index, collectionName) {
     <div class="run-details">
       <div class="video-section">${formatVideos(run.videos)}</div>
       <div class="stats-section">
+        <div class="pending-text">
+          <p class="pending-verification">⚠ Run pending verification ⚠</p>
+        </div>
         <h3>Run Information</h3>
         <p><strong>Players:</strong> 
           ${run.players.map(player => 
@@ -352,6 +359,10 @@ export function showRunDetails(run, index, collectionName) {
 
   
   detailsPanel.innerHTML = runDetailsHtml;
+
+  if (run.verified) {
+    detailsPanel.querySelector('.pending-verification').classList.add('hidden');
+  }
 
   setTimeout(() => {
     detailsPanel.classList.add('active');

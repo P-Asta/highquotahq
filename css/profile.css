@@ -466,3 +466,11 @@ button.close-btn {
 button.close-btn:hover {
   color: #ff5555;
 }
+
+.pending-verification {
+  color: #ff4;
+}
+
+.pending-verification.hidden {
+  display: none;
+}

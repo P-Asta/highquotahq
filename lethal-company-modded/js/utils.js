@@ -22,16 +22,19 @@ export function loadNavbar(onLoadedCallback) {
         const homeButton = document.getElementById('home-button');
         const leaderboardsButton = document.getElementById('leaderboards-button');
         const submissionsButton = document.getElementById('submissions-button');
+        const rulesButton = document.getElementById('rules-button');
         const guidesButton = document.getElementById('guides-button');
         const adminButton = document.getElementById('admin-button');
         const loginButton = document.getElementById('login-button');
         const logoutButton = document.getElementById('logout-button');
         const profileButton = document.getElementById('profile-button');
+        const profileImage = document.getElementById('profile-image');
 
         // Navigation button event listeners
         if (homeButton) homeButton.addEventListener('click', () => window.location.href = '/lethal-company-modded/index.html');
         if (leaderboardsButton) leaderboardsButton.addEventListener('click', () => window.location.href = '/lethal-company-modded/pages/leaderboards.html');
         if (submissionsButton) submissionsButton.addEventListener('click', () => window.location.href = '/lethal-company-modded/pages/submissions.html');
+        if (rulesButton) rulesButton.addEventListener('click', () => window.location.href = '/lethal-company-modded/pages/rules.html');
         if (guidesButton) guidesButton.addEventListener('click', () => window.location.href = '/lethal-company-modded/pages/guides.html');
 
         // Dropdown handling
@@ -93,13 +96,14 @@ export function loadNavbar(onLoadedCallback) {
                 if (profileButton) {
                   profileButton.style.display = 'block';
                   profileButton.addEventListener('click', () => {window.location.href = '/pages/profile.html?username=' + encodeURIComponent(username);});
+                  profileImage.src = userData.profilePicture || "/assets/default-avatar.png";
                 }
 
 
                 // Show admin button if the user is an admin
                 if (roles.includes("admin")) {
                   if (adminButton) {
-                    adminButton.style.display = 'block';
+                    adminButton.style.display = 'inline-block';
                     adminButton.addEventListener('click', () => window.location.href = '/pages/admin.html');
                   }
                 }

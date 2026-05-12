@@ -452,7 +452,7 @@ export function showRunDetails(run, index) {
       <p><strong>Version:</strong> ${run.version}</p>
     `;
   }
-  else if (activeCollection === 'modded_smhq') {
+  else if (activeCollection === '_smhq') {
     runDetailsHtml += `
       <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
       <p><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>

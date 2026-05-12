@@ -573,65 +573,65 @@ export function showRunDetails(runId, collectionName, run, role) {
 
     resetButtonStates();
 
-runDetailsContainer.removeEventListener('click', handleRunDetailsClick);
-runDetailsContainer.addEventListener('click', handleRunDetailsClick);
+    runDetailsContainer.removeEventListener('click', handleRunDetailsClick);
+    runDetailsContainer.addEventListener('click', handleRunDetailsClick);
 
-function handleRunDetailsClick(event) {
-    const target = event.target;
-    if (target.matches('#edit-button')) {
-        console.log("Edit button clicked");
-        const fields = runDetailsContainer.querySelectorAll('[data-field]');
-        fields.forEach(field => field.disabled = false);
-        resetButtonStates('edit');
-    } else if (target.matches('#save-button')) {
-        console.log("Save button clicked");
-        const fields = runDetailsContainer.querySelectorAll('[data-field]');
-        const updatedRun = {};
+    function handleRunDetailsClick(event) {
+        const target = event.target;
+        if (target.matches('#edit-button')) {
+            console.log("Edit button clicked");
+            const fields = runDetailsContainer.querySelectorAll('[data-field]');
+            fields.forEach(field => field.disabled = false);
+            resetButtonStates('edit');
+        } else if (target.matches('#save-button')) {
+            console.log("Save button clicked");
+            const fields = runDetailsContainer.querySelectorAll('[data-field]');
+            const updatedRun = {};
 
-        fields.forEach(field => {
-            const fieldName = field.getAttribute('data-field');
-            if (fieldName === 'date' && field.value) {
-                updatedRun[fieldName] = Timestamp.fromDate(new Date(field.value));
-            } else if (fieldName.startsWith('videos-')) {
-                const player = fieldName.split('-')[1];
-                updatedRun.videos = updatedRun.videos || {};
-                updatedRun.videos[player] = field.value.split(',').map(url => url.trim());
-            } else if (field.type === 'select-one') {
-                updatedRun[fieldName] = field.value === 'true';
-            } else if (field.type === 'number') {
-                updatedRun[fieldName] = parseFloat(field.value);
-            } else if (Array.isArray(run[fieldName])) {
-                updatedRun[fieldName] = field.value.split(',').map(item => item.trim());
-            } else {
-                updatedRun[fieldName] = field.value;
-            }
-            field.disabled = true;
-        });
-
-        saveRunDetails(runId, collectionName, updatedRun)
-            .then(() => {
-                console.log(`Run ${runId} updated successfully.`);
-                resetButtonStates('save');
-            })
-            .catch((error) => {
-                console.error('Error updating run:', error);
+            fields.forEach(field => {
+                const fieldName = field.getAttribute('data-field');
+                if (fieldName === 'date' && field.value) {
+                    updatedRun[fieldName] = Timestamp.fromDate(new Date(field.value));
+                } else if (fieldName.startsWith('videos-')) {
+                    const player = fieldName.split('-')[1];
+                    updatedRun.videos = updatedRun.videos || {};
+                    updatedRun.videos[player] = field.value.split(',').map(url => url.trim());
+                } else if (field.type === 'select-one') {
+                    updatedRun[fieldName] = field.value === 'true';
+                } else if (field.type === 'number') {
+                    updatedRun[fieldName] = parseFloat(field.value);
+                } else if (Array.isArray(run[fieldName])) {
+                    updatedRun[fieldName] = field.value.split(',').map(item => item.trim());
+                } else {
+                    updatedRun[fieldName] = field.value;
+                }
+                field.disabled = true;
             });
-    } else if (target.matches('#cancel-button')) {
-        console.log("Cancel button clicked");
-        const fields = runDetailsContainer.querySelectorAll('[data-field]');
-        fields.forEach(field => field.disabled = true);
-        resetButtonStates('cancel');
-    } else if (target.matches('#verify-button')) {
-        console.log("Verify button clicked");
-        verifyRun(runId, collectionName, role);
-    } else if (target.matches('#reject-button')) {
-        console.log("Reject button clicked");
-        rejectRun(runId, collectionName, role);
-    } else if (target.matches('#back-to-list')) {
-        console.log("🔄 Back button clicked via delegation!");
-        backToList(role);
+
+            saveRunDetails(runId, collectionName, updatedRun)
+                .then(() => {
+                    console.log(`Run ${runId} updated successfully.`);
+                    resetButtonStates('save');
+                })
+                .catch((error) => {
+                    console.error('Error updating run:', error);
+                });
+        } else if (target.matches('#cancel-button')) {
+            console.log("Cancel button clicked");
+            const fields = runDetailsContainer.querySelectorAll('[data-field]');
+            fields.forEach(field => field.disabled = true);
+            resetButtonStates('cancel');
+        } else if (target.matches('#verify-button')) {
+            console.log("Verify button clicked");
+            verifyRun(runId, collectionName, role);
+        } else if (target.matches('#reject-button')) {
+            console.log("Reject button clicked");
+            rejectRun(runId, collectionName, role);
+        } else if (target.matches('#back-to-list')) {
+            console.log("🔄 Back button clicked via delegation!");
+            backToList(role);
+        }
     }
-}
 
     function resetButtonStates(buttonClicked = '') {
         const editButton = document.getElementById('edit-button');
@@ -656,7 +656,7 @@ function handleRunDetailsClick(event) {
             cancelButton.style.display = 'none';
         }
     }
-    }
+}
 
 async function saveRunDetails(runId, collectionName, updatedRun) {
     const runRef = doc(db, collectionName, runId);

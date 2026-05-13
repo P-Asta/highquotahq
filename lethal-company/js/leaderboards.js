@@ -262,15 +262,45 @@ const displayLatest = (runs) => {
     recentRuns.innerHTML = '<p>No recent runs</p>';
     return;
   }
-  runs.forEach((run, index) => {
+  runs.slice(0, 10).forEach((run, index) => {
     const runValue = run.quotaAmount || run.totalScrap || 0;
 
     const runDiv = document.createElement('div');
     runDiv.classList.add('recent-entry');
-    const nameElement = document.createElement('p');
-    nameElement.textContent = run.players.toString() + runValue;
-    runDiv.appendChild(nameElement);
-    recentRuns.appendChild(runDiv);
+    const playersDiv = document.createElement('div');
+    playersDiv.classList.add('recent-players');
+    playersDiv.textContent = `Players: `;
+
+    run.players.forEach((player, i) => {
+      const playerLink = document.createElement('a');
+      playerLink.href = `/pages/profile.html?username=${encodeURIComponent(player)}`;
+      playerLink.textContent = player;
+      playerLink.classList.add('player-link');
+
+      playersDiv.appendChild(playerLink);
+
+      if (i < run.players.length - 1) {
+        playersDiv.appendChild(document.createTextNode(', '));
+      }
+    });
+    runDiv.appendChild(playersDiv);
+    const versionDiv = document.createElement('div');
+    versionDiv.classList.add('recent-version');
+    versionDiv.textContent = `Version: ${run.version}`;
+    runDiv.appendChild(versionDiv);
+
+    const valueDiv = document.createElement('div');
+    valueDiv.classList.add('recent-value');
+    valueDiv.textContent = `${runValue}`;
+    runDiv.appendChild(valueDiv);
+
+    const detailsButton = document.createElement('button');
+    detailsButton.classList.add('view-details-btn');
+    detailsButton.innerHTML = '→';
+    detailsButton.onclick = () => showRunDetails(run, index);
+    runDiv.appendChild(detailsButton);
+
+    recentRuns.append(runDiv);
   })
 }
 
@@ -474,8 +504,10 @@ export function showRunDetails(run, index) {
   setTimeout(() => {
     const leaderboard = document.getElementById('leaderboard');
     const filters = document.getElementById('filters');
+    const recentruns = document.getElementById('recent-runs-container');
     leaderboard.classList.add('hidden');
     filters.classList.add('hidden');
+    recentruns.classList.add('hidden');
   }, 50);
 
   const closeBtn = document.getElementById('close-btn');
@@ -490,8 +522,10 @@ function closeRunDetails() {
   
   const leaderboard = document.getElementById('leaderboard');
   const filters = document.getElementById('filters');
+  const recentruns = document.getElementById('recent-runs-container');
   leaderboard.classList.remove('hidden');
   filters.classList.remove('hidden');
+  recentruns.classList.remove('hidden');
 }
 
 

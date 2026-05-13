@@ -11,8 +11,7 @@
   }
   
   .collection-btn,
-  .filter-btn
-  .recent-btn {
+  .filter-btn {
     font-family: 'systematic_jcool';
     src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
          url('/assets/fonts/9systema-webfont.woff') format('woff');
@@ -28,8 +27,7 @@
   }
   
   .collection-btn.active,
-  .filter-btn.active
-  .recent-btn.active {
+  .filter-btn.active {
     background-color: #ff6f61;
     color: white;
   }
@@ -68,7 +66,7 @@
         url('/assets/fonts/9systema-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 
 /* filter categories */
@@ -101,6 +99,8 @@
 
 .page-content {
   display: flex;
+  justify-content: space-between;
+  gap: 20px;
 }
 
 #recent-runs-container{
@@ -110,6 +110,7 @@
   position: relative;
   overflow: hidden;
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
+  padding: 15px;
 
   h2 {
     color: #ff3e3e;
@@ -153,7 +154,18 @@
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
 }
 
-.collection-btn, .recent-btn {
+.recent-btn {
+  padding: 5px 10px;
+  margin: 2px;
+  background-color: #333;
+  color: white;
+  border: 2px solid #444;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.collection-btn {
   padding: 10px 20px;
   margin: 5px;
   background-color: #333;
@@ -266,6 +278,40 @@
     background-color: #33333351;
     border-radius: 10px;
   }
+
+  .recent-entry {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    margin: 10px 0;
+    background-color: rgba(45, 45, 45, 0.9);;
+    border: 1px solid #555;
+    border-radius: 8px;
+    color: #fff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .recent-players {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #f0f0f0;
+    margin-bottom: 2px;
+    text-align: left;
+  }
+
+  .recent-version {
+    font-size: 0.8rem;
+    color: #ddd;
+    margin-top: 2px;
+    text-align: left;
+  }
+
+  .recent-value {
+    font-size: 1.6rem;
+    color: #ddd;
+    text-align: center;
+    margin-bottom: 0px;
+  }
   
   .run-entry {
     display: flex;
@@ -354,7 +400,7 @@
   transform: translateY(0);
 }
 
-#leaderboard.hidden, #filters.hidden {
+#leaderboard.hidden, #filters.hidden, #recent-runs-container.hidden {
   opacity: 0;
   transform: translateY(-20px);
   pointer-events: none;

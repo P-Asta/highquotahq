@@ -9,6 +9,10 @@ const collectionBtns = document.querySelectorAll('.collection-btn');
 const filterSections = document.querySelectorAll('.filter-section');
 const filterBtns = document.querySelectorAll('.filter-btn');
 const leaderboard = document.getElementById('leaderboard');
+const recentBtns = document.querySelectorAll('.recent-btn');
+const recentRuns = document.getElementById('recent-runs');
+
+let activeRecent = 'leaderboards_hq';
 
 // Set up active collection
 let activeCollection = 'leaderboards_hq';
@@ -26,22 +30,22 @@ const CACHE_KEY_PREFIX = 'leaderboard-cache-';
 const CACHE_EXPIRY_MS = 10 * 60 * 1000 * 144; // 24 hrs
 
 // Fetch raw runs data from cache or Firestore
-const fetchRawRuns = async () => {
-  const cacheKey = CACHE_KEY_PREFIX + activeCollection;
+const fetchRawRuns = async (collectionName) => {
+  const cacheKey = CACHE_KEY_PREFIX + collectionName;
   const cached = localStorage.getItem(cacheKey);
 
   if (cached) {
     const cachedData = JSON.parse(cached);
     const age = Date.now() - cachedData.timestamp;
     if (age < CACHE_EXPIRY_MS) {
-      console.log('Using cached data for', activeCollection);
+      console.log('Using cached data for', collectionName);
       return cachedData.runs;  // raw data, unfiltered
     }
   }
 
   // If no cache or cache expired, fetch fresh data
   try {
-    const querySnapshot = await getDocs(collection(db, activeCollection));
+    const querySnapshot = await getDocs(collection(db, collectionName));
     const runs = querySnapshot.docs.map(doc => doc.data());
 
     localStorage.setItem(cacheKey, JSON.stringify({
@@ -55,6 +59,7 @@ const fetchRawRuns = async () => {
     throw error;
   }
 };
+
 
 // Apply filters and sorting in-memory
 const filterAndSortRuns = (runs) => {
@@ -103,14 +108,15 @@ const filterAndSortRuns = (runs) => {
 
 // Main function to fetch data & update leaderboard display
 const fetchLeaderboardData = async () => {
-  leaderboard.innerHTML = 'Loading...';
+  leaderboard.innerHTML = '<p>Loading...</p>';
 
   try {
-    const rawRuns = await fetchRawRuns();           // get raw cached or fresh runs
+    const rawRuns = await fetchRawRuns(activeCollection);           // get raw cached or fresh runs
     const filteredSortedRuns = filterAndSortRuns(rawRuns); // filter & sort in-memory
     displayLeaderboard(filteredSortedRuns);         // show leaderboard
-  } catch {
-    leaderboard.innerHTML = 'Error loading leaderboard.';
+  } catch (error) {
+    leaderboard.innerHTML = '<p>Error loading leaderboard.</p>';
+    console.error(error);
   }
 };
 
@@ -121,6 +127,42 @@ const filterTypeMap = {
   'moon': 'moon',
   'scrap-type': 'scrapType',
 };
+
+const fetchRecentRunsData = async () => {
+  recentRuns.innerHTML = '<p>Loading...</p>';
+
+  try {
+    const rawLatestRuns = await fetchRawRuns(activeRecent);
+    const filteredLatestRuns = filterAndSortLatestRuns(rawLatestRuns);
+    displayLatest(filteredLatestRuns);
+  }catch (error){
+    recentRuns.innerHTML = '<p>Error loading latest runs.</p>';
+    console.error(error);
+  }
+}
+
+const filterAndSortLatestRuns = (runs) => {
+  const filteredRecentRuns = runs.filter(run => {
+    const isVerified = run.verified === true;
+    return isVerified;
+  });
+  return filteredRecentRuns.sort((a, b) => {
+    const timeA = a.verifiedAt?.seconds || 0;
+    const timeB = b.verifiedAt?.seconds || 0;
+    return timeB - timeA;
+  });
+}
+
+recentBtns.forEach((btn) => {
+  btn.addEventListener('click', (event) => {
+    activeRecent = btn.getAttribute('data-collection');
+
+    recentBtns.forEach(button => button.classList.remove('active'));
+    btn.classList.add('active');
+
+    fetchRecentRunsData();
+  })
+})
 
 // Event listener for filter buttons
 filterBtns.forEach((btn) => {
@@ -214,7 +256,23 @@ collectionBtns.forEach(btn => {
   });
 });
 
+const displayLatest = (runs) => {
+  recentRuns.innerHTML = '';
+  if (runs.length === 0){
+    recentRuns.innerHTML = '<p>No recent runs</p>';
+    return;
+  }
+  runs.forEach((run, index) => {
+    const runValue = run.quotaAmount || run.totalScrap || 0;
 
+    const runDiv = document.createElement('div');
+    runDiv.classList.add('recent-entry');
+    const nameElement = document.createElement('p');
+    nameElement.textContent = run.players.toString() + runValue;
+    runDiv.appendChild(nameElement);
+    recentRuns.appendChild(runDiv);
+  })
+}
 
 const displayLeaderboard = (runs) => {
   leaderboard.innerHTML = '';
@@ -308,9 +366,9 @@ export function showRunDetails(run, index) {
   
   // Helper function to format timestamps
   const formatTimestamp = (timestamp) => {
-    if (timestamp && timestamp.toDate) {
-      return new Date(timestamp.toDate()).toLocaleString();
-    }
+    if (!timestamp) return 'N/A';
+    if (timestamp.toDate) return new Date(timestamp.toDate()).toLocaleString();
+    if (timestamp.seconds) return new Date(timestamp.seconds * 1000).toLocaleString();
     return 'N/A';
   };
 
@@ -439,6 +497,7 @@ function closeRunDetails() {
 
 
 fetchLeaderboardData();
+fetchRecentRunsData();
 
 
 

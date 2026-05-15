@@ -23,6 +23,12 @@ let activeFilters = {
   scrapType: [],
 };
 
+const collectionMap = {
+  'leaderboards_hq': 'Classic High Quota',
+  'leaderboards_smhq': 'Single Moon High Quota',
+  'leaderboards_sdc': 'Single Day Clear'
+};
+
 // Ensure "Player 1" button is visually active on page load
 document.querySelector('[data-filter="1"]').classList.add('active');
 
@@ -107,15 +113,21 @@ const filterAndSortRuns = (runs) => {
 };
 
 // Main function to fetch data & update leaderboard display
-const fetchLeaderboardData = async () => {
+const fetchLeaderboardData = async (displaylatest = false) => {
   leaderboard.innerHTML = '<p>Loading...</p>';
+  if (displaylatest === true) recentRuns.innerHTML = '<p>Loading...</p>';
 
   try {
     const rawRuns = await fetchRawRuns(activeCollection);           // get raw cached or fresh runs
     const filteredSortedRuns = filterAndSortRuns(rawRuns); // filter & sort in-memory
     displayLeaderboard(filteredSortedRuns);         // show leaderboard
+    if (displaylatest === true) {
+      const filteredLatestRuns = filterAndSortLatestRuns(rawRuns);
+      displayLatest(filteredLatestRuns);
+    }
   } catch (error) {
     leaderboard.innerHTML = '<p>Error loading leaderboard.</p>';
+    recentRuns.innerHTML = '<p>Error loading latest runs.</p>';
     console.error(error);
   }
 };
@@ -128,19 +140,6 @@ const filterTypeMap = {
   'scrap-type': 'scrapType',
 };
 
-const fetchRecentRunsData = async () => {
-  recentRuns.innerHTML = '<p>Loading...</p>';
-
-  try {
-    const rawLatestRuns = await fetchRawRuns(activeRecent);
-    const filteredLatestRuns = filterAndSortLatestRuns(rawLatestRuns);
-    displayLatest(filteredLatestRuns);
-  }catch (error){
-    recentRuns.innerHTML = '<p>Error loading latest runs.</p>';
-    console.error(error);
-  }
-}
-
 const filterAndSortLatestRuns = (runs) => {
   const filteredRecentRuns = runs.filter(run => {
     const isVerified = run.verified === true;
@@ -152,17 +151,6 @@ const filterAndSortLatestRuns = (runs) => {
     return timeB - timeA;
   });
 }
-
-recentBtns.forEach((btn) => {
-  btn.addEventListener('click', (event) => {
-    activeRecent = btn.getAttribute('data-collection');
-
-    recentBtns.forEach(button => button.classList.remove('active'));
-    btn.classList.add('active');
-
-    fetchRecentRunsData();
-  })
-})
 
 // Event listener for filter buttons
 filterBtns.forEach((btn) => {
@@ -209,7 +197,7 @@ filterBtns.forEach((btn) => {
     }
 
     // Fetch and display leaderboard data based on active filters
-    fetchLeaderboardData();
+    fetchLeaderboardData(false);
   });
 });
 
@@ -252,12 +240,14 @@ collectionBtns.forEach(btn => {
     document.getElementById(`${activeCollection}-filters`).classList.add('active');
 
     // Fetch leaderboard data for the new collection
-    fetchLeaderboardData();
+    fetchLeaderboardData(true);
   });
 });
 
 const displayLatest = (runs) => {
   recentRuns.innerHTML = '';
+  const recentTitle = document.getElementById('recent-title');
+  recentTitle.textContent = collectionMap[activeCollection];  
   if (runs.length === 0){
     recentRuns.innerHTML = '<p>No recent runs</p>';
     return;
@@ -286,12 +276,20 @@ const displayLatest = (runs) => {
     runDiv.appendChild(playersDiv);
     const versionDiv = document.createElement('div');
     versionDiv.classList.add('recent-version');
-    versionDiv.textContent = `Version: ${run.version}`;
+    if (activeCollection.endsWith('_sdc') || activeCollection.endsWith('_smhq')){
+      versionDiv.textContent = `Version: ${run.version} - Moon: ${run.moon}`;
+    } else {
+      versionDiv.textContent = `Version: ${run.version}`;
+    }
     runDiv.appendChild(versionDiv);
 
     const valueDiv = document.createElement('div');
     valueDiv.classList.add('recent-value');
-    valueDiv.textContent = `${runValue}`;
+    if (activeCollection.endsWith('hq')){
+      valueDiv.textContent = `Quota ${run.quotaReached}: ${runValue}`;
+    }else{
+      valueDiv.textContent = `Collected: ${runValue}`;
+    }
     runDiv.appendChild(valueDiv);
 
     const aDiv = document.createElement('a');
@@ -373,9 +371,9 @@ const displayLeaderboard = (runs) => {
     valueDiv.classList.add('run-value');
 
     if (activeCollection === "leaderboards_hq" || activeCollection === "leaderboards_smhq") {
-      valueDiv.textContent = `Quota Amount: ${run.quotaAmount || 0}`;
+      valueDiv.textContent = `Quota ${run.quotaReached}: ${run.quotaAmount || 0}`;
     } else if (activeCollection === "leaderboards_sdc") {
-      valueDiv.textContent = `Total Scrap: ${run.totalScrap || 0}`;
+      valueDiv.textContent = `Collected: ${run.totalScrap || 0}`;
     }
     runDiv.appendChild(valueDiv);
 
@@ -528,8 +526,7 @@ function closeRunDetails() {
 
 
 
-fetchLeaderboardData();
-fetchRecentRunsData();
+fetchLeaderboardData(true);
 
 
 

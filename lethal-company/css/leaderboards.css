@@ -69,6 +69,10 @@
   font-size: 0.8rem;
 }
 
+.element-link:hover {
+  cursor: pointer;
+}
+
 /* filter categories */
 .filter-category {
   margin-bottom: 1rem;
@@ -291,6 +295,11 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
 
+  .recent-entry:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
   .recent-players {
     font-size: 0.9rem;
     font-weight: bold;
@@ -326,7 +335,7 @@
   }
   
   .run-entry:hover {
-    transform: scale(1.002);
+    transform: scale(1.01);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   }
   

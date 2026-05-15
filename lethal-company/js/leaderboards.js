@@ -294,13 +294,12 @@ const displayLatest = (runs) => {
     valueDiv.textContent = `${runValue}`;
     runDiv.appendChild(valueDiv);
 
-    const detailsButton = document.createElement('button');
-    detailsButton.classList.add('view-details-btn');
-    detailsButton.innerHTML = '→';
-    detailsButton.onclick = () => showRunDetails(run, index);
-    runDiv.appendChild(detailsButton);
-
-    recentRuns.append(runDiv);
+    const aDiv = document.createElement('a');
+    aDiv.classList.add('element-link');
+    aDiv.onclick = () => showRunDetails(run, index);
+    aDiv.appendChild(runDiv);
+    
+    recentRuns.append(aDiv);
   })
 }
 
@@ -380,13 +379,12 @@ const displayLeaderboard = (runs) => {
     }
     runDiv.appendChild(valueDiv);
 
-    const detailsButton = document.createElement('button');
-    detailsButton.classList.add('view-details-btn');
-    detailsButton.innerHTML = '→';
-    detailsButton.onclick = () => showRunDetails(run, index);
-    runDiv.appendChild(detailsButton);
+    const aDiv = document.createElement('a');
+    aDiv.classList.add('element-link');
+    aDiv.onclick = () => showRunDetails(run, index);
+    aDiv.appendChild(runDiv);
 
-    leaderboard.appendChild(runDiv);
+    leaderboard.appendChild(aDiv);
   });
 };
 

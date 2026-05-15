@@ -68,6 +68,10 @@ const displayTeamMembers = (admins, verifiers, moddedVerifiers, siteDevelopers) 
 
   const verifierList = document.getElementById('verifier-list');
   verifiers.forEach(verifier => {
+    const exists = admins.some(admin => admin.username === verifier.username)
+    if (exists){
+      return;
+    }
     const listItem = document.createElement('li');
     const profileLink = createProfileLink(verifier.username, verifier.profilePicture);
     listItem.appendChild(profileLink);
@@ -76,6 +80,10 @@ const displayTeamMembers = (admins, verifiers, moddedVerifiers, siteDevelopers) 
 
   const moddedVerifierList = document.getElementById('modded-verifier-list');
   moddedVerifiers.forEach(moddedVerifier => {
+    const exists = admins.some(admin => admin.username === moddedVerifier.username)
+    if (exists){
+      return;
+    }
     const listItem = document.createElement('li');
     const profileLink = createProfileLink(moddedVerifier.username, moddedVerifier.profilePicture);
     listItem.appendChild(profileLink);

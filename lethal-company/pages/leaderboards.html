@@ -15,145 +15,148 @@
     <!-- Page content wrapper -->
     <div class="content">
       <div id="details-panel"></div>
-
-      <div id="filters">
-        <h1>Leaderboards</h1>
-        <!-- Collection Buttons -->
-        <div id="collection-filters">
-          <button class="collection-btn active" data-collection="leaderboards_hq">Classic High Quota</button>
-          <button class="collection-btn" data-collection="leaderboards_sdc">Single Day Clear</button>
-          <button class="collection-btn" data-collection="leaderboards_smhq">Single Moon High Quota</button>
+      <div class="page-content">
+        <div id="recent-runs-container">
+          <h2>Recent runs</h2>
+          <p id="recent-title" class="recent-title">Classic High Quota</p>
+          <div id="recent-runs"></div>
         </div>
-      
-        <!-- Filter Sections for Each Collection -->
-        <div id="leaderboards_hq-filters" class="filter-section active">
-          <!-- Player Count Filters -->
-          <div class="filter-category" id="player-count-filters">
-            <h3>Player Count</h3>
-            <button class="filter-btn" data-filter="1" id="player-count-1">1 Player</button>
-            <button class="filter-btn" data-filter="2" id="player-count-2">2 Players</button>
-            <button class="filter-btn" data-filter="3" id="player-count-3">3 Players</button>            
-            <button class="filter-btn" data-filter="4" id="player-count-4">4 Players</button>        
-          </div>
-      
-          <!-- Version Filters -->
-          <div class="filter-category" id="version-filters">
-            <h3>Version</h3>
-            <button class="filter-btn" data-filter="v40">v40</button>
-            <button class="filter-btn" data-filter="v45">v45</button>
-            <button class="filter-btn" data-filter="v49">v49</button>
-            <button class="filter-btn" data-filter="v50">v50</button>
-            <button class="filter-btn" data-filter="v56">v56</button>
-            <button class="filter-btn" data-filter="v62">v62</button>
-            <button class="filter-btn" data-filter="v64">v64</button>
-            <button class="filter-btn" data-filter="v69">v69</button>
-            <button class="filter-btn" data-filter="v72">v72</button>
-            <button class="filter-btn" data-filter="v73">v73</button>
-            <button class="filter-btn" data-filter="v81">v81</button>
-          </div>
+        <div id="leaderboard-container">
+          <div id="filters">
+            <h1>Leaderboards</h1>
+            <!-- Collection Buttons -->
+            <div id="collection-filters">
+              <button class="collection-btn active" data-collection="leaderboards_hq">Classic High Quota</button>
+              <button class="collection-btn" data-collection="leaderboards_smhq">Single Moon High Quota</button>
+              <button class="collection-btn" data-collection="leaderboards_sdc">Single Day Clear</button>
+            </div>
+          
+            <!-- Filter Sections for Each Collection -->
+            <div id="leaderboards_hq-filters" class="filter-section active">
+              <!-- Player Count Filters -->
+              <div class="filter-category" id="player-count-filters">
+                <h3>Player Count</h3>
+                <button class="filter-btn" data-filter="1" id="player-count-1">1 Player</button>
+                <button class="filter-btn" data-filter="2" id="player-count-2">2 Players</button>
+                <button class="filter-btn" data-filter="3" id="player-count-3">3 Players</button>            
+                <button class="filter-btn" data-filter="4" id="player-count-4">4 Players</button>        
+              </div>
+          
+              <!-- Version Filters -->
+              <div class="filter-category" id="version-filters">
+                <h3>Version</h3>
+                <button class="filter-btn" data-filter="v40">v40</button>
+                <button class="filter-btn" data-filter="v45">v45</button>
+                <button class="filter-btn" data-filter="v49">v49</button>
+                <button class="filter-btn" data-filter="v50">v50</button>
+                <button class="filter-btn" data-filter="v56">v56</button>
+                <button class="filter-btn" data-filter="v62">v62</button>
+                <button class="filter-btn" data-filter="v64">v64</button>
+                <button class="filter-btn" data-filter="v69">v69</button>
+                <button class="filter-btn" data-filter="v72">v72</button>
+                <button class="filter-btn" data-filter="v73">v73</button>
+                <button class="filter-btn" data-filter="v81">v81</button>
+              </div>
 
-        </div>
-      
-        <div id="leaderboards_sdc-filters" class="filter-section">
-          <!-- Player Count Filters -->
-          <div class="filter-category" id="player-count-filters">
-            <h3>Player Count</h3>
-            <button class="filter-btn" data-filter="1" id="player-count-1">1 Player</button>
-            <button class="filter-btn" data-filter="2" id="player-count-2">2 Players</button>
-            <button class="filter-btn" data-filter="3" id="player-count-3">3 Players</button>
-            <button class="filter-btn" data-filter="4" id="player-count-4">4 Players</button>
-          </div>
-      
-          <!-- Moon Filters -->
-          <div class="filter-category" id="moon-filters">
-            <h3>Moon</h3>
-            <button class="filter-btn" data-filter="41-Experimentation">41-Experimentation</button>
-            <button class="filter-btn" data-filter="220-Assurance">220-Assurance</button>
-            <button class="filter-btn" data-filter="56-Vow">56-Vow</button>
-            <button class="filter-btn" data-filter="21-Offense">21-Offense</button>
-            <button class="filter-btn" data-filter="61-March">61-March</button>
-            <button class="filter-btn" data-filter="20-Adamance">20-Adamance</button>
-            <button class="filter-btn" data-filter="85-Rend">85-Rend</button>
-            <button class="filter-btn" data-filter="7-Dine">7-Dine</button>
-            <button class="filter-btn" data-filter="8-Titan">8-Titan</button>
-            <button class="filter-btn" data-filter="68-Artifice">68-Artifice</button>
-            <button class="filter-btn" data-filter="5-Embrion">5-Embrion</button>
-          </div>
-      
-          <!-- Version Filters -->
-          <div class="filter-category" id="version-filters">
-            <h3>Version</h3>
-            <button class="filter-btn" data-filter="v40">v40</button>
-            <button class="filter-btn" data-filter="v45">v45</button>
-            <button class="filter-btn" data-filter="v49">v49</button>
-            <button class="filter-btn" data-filter="v50">v50</button>
-            <button class="filter-btn" data-filter="v56">v56</button>
-            <button class="filter-btn" data-filter="v62">v62</button>
-            <button class="filter-btn" data-filter="v64">v64</button>
-            <button class="filter-btn" data-filter="v69">v69</button>
-            <button class="filter-btn" data-filter="v72">v72</button>
-            <button class="filter-btn" data-filter="v73">v73</button>
-            <button class="filter-btn" data-filter="v81">v81</button>
-          </div>
+            </div>
+          
+            <div id="leaderboards_sdc-filters" class="filter-section">
+              <!-- Player Count Filters -->
+              <div class="filter-category" id="player-count-filters">
+                <h3>Player Count</h3>
+                <button class="filter-btn" data-filter="1" id="player-count-1">1 Player</button>
+                <button class="filter-btn" data-filter="2" id="player-count-2">2 Players</button>
+                <button class="filter-btn" data-filter="3" id="player-count-3">3 Players</button>
+                <button class="filter-btn" data-filter="4" id="player-count-4">4 Players</button>
+              </div>
+          
+              <!-- Moon Filters -->
+              <div class="filter-category" id="moon-filters">
+                <h3>Moon</h3>
+                <button class="filter-btn" data-filter="41-Experimentation">41-Experimentation</button>
+                <button class="filter-btn" data-filter="220-Assurance">220-Assurance</button>
+                <button class="filter-btn" data-filter="56-Vow">56-Vow</button>
+                <button class="filter-btn" data-filter="21-Offense">21-Offense</button>
+                <button class="filter-btn" data-filter="61-March">61-March</button>
+                <button class="filter-btn" data-filter="20-Adamance">20-Adamance</button>
+                <button class="filter-btn" data-filter="85-Rend">85-Rend</button>
+                <button class="filter-btn" data-filter="7-Dine">7-Dine</button>
+                <button class="filter-btn" data-filter="8-Titan">8-Titan</button>
+                <button class="filter-btn" data-filter="68-Artifice">68-Artifice</button>
+                <button class="filter-btn" data-filter="5-Embrion">5-Embrion</button>
+              </div>
+          
+              <!-- Version Filters -->
+              <div class="filter-category" id="version-filters">
+                <h3>Version</h3>
+                <button class="filter-btn" data-filter="v40">v40</button>
+                <button class="filter-btn" data-filter="v45">v45</button>
+                <button class="filter-btn" data-filter="v49">v49</button>
+                <button class="filter-btn" data-filter="v50">v50</button>
+                <button class="filter-btn" data-filter="v56">v56</button>
+                <button class="filter-btn" data-filter="v62">v62</button>
+                <button class="filter-btn" data-filter="v64">v64</button>
+                <button class="filter-btn" data-filter="v69">v69</button>
+                <button class="filter-btn" data-filter="v72">v72</button>
+                <button class="filter-btn" data-filter="v73">v73</button>
+                <button class="filter-btn" data-filter="v81">v81</button>
+              </div>
 
-          <!-- Scrap Type Filters -->
-          <div class="filter-category" id="scrap-type-filters">
-            <h3>Scrap Type</h3>
-            <button class="filter-btn" data-filter="Regular">Regular</button>
-            <button class="filter-btn" data-filter="Single">Single</button>
+              <!-- Scrap Type Filters -->
+              <div class="filter-category" id="scrap-type-filters">
+                <h3>Scrap Type</h3>
+                <button class="filter-btn" data-filter="Regular">Regular</button>
+                <button class="filter-btn" data-filter="Single">Single</button>
+              </div>
+          
+            </div>
+          
+            <div id="leaderboards_smhq-filters" class="filter-section">
+              <!-- Player Count Filters -->
+              <div class="filter-category" id="player-count-filters">
+                <h3>Player Count</h3>
+                <button class="filter-btn" data-filter="1" id="player-count-1">1 Player</button>
+                <button class="filter-btn" data-filter="2" id="player-count-2">2 Players</button>
+                <button class="filter-btn" data-filter="3" id="player-count-3">3 Players</button>
+                <button class="filter-btn" data-filter="4" id="player-count-4">4 Players</button>
+              </div>
+          
+              <!-- Moon Filters -->
+              <div class="filter-category" id="moon-filters">
+                <h3>Moon</h3>
+                <button class="filter-btn" data-filter="41-Experimentation">41-Experimentation</button>
+                <button class="filter-btn" data-filter="220-Assurance">220-Assurance</button>
+                <button class="filter-btn" data-filter="56-Vow">56-Vow</button>
+                <button class="filter-btn" data-filter="21-Offense">21-Offense</button>
+                <button class="filter-btn" data-filter="61-March">61-March</button>
+                <button class="filter-btn" data-filter="20-Adamance">20-Adamance</button>
+                <button class="filter-btn" data-filter="85-Rend">85-Rend</button>
+                <button class="filter-btn" data-filter="7-Dine">7-Dine</button>
+                <button class="filter-btn" data-filter="8-Titan">8-Titan</button>
+                <button class="filter-btn" data-filter="68-Artifice">68-Artifice</button>
+                <button class="filter-btn" data-filter="5-Embrion">5-Embrion</button>
+              </div>
+          
+              <!-- Version Filters -->
+              <div class="filter-category" id="version-filters">
+                <h3>Version</h3>
+                <button class="filter-btn" data-filter="v40">v40</button>
+                <button class="filter-btn" data-filter="v45">v45</button>
+                <button class="filter-btn" data-filter="v49">v49</button>
+                <button class="filter-btn" data-filter="v50">v50</button>
+                <button class="filter-btn" data-filter="v56">v56</button>
+                <button class="filter-btn" data-filter="v62">v62</button>
+                <button class="filter-btn" data-filter="v64">v64</button>
+                <button class="filter-btn" data-filter="v69">v69</button>
+                <button class="filter-btn" data-filter="v72">v72</button>
+                <button class="filter-btn" data-filter="v73">v73</button>
+                <button class="filter-btn" data-filter="v81">v81</button>
+              </div>
+            </div>
           </div>
-      
-        </div>
-      
-        <div id="leaderboards_smhq-filters" class="filter-section">
-          <!-- Player Count Filters -->
-          <div class="filter-category" id="player-count-filters">
-            <h3>Player Count</h3>
-            <button class="filter-btn" data-filter="1" id="player-count-1">1 Player</button>
-            <button class="filter-btn" data-filter="2" id="player-count-2">2 Players</button>
-            <button class="filter-btn" data-filter="3" id="player-count-3">3 Players</button>
-            <button class="filter-btn" data-filter="4" id="player-count-4">4 Players</button>
-          </div>
-      
-          <!-- Moon Filters -->
-          <div class="filter-category" id="moon-filters">
-            <h3>Moon</h3>
-            <button class="filter-btn" data-filter="41-Experimentation">41-Experimentation</button>
-            <button class="filter-btn" data-filter="220-Assurance">220-Assurance</button>
-            <button class="filter-btn" data-filter="56-Vow">56-Vow</button>
-            <button class="filter-btn" data-filter="21-Offense">21-Offense</button>
-            <button class="filter-btn" data-filter="61-March">61-March</button>
-            <button class="filter-btn" data-filter="20-Adamance">20-Adamance</button>
-            <button class="filter-btn" data-filter="85-Rend">85-Rend</button>
-            <button class="filter-btn" data-filter="7-Dine">7-Dine</button>
-            <button class="filter-btn" data-filter="8-Titan">8-Titan</button>
-            <button class="filter-btn" data-filter="68-Artifice">68-Artifice</button>
-            <button class="filter-btn" data-filter="5-Embrion">5-Embrion</button>
-          </div>
-      
-          <!-- Version Filters -->
-          <div class="filter-category" id="version-filters">
-            <h3>Version</h3>
-            <button class="filter-btn" data-filter="v40">v40</button>
-            <button class="filter-btn" data-filter="v45">v45</button>
-            <button class="filter-btn" data-filter="v49">v49</button>
-            <button class="filter-btn" data-filter="v50">v50</button>
-            <button class="filter-btn" data-filter="v56">v56</button>
-            <button class="filter-btn" data-filter="v62">v62</button>
-            <button class="filter-btn" data-filter="v64">v64</button>
-            <button class="filter-btn" data-filter="v69">v69</button>
-            <button class="filter-btn" data-filter="v72">v72</button>
-            <button class="filter-btn" data-filter="v73">v73</button>
-            <button class="filter-btn" data-filter="v81">v81</button>
-          </div>
-           
+          <div id="leaderboard"></div>
         </div>
       </div>
-      
-      <div id="leaderboard"></div>
-      
-      
-      
     </div>
 
   <script type="module" src="../js/leaderboards.js"></script>

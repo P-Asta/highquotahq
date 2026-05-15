@@ -15,7 +15,7 @@
   .filter-btn {
     font-family: 'systematic_jcool';
     src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-         url('/assets/fonts/9systema-webfont.woff') format('woff');
+          url('/assets/fonts/9systema-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
     font-size: 0.9rem;
@@ -26,30 +26,41 @@
     background-color: #f0f0f0;
     cursor: pointer;
   }
-  
+
   .modpack-btn.active,
   .collection-btn.active,
   .filter-btn.active {
     background-color: #ff6f61;
     color: white;
   }
-  
+
   .collection-section,
   .filter-section {
     display: none;
   }
-  
+
+  .collection-section {
+    h3 {
+      font-family: 'systematic_jcool';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 1.5rem;
+      color: #ff3e3e;
+      margin-bottom: 10px;
+    }
+  }
+
   .collection-section.active,
   .filter-section.active {
     display: block;
   }
-  
+
   #leaderboard {
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
-  
+
   .run {
     padding: 10px;
     border: 1px solid #ccc;
@@ -61,194 +72,235 @@
 #collection-filters {
     margin-bottom: 1rem;
   }
+
+.recent-btn {
+font-family: 'systematic_jcool';
+src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
+      url('/assets/fonts/9systema-webfont.woff') format('woff');
+font-weight: normal;
+font-style: normal;
+font-size: 0.8rem;
+}
+
+.element-link:hover {
+  cursor: pointer;
+}
   
-  .modpack-btn,
-  .collection-btn {
-    margin-right: 0.5rem;
-    padding: 0.5rem 1rem;
-    background-color: #333;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+/* Filter Categories */
+.filter-category {
+  margin-bottom: 1rem;
+}
+
+.filter-category h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+/* Filter Buttons */
+.filter-btn {
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #eee;
+  color: #333;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.filter-btn.active {
+  background-color: #ff5733;
+  color: white;
+}
+
+.page-content {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+#recent-runs-container{
+  background-color: #2a2a2abb;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
+  padding: 15px;
+  max-width: 240px;
+  min-width: 240px;
+
+  h2 {
+    color: #ff3e3e;
+    margin-bottom: 20px;
   }
-  
-  /* Filter Categories */
-  .filter-category {
-    margin-bottom: 1rem;
-  }
-  
-  .filter-category h3 {
-    margin-bottom: 0.5rem;
-    font-size: 1.2rem;
-    color: #333;
-  }
-  
-  /* Filter Buttons */
-  .filter-btn {
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
-    padding: 0.5rem 1rem;
-    background-color: #eee;
-    color: #333;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .filter-btn.active {
-    background-color: #ff5733;
-    color: white;
-  }
+}
   
 .content {
-    max-width: 1200px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #1a1a1aa2;
-    color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-  }
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #1a1a1aa2;
+  color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
 /*
-  .content:hover {
-    transform: scale(1.01);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  }*/
-  
-  /* Leaderboard Header */
-  .content h1 {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    color: #ff3e3e;
-  }
-  
-  /* Filters section */
-  #filters {
-    margin-bottom: 20px;
+.content:hover {
+  transform: scale(1.01);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}*/
+
+/* Leaderboard Header */
+.content h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #ff3e3e;
+}
+
+/* Filters section */
+#filters {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #2a2a2abb;
+  border-radius: 8px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Collection buttons */
+#collection-filters {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.modpack-btn,
+.collection-btn {
+  padding: 10px 20px;
+  margin: 5px;
+  background-color: #333;
+  color: white;
+  border: 2px solid #444;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modpack-btn:hover,
+.modpack-btn.active,
+.collection-btn:hover,
+.collection-btn.active {
+  background-color: #ff3e3e;
+  border-color: #ff5757;
+  color: #fff;
+}
+
+/* Filter categories */
+.filter-category {
+  margin-bottom: 20px;
+}
+
+.filter-category h3 {
+  font-family: 'systematic_jcool';
+  src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
+        url('/assets/fonts/9systema-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-size: 1.5rem;
+  color: #ff3e3e;
+  margin-bottom: 10px;
+}
+
+.filter-btn {
+  font-family: 'systematic_jcool';
+  src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
+        url('/assets/fonts/9systema-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  padding: 8px 15px;
+  margin: 5px;
+  background-color: #444;
+  color: white;
+  border: 1px solid #555;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+  background-color: #ff3e3e;
+  border-color: #ff5757;
+}
+
+/* Leaderboard container */
+#leaderboard {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+.run {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #333;
+  border: 1px solid #444;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.run:hover {
+  background-color: #444;
+}
+
+@media (max-width: 768px) {
+  .content {
     padding: 15px;
-    background-color: #2a2a2abb;
-    border-radius: 8px;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
   }
-  
-  /* Collection buttons */
-  #collection-filters {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-  
+
   .modpack-btn,
-  .collection-btn {
-    padding: 10px 20px;
-    margin: 5px;
-    background-color: #333;
-    color: white;
-    border: 2px solid #444;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  .modpack-btn:hover,
-  .modpack-btn.active,
-  .collection-btn:hover,
-  .collection-btn.active {
-    background-color: #ff3e3e;
-    border-color: #ff5757;
-    color: #fff;
-  }
-  
-  /* Filter categories */
-  .filter-category {
-    margin-bottom: 20px;
-  }
-  
-  .filter-category h3 {
-    font-family: 'systematic_jcool';
-    src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-         url('/assets/fonts/9systema-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    font-size: 1.5rem;
-    color: #ff3e3e;
-    margin-bottom: 10px;
-  }
-  
+  .collection-btn,
   .filter-btn {
+    padding: 8px 10px;
     font-family: 'systematic_jcool';
     src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-         url('/assets/fonts/9systema-webfont.woff') format('woff');
+          url('/assets/fonts/9systema-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
-    padding: 8px 15px;
-    margin: 5px;
-    background-color: #444;
-    color: white;
-    border: 1px solid #555;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    font-size: 0.9rem;
   }
-  
-  .filter-btn:hover,
-  .filter-btn.active {
-    background-color: #ff3e3e;
-    border-color: #ff5757;
-  }
-  
-  /* Leaderboard container */
-  #leaderboard {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: #2a2a2a;
-    border-radius: 8px;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
-  }
-  
+
   .run {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    margin: 10px 0;
-    background-color: #333;
-    border: 1px solid #444;
-    border-radius: 5px;
-    transition: all 0.3s ease;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  #recent-runs-container{
+    max-width: 140px;
+    min-width: 140px;
+  }
+}
+
+@media (max-width: 500px){
+  .page-content {
+    flex-direction: column-reverse;
   }
   
-  .run:hover {
-    background-color: #444;
+  #recent-runs-container{
+    max-width: none;
+    min-width: none;
   }
-  
-  @media (max-width: 768px) {
-    .content {
-      padding: 15px;
-    }
-  
-    .modpack-btn,
-    .collection-btn,
-    .filter-btn {
-      padding: 8px 10px;
-      font-family: 'systematic_jcool';
-      src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-           url('/assets/fonts/9systema-webfont.woff') format('woff');
-      font-weight: normal;
-      font-style: normal;
-      font-size: 0.9rem;
-    }
-  
-    .run {
-      flex-direction: column;
-      text-align: center;
-    }
-  }
+}
   
 /* Leaderboard container */
 #leaderboard {
@@ -258,6 +310,45 @@
     padding: 20px;
     background-color: #33333351;
     border-radius: 10px;
+  }
+
+  .recent-entry {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    margin: 10px 0;
+    background-color: rgba(45, 45, 45, 0.9);;
+    border: 1px solid #555;
+    border-radius: 8px;
+    color: #fff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .recent-entry:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .recent-players {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #f0f0f0;
+    margin-bottom: 2px;
+    text-align: left;
+  }
+
+  .recent-version {
+    font-size: 0.8rem;
+    color: #ddd;
+    margin: 4px 0px;
+    text-align: left;
+  }
+
+  .recent-value {
+    font-size: 1.4rem;
+    color: #ddd;
+    text-align: center;
+    margin-bottom: 0px;
   }
   
   .run-entry {
@@ -271,12 +362,12 @@
     color: #fff;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-  
+
   .run-entry:hover {
-    transform: scale(1.002);
+    transform: scale(1.01);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   }
-  
+
   .run-players {
     font-size: 1.1rem;
     font-weight: bold;
@@ -284,7 +375,7 @@
     margin-bottom: 8px;
     text-align: left;
   }
-  
+
   .run-version {
     font-size: 1rem;
     color: #ddd;
@@ -299,26 +390,26 @@
     margin-bottom: 0px;
   }
 
-.run-position {
-  font-size: 2em;
-  font-weight: bold;
-  margin-right: 15px;
-  margin-bottom: 5px;
-  width: 50px;
-  text-align: left;
-}
+  .run-position {
+    font-size: 2em;
+    font-weight: bold;
+    margin-right: 15px;
+    margin-bottom: 5px;
+    width: 50px;
+    text-align: left;
+  }
 
-.run-position.gold {
-  color: gold;
-}
+  .run-position.gold {
+    color: gold;
+  }
 
-.run-position.silver {
-  color: silver;
-}
+  .run-position.silver {
+    color: silver;
+  }
 
-.run-position.bronze {
-  color: #cd7f32;
-}
+  .run-position.bronze {
+    color: #cd7f32;
+  }
 
 
 /* Leaderboard Section */
@@ -339,13 +430,17 @@
 
 }
 
+#leaderboard-container {
+  width: 100%;
+}
+
 #leaderboard, #filters {
   transition: opacity 0.5s ease, transform 0.5s ease;
   opacity: 1;
   transform: translateY(0);
 }
 
-#leaderboard.hidden, #filters.hidden {
+#leaderboard.hidden, #filters.hidden, #recent-runs-container.hidden {
   opacity: 0;
   transform: translateY(-20px);
   pointer-events: none;

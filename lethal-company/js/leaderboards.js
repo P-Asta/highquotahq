@@ -9,6 +9,7 @@ const collectionBtns = document.querySelectorAll('.collection-btn');
 const filterSections = document.querySelectorAll('.filter-section');
 const filterBtns = document.querySelectorAll('.filter-btn');
 const leaderboard = document.getElementById('leaderboard');
+const recentRuns = document.getElementById('recent-runs');
 
 // Set up active collection
 let activeCollection = 'leaderboards_hq';
@@ -19,6 +20,12 @@ let activeFilters = {
   scrapType: [],
 };
 
+const collectionMap = {
+  'leaderboards_hq': 'Classic High Quota',
+  'leaderboards_smhq': 'Single Moon High Quota',
+  'leaderboards_sdc': 'Single Day Clear'
+};
+
 // Ensure "Player 1" button is visually active on page load
 document.querySelector('[data-filter="1"]').classList.add('active');
 
@@ -26,22 +33,22 @@ const CACHE_KEY_PREFIX = 'leaderboard-cache-';
 const CACHE_EXPIRY_MS = 10 * 60 * 1000 * 144; // 24 hrs
 
 // Fetch raw runs data from cache or Firestore
-const fetchRawRuns = async () => {
-  const cacheKey = CACHE_KEY_PREFIX + activeCollection;
+const fetchRawRuns = async (collectionName) => {
+  const cacheKey = CACHE_KEY_PREFIX + collectionName;
   const cached = localStorage.getItem(cacheKey);
 
   if (cached) {
     const cachedData = JSON.parse(cached);
     const age = Date.now() - cachedData.timestamp;
     if (age < CACHE_EXPIRY_MS) {
-      console.log('Using cached data for', activeCollection);
+      console.log('Using cached data for', collectionName);
       return cachedData.runs;  // raw data, unfiltered
     }
   }
 
   // If no cache or cache expired, fetch fresh data
   try {
-    const querySnapshot = await getDocs(collection(db, activeCollection));
+    const querySnapshot = await getDocs(collection(db, collectionName));
     const runs = querySnapshot.docs.map(doc => doc.data());
 
     localStorage.setItem(cacheKey, JSON.stringify({
@@ -55,6 +62,7 @@ const fetchRawRuns = async () => {
     throw error;
   }
 };
+
 
 // Apply filters and sorting in-memory
 const filterAndSortRuns = (runs) => {
@@ -102,15 +110,22 @@ const filterAndSortRuns = (runs) => {
 };
 
 // Main function to fetch data & update leaderboard display
-const fetchLeaderboardData = async () => {
-  leaderboard.innerHTML = 'Loading...';
+const fetchLeaderboardData = async (displaylatest = false) => {
+  leaderboard.innerHTML = '<p>Loading...</p>';
+  if (displaylatest === true) recentRuns.innerHTML = '<p>Loading...</p>';
 
   try {
-    const rawRuns = await fetchRawRuns();           // get raw cached or fresh runs
+    const rawRuns = await fetchRawRuns(activeCollection);           // get raw cached or fresh runs
     const filteredSortedRuns = filterAndSortRuns(rawRuns); // filter & sort in-memory
     displayLeaderboard(filteredSortedRuns);         // show leaderboard
-  } catch {
-    leaderboard.innerHTML = 'Error loading leaderboard.';
+    if (displaylatest === true) {
+      const filteredLatestRuns = filterAndSortLatestRuns(rawRuns);
+      displayLatest(filteredLatestRuns);
+    }
+  } catch (error) {
+    leaderboard.innerHTML = '<p>Error loading leaderboard.</p>';
+    recentRuns.innerHTML = '<p>Error loading latest runs.</p>';
+    console.error(error);
   }
 };
 
@@ -121,6 +136,18 @@ const filterTypeMap = {
   'moon': 'moon',
   'scrap-type': 'scrapType',
 };
+
+const filterAndSortLatestRuns = (runs) => {
+  const filteredRecentRuns = runs.filter(run => {
+    const isVerified = run.verified === true;
+    return isVerified;
+  });
+  return filteredRecentRuns.sort((a, b) => {
+    const timeA = a.verifiedAt?.seconds || 0;
+    const timeB = b.verifiedAt?.seconds || 0;
+    return timeB - timeA;
+  });
+}
 
 // Event listener for filter buttons
 filterBtns.forEach((btn) => {
@@ -167,7 +194,7 @@ filterBtns.forEach((btn) => {
     }
 
     // Fetch and display leaderboard data based on active filters
-    fetchLeaderboardData();
+    fetchLeaderboardData(false);
   });
 });
 
@@ -210,11 +237,66 @@ collectionBtns.forEach(btn => {
     document.getElementById(`${activeCollection}-filters`).classList.add('active');
 
     // Fetch leaderboard data for the new collection
-    fetchLeaderboardData();
+    fetchLeaderboardData(true);
   });
 });
 
+const displayLatest = (runs) => {
+  recentRuns.innerHTML = '';
+  const recentTitle = document.getElementById('recent-title');
+  recentTitle.textContent = collectionMap[activeCollection];  
+  if (runs.length === 0){
+    recentRuns.innerHTML = '<p>No recent runs.</p>';
+    return;
+  }
+  runs.slice(0, 10).forEach((run, index) => {
+    const runValue = run.quotaAmount || run.totalScrap || 0;
 
+    const runDiv = document.createElement('div');
+    runDiv.classList.add('recent-entry');
+    const playersDiv = document.createElement('div');
+    playersDiv.classList.add('recent-players');
+    playersDiv.textContent = `Players: `;
+
+    run.players.forEach((player, i) => {
+      const playerLink = document.createElement('a');
+      playerLink.href = `/pages/profile.html?username=${encodeURIComponent(player)}`;
+      playerLink.textContent = player;
+      playerLink.classList.add('player-link');
+
+      playersDiv.appendChild(playerLink);
+
+      if (i < run.players.length - 1) {
+        playersDiv.appendChild(document.createTextNode(', '));
+      }
+    });
+    runDiv.appendChild(playersDiv);
+    const versionDiv = document.createElement('div');
+    versionDiv.classList.add('recent-version');
+    if (activeCollection.endsWith('_sdc') || activeCollection.endsWith('_smhq')){
+      versionDiv.textContent = `Version: ${run.version} - Moon: ${run.moon}`;
+    } else {
+      versionDiv.textContent = `Version: ${run.version}`;
+    }
+    runDiv.appendChild(versionDiv);
+
+    const valueDiv = document.createElement('div');
+    valueDiv.classList.add('recent-value');
+    if (activeCollection.endsWith('hq')){
+      valueDiv.textContent = `Quota ${run.quotaReached}: ${runValue}`;
+    }else{
+      valueDiv.textContent = `Collected: ${runValue}`;
+    }
+    runDiv.appendChild(valueDiv);
+
+    const aDiv = document.createElement('a');
+    aDiv.classList.add('element-link');
+    aDiv.onclick = () => showRunDetails(run, index);
+    aDiv.appendChild(runDiv);
+    
+    recentRuns.append(aDiv);
+  });
+};
 
 const displayLeaderboard = (runs) => {
   leaderboard.innerHTML = '';
@@ -286,19 +368,18 @@ const displayLeaderboard = (runs) => {
     valueDiv.classList.add('run-value');
 
     if (activeCollection === "leaderboards_hq" || activeCollection === "leaderboards_smhq") {
-      valueDiv.textContent = `Quota Amount: ${run.quotaAmount || 0}`;
+      valueDiv.textContent = `Quota ${run.quotaReached || 0}: ${run.quotaAmount || 0}`;
     } else if (activeCollection === "leaderboards_sdc") {
-      valueDiv.textContent = `Total Scrap: ${run.totalScrap || 0}`;
+      valueDiv.textContent = `Collected: ${run.totalScrap || 0}`;
     }
     runDiv.appendChild(valueDiv);
 
-    const detailsButton = document.createElement('button');
-    detailsButton.classList.add('view-details-btn');
-    detailsButton.innerHTML = '→';
-    detailsButton.onclick = () => showRunDetails(run, index);
-    runDiv.appendChild(detailsButton);
+    const aDiv = document.createElement('a');
+    aDiv.classList.add('element-link');
+    aDiv.onclick = () => showRunDetails(run, index);
+    aDiv.appendChild(runDiv);
 
-    leaderboard.appendChild(runDiv);
+    leaderboard.appendChild(aDiv);
   });
 };
 
@@ -308,9 +389,9 @@ export function showRunDetails(run, index) {
   
   // Helper function to format timestamps
   const formatTimestamp = (timestamp) => {
-    if (timestamp && timestamp.toDate) {
-      return new Date(timestamp.toDate()).toLocaleString();
-    }
+    if (!timestamp) return 'N/A';
+    if (timestamp.toDate) return new Date(timestamp.toDate()).toLocaleString();
+    if (timestamp.seconds) return new Date(timestamp.seconds * 1000).toLocaleString();
     return 'N/A';
   };
 
@@ -416,8 +497,10 @@ export function showRunDetails(run, index) {
   setTimeout(() => {
     const leaderboard = document.getElementById('leaderboard');
     const filters = document.getElementById('filters');
+    const recentruns = document.getElementById('recent-runs-container');
     leaderboard.classList.add('hidden');
     filters.classList.add('hidden');
+    recentruns.classList.add('hidden');
   }, 50);
 
   const closeBtn = document.getElementById('close-btn');
@@ -432,13 +515,15 @@ function closeRunDetails() {
   
   const leaderboard = document.getElementById('leaderboard');
   const filters = document.getElementById('filters');
+  const recentruns = document.getElementById('recent-runs-container');
   leaderboard.classList.remove('hidden');
   filters.classList.remove('hidden');
+  recentruns.classList.remove('hidden');
 }
 
 
 
-fetchLeaderboardData();
+fetchLeaderboardData(true);
 
 
 

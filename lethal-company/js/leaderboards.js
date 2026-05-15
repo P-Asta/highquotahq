@@ -9,10 +9,7 @@ const collectionBtns = document.querySelectorAll('.collection-btn');
 const filterSections = document.querySelectorAll('.filter-section');
 const filterBtns = document.querySelectorAll('.filter-btn');
 const leaderboard = document.getElementById('leaderboard');
-const recentBtns = document.querySelectorAll('.recent-btn');
 const recentRuns = document.getElementById('recent-runs');
-
-let activeRecent = 'leaderboards_hq';
 
 // Set up active collection
 let activeCollection = 'leaderboards_hq';
@@ -249,7 +246,7 @@ const displayLatest = (runs) => {
   const recentTitle = document.getElementById('recent-title');
   recentTitle.textContent = collectionMap[activeCollection];  
   if (runs.length === 0){
-    recentRuns.innerHTML = '<p>No recent runs</p>';
+    recentRuns.innerHTML = '<p>No recent runs.</p>';
     return;
   }
   runs.slice(0, 10).forEach((run, index) => {
@@ -298,8 +295,8 @@ const displayLatest = (runs) => {
     aDiv.appendChild(runDiv);
     
     recentRuns.append(aDiv);
-  })
-}
+  });
+};
 
 const displayLeaderboard = (runs) => {
   leaderboard.innerHTML = '';
@@ -371,7 +368,7 @@ const displayLeaderboard = (runs) => {
     valueDiv.classList.add('run-value');
 
     if (activeCollection === "leaderboards_hq" || activeCollection === "leaderboards_smhq") {
-      valueDiv.textContent = `Quota ${run.quotaReached}: ${run.quotaAmount || 0}`;
+      valueDiv.textContent = `Quota ${run.quotaReached || 0}: ${run.quotaAmount || 0}`;
     } else if (activeCollection === "leaderboards_sdc") {
       valueDiv.textContent = `Collected: ${run.totalScrap || 0}`;
     }

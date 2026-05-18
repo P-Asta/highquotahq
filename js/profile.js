@@ -228,7 +228,7 @@ async function displayPlayerRuns(username) {
       }
       if (!run.verified)
         {
-          metadataDiv.innerHTML += ` - <strong class="pending-verification">Pending verification</strong>`;
+          metadataDiv.innerHTML += ` - <strong class="pending-color">Pending verification</strong>`;
         }
       runDiv.appendChild(metadataDiv);
 
@@ -236,9 +236,9 @@ async function displayPlayerRuns(username) {
       valueDiv.classList.add('run-value');
 
       if (collectionName.endsWith('hq')) {
-        valueDiv.textContent = `Quota Amount: ${run.quotaAmount || 0}`;
+        valueDiv.textContent = `Quota ${run.quotaReached}: ${run.quotaAmount || 0}`;
       } else if (collectionName.endsWith('sdc')) {
-        valueDiv.textContent = `Total Scrap: ${run.totalScrap || 0}`;
+        valueDiv.textContent = `Collected: ${run.totalScrap || 0}`;
       }
 
       runDiv.appendChild(valueDiv);
@@ -305,63 +305,71 @@ export function showRunDetails(run, index, collectionName) {
     <div class="run-details">
       <div class="video-section">${formatVideos(run.videos)}</div>
       <div class="stats-section">
-        <div class="pending-text">
-          <p class="pending-verification">⚠ Run pending verification ⚠</p>
+        <div class="pending-verification">
+          <p class="pending-text pending-color">⚠ Run pending verification ⚠</p>
         </div>
         <h3>Run Information</h3>
-        <p><strong>Players:</strong> 
+        <p class="run-stat"><strong>Players:</strong> 
           ${run.players.map(player => 
             `<a href="/pages/profile.html?username=${encodeURIComponent(player)}" class="player-link">${player}</a>`
           ).join(', ')}
         </p>
-        <p><strong>Date:</strong> ${formatTimestamp(run.date)}</p>
+        <p class="run-stat"><strong>Date:</strong> ${formatTimestamp(run.date)}</p>
   `;
 
   if (collectionName.endsWith('_hq')) {
     runDetailsHtml += `
-      <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
-      <p><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
-      <p><strong>Quota Reached:</strong> ${run.quotaReached}</p>
-      <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
-      <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-      <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
-      <p><strong>Version:</strong> ${run.version}</p>
+      <p class="run-stat"><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
+      <p class="run-stat"><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
+      <p class="run-stat"><strong>Quota Reached:</strong> ${run.quotaReached}</p>
+      <p class="run-stat"><strong>Total Scrap:</strong> ${run.totalScrap}</p>
+      <p class="run-stat"><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
+      <p class="run-stat"><strong>Verified By:</strong> ${run.verifiedBy}</p>
+      <p class="run-stat"><strong>Version:</strong> ${run.version}</p>
     `;
   }
   else if (collectionName.endsWith('_sdc')) {
     runDetailsHtml += `
-      <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
-      <p><strong>Scrap Type:</strong> ${run.scrapType}</p>
-      <p><strong>Equipment:</strong> ${run.equipment}</p>
-      <p><strong>Moon:</strong> ${run.moon}</p>
-      <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-      <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
-      <p><strong>Version:</strong> ${run.version}</p>
+      <p class="run-stat"><strong>Total Scrap:</strong> ${run.totalScrap}</p>
+      <p class="run-stat"><strong>Scrap Type:</strong> ${run.scrapType}</p>
+      <p class="run-stat"><strong>Equipment:</strong> ${run.equipment}</p>
+      <p class="run-stat"><strong>Moon:</strong> ${run.moon}</p>
+      <p class="run-stat"><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
+      <p class="run-stat"><strong>Verified By:</strong> ${run.verifiedBy}</p>
+      <p class="run-stat"><strong>Version:</strong> ${run.version}</p>
     `;
   }
   else if (collectionName.endsWith('_smhq')) {
     runDetailsHtml += `
-      <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
-      <p><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
-      <p><strong>Quota Reached:</strong> ${run.quotaReached}</p>
-      <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
-      <p><strong>Moon:</strong> ${run.moon}</p>
-      <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-      <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
-      <p><strong>Version:</strong> ${run.version}</p>
+      <p class="run-stat"><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
+      <p class="run-stat"><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
+      <p class="run-stat"><strong>Quota Reached:</strong> ${run.quotaReached}</p>
+      <p class="run-stat"><strong>Total Scrap:</strong> ${run.totalScrap}</p>
+      <p class="run-stat"><strong>Moon:</strong> ${run.moon}</p>
+      <p class="run-stat"><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
+      <p class="run-stat"><strong>Verified By:</strong> ${run.verifiedBy}</p>
+      <p class="run-stat"><strong>Version:</strong> ${run.version}</p>
     `;
   }
   else {
     runDetailsHtml += `
-      <p><strong>Additional Info:</strong> ${run.someOtherDetail || 'No additional info available.'}</p>
+      <p class="run-stat"><strong>Additional Info:</strong> ${run.someOtherDetail || 'No additional info available.'}</p>
     `;
   }
 
   
   detailsPanel.innerHTML = runDetailsHtml;
 
+  console.log(run.claimedAt);
+  console.log(run.verified);
   if (run.verified) {
     detailsPanel.querySelector('.pending-verification').classList.add('hidden');
+  }else if (run.claimedAt !== undefined){
+    const runPendingDiv = detailsPanel.querySelector('.pending-verification');
+    const runClaimedAt = document.createElement('p');
+    runClaimedAt.classList.add('pending-claimed');
+    runClaimedAt.textContent = `Claimed at ${formatTimestamp(run.claimedAt)}`;
+    runPendingDiv.appendChild(runClaimedAt);
   }
 
   setTimeout(() => {

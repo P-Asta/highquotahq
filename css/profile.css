@@ -398,7 +398,7 @@ button:hover {
   border-radius: 8px;
 }
 
-.stats-section p {
+.run-stat {
   margin: 12px 0;
   font-size: 20px;
 }
@@ -467,10 +467,21 @@ button.close-btn:hover {
   color: #ff5555;
 }
 
-.pending-verification {
+.pending-text {
+  margin: 12px 0;
+  font-size: 25px;
+}
+
+.pending-color {
   color: #ff4;
 }
 
 .pending-verification.hidden {
   display: none;
+}
+
+.pending-claimed {
+  margin: 12px 0;
+  color: #fb6;
+  font-size: 15px;
 }

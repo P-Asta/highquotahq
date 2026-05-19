@@ -213,81 +213,94 @@ async function displayPlayerRuns(username) {
   runsContainer.innerHTML = "<h2>Lethal Company</h2>";
   moddedRunsContainer.innerHTML = "<h2>Modded Lethal Company</h2>";
 
-  for (const collectionName of leaderboardCollections) {
-    const runsRef = collection(db, collectionName);
-    const q = query(runsRef, where("players", "array-contains", normalizedUsername));
-    const querySnapshot = await getDocs(q);
-    if (querySnapshot.empty){
-      continue;
-    }
-    const sectionHeader = document.createElement('h3');
-    sectionHeader.textContent = collectionDisplayNames[collectionName] || collectionName;
-    const collectionContainer = document.createElement('div');
-    if (collectionName.startsWith("lc_modded")){
-        moddedRunsContainer.appendChild(sectionHeader);
-        moddedRunsContainer.appendChild(collectionContainer);
-        if (moddedRunsContainer.classList.contains("disabled")){
-          moddedRunsContainer.classList.remove("disabled");
-        }
-    }else{
-      runsContainer.appendChild(sectionHeader);
-      runsContainer.appendChild(collectionContainer);
-      if (runsContainer.classList.contains("disabled")){
-        runsContainer.classList.remove("disabled");
-      }
-    }
-
-    querySnapshot.forEach((docSnapshot) => {
-      const run = docSnapshot.data();
-      const runId = docSnapshot.id;
-      
-      const players = run.players || ['Unknown Player'];
-      const version = run.version || 'Unknown Version';
-
-      const runDiv = document.createElement('div');
-      runDiv.classList.add('run-entry');
-
-      // basic run info
-      const playersDiv = document.createElement('p');
-      playersDiv.classList.add('run-players');
-      const playerLinks = run.players.map(player => ` <a href="profile.html?username=${encodeURIComponent(player)}" class="player-link">${player}</a>`);
-      playersDiv.innerHTML = `Players: ${playerLinks}`;
-      runDiv.appendChild(playersDiv);
-
-      const metadataDiv = document.createElement('p');
-      metadataDiv.classList.add('run-metadata');
-      if (collectionName.endsWith("_smhq")){
-        metadataDiv.textContent = `Moon: ${run.moon} - Version: ${version}`;
-      } else if (collectionName.endsWith("_sdc")){
-        metadataDiv.textContent = `Moon: ${run.moon} - Scrap Type: ${run.scrapType} - Version: ${version}`;
-      }else if (collectionName.endsWith("_hq")){
-        metadataDiv.textContent = `Version: ${version}`;
-      }
-
-      if (!run.verified)
-        {
-          metadataDiv.innerHTML += ` - <strong class="pending-color">Pending verification</strong>`;
-        }
-      runDiv.appendChild(metadataDiv);
-
-      const valueDiv = document.createElement('p');
-      valueDiv.classList.add('run-value');
-
-      if (collectionName.endsWith('hq')) {
-        valueDiv.textContent = `Quota ${run.quotaReached}: ${run.quotaAmount || 0}`;
-      } else if (collectionName.endsWith('sdc')) {
-        valueDiv.textContent = `Collected: ${run.totalScrap || 0}`;
-      }
-      runDiv.appendChild(valueDiv);
-
-      const aDiv = document.createElement('a');
-      aDiv.classList.add('element-link');
-      aDiv.onclick = () => showRunDetails(run, runId, collectionName);
-      aDiv.appendChild(runDiv);
-
-      collectionContainer.appendChild(aDiv);
+  try {
+    const promises = leaderboardCollections.map(collectionName => {
+      const runsRef = collection(db, collectionName);
+      const q = query(runsRef, where("players", "array-contains", normalizedUsername));
+      return getDocs(q);
     });
+    
+    const querySnapshots = await Promise.all(promises);
+
+    leaderboardCollections.forEach((collectionName, index) => {
+      const querySnapshot = querySnapshots[index];
+      if (querySnapshot.empty){
+        return;
+      }
+      const sectionHeader = document.createElement('h3');
+      sectionHeader.textContent = collectionDisplayNames[collectionName] || collectionName;
+      const collectionContainer = document.createElement('div');
+      if (collectionName.startsWith("lc_modded")){
+          moddedRunsContainer.appendChild(sectionHeader);
+          moddedRunsContainer.appendChild(collectionContainer);
+          if (moddedRunsContainer.classList.contains("disabled")){
+            moddedRunsContainer.classList.remove("disabled");
+          }
+      }else{
+        runsContainer.appendChild(sectionHeader);
+        runsContainer.appendChild(collectionContainer);
+        if (runsContainer.classList.contains("disabled")){
+          runsContainer.classList.remove("disabled");
+        }
+      }
+
+      querySnapshot.forEach((docSnapshot) => {
+        const run = docSnapshot.data();
+        const runId = docSnapshot.id;
+        
+        const players = run.players || ['Unknown Player'];
+        const version = run.version || 'Unknown Version';
+
+        const runDiv = document.createElement('div');
+        runDiv.classList.add('run-entry');
+
+        // basic run info
+        const playersDiv = document.createElement('p');
+        playersDiv.classList.add('run-players');
+        const playerLinks = run.players.map(player => ` <a href="profile.html?username=${encodeURIComponent(player)}" class="player-link">${player}</a>`);
+        playersDiv.innerHTML = `Players: ${playerLinks}`;
+        runDiv.appendChild(playersDiv);
+
+        const metadataDiv = document.createElement('p');
+        metadataDiv.classList.add('run-metadata');
+        if (collectionName.endsWith("_smhq")){
+          metadataDiv.textContent = `Moon: ${run.moon} - Version: ${version}`;
+        } else if (collectionName.endsWith("_sdc")){
+          metadataDiv.textContent = `Moon: ${run.moon} - Scrap Type: ${run.scrapType} - Version: ${version}`;
+        }else if (collectionName.endsWith("_hq")){
+          metadataDiv.textContent = `Version: ${version}`;
+        }
+
+        if (!run.verified)
+          {
+            metadataDiv.innerHTML += ` - <strong class="pending-color">Pending verification</strong>`;
+          }
+        runDiv.appendChild(metadataDiv);
+
+        const valueDiv = document.createElement('p');
+        valueDiv.classList.add('run-value');
+
+        if (collectionName.endsWith('hq')) {
+          valueDiv.textContent = `Quota ${run.quotaReached}: ${run.quotaAmount || 0}`;
+        } else if (collectionName.endsWith('sdc')) {
+          valueDiv.textContent = `Collected: ${run.totalScrap || 0}`;
+        }
+        runDiv.appendChild(valueDiv);
+
+        const aDiv = document.createElement('a');
+        aDiv.classList.add('element-link');
+        aDiv.onclick = () => showRunDetails(run, runId, collectionName);
+        aDiv.appendChild(runDiv);
+
+        collectionContainer.appendChild(aDiv);
+      });
+    });
+  } catch (error) {
+    console.error(error);
+    runsContainer.classList.remove("disabled");
+    runsContainer.innerHTML = `<p style="color: #f55">There was an error while loading runs. Reload page to try again. Contact us if issues persist.</p>`;
   }
+
 }
 
 export function showRunDetails(run, index, collectionName) {

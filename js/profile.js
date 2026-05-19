@@ -214,12 +214,13 @@ async function displayPlayerRuns(username) {
       runDiv.classList.add('run-entry');
 
       // basic run info
-      const playersDiv = document.createElement('div');
+      const playersDiv = document.createElement('p');
       playersDiv.classList.add('run-players');
-      playersDiv.textContent = `Players: ${run.players.join(', ')}`;
+      const playerLinks = run.players.map(player => ` <a href="profile.html?username=${encodeURIComponent(player)}" class="player-link">${player}</a>`);
+      playersDiv.innerHTML = `Players: ${playerLinks}`;
       runDiv.appendChild(playersDiv);
 
-      const metadataDiv = document.createElement('div');
+      const metadataDiv = document.createElement('p');
       metadataDiv.classList.add('run-metadata');
       if (collectionName.endsWith("smhq") || collectionName.endsWith("sdc")){
         metadataDiv.textContent = `Moon: ${run.moon} - Version: ${version}`;
@@ -232,7 +233,7 @@ async function displayPlayerRuns(username) {
         }
       runDiv.appendChild(metadataDiv);
 
-      const valueDiv = document.createElement('div');
+      const valueDiv = document.createElement('p');
       valueDiv.classList.add('run-value');
 
       if (collectionName.endsWith('hq')) {
@@ -240,16 +241,14 @@ async function displayPlayerRuns(username) {
       } else if (collectionName.endsWith('sdc')) {
         valueDiv.textContent = `Collected: ${run.totalScrap || 0}`;
       }
-
       runDiv.appendChild(valueDiv);
 
-      const detailsButton = document.createElement('button');
-      detailsButton.classList.add('view-details-btn');
-      detailsButton.innerHTML = '→';
-      detailsButton.onclick = () => showRunDetails(run, runId, collectionName);
-      runDiv.appendChild(detailsButton);
+      const aDiv = document.createElement('a');
+      aDiv.classList.add('element-link');
+      aDiv.onclick = () => showRunDetails(run, runId, collectionName);
+      aDiv.appendChild(runDiv);
 
-      collectionContainer.appendChild(runDiv);
+      collectionContainer.appendChild(aDiv);
     });
   }
 }

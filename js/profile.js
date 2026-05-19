@@ -11,6 +11,8 @@ const createdAtDisplay = document.getElementById("created-at");
 const bioDisplay = document.getElementById("bio");
 const pronounsDisplay = document.getElementById("pronouns");
 const countryDisplay = document.getElementById("country");
+const profileCard = document.getElementById("profile-card");
+const profileDetailsSection = document.getElementById("profile-section-details");
 
 const editProfileButton = document.getElementById("edit-profile-button");
 const editProfileModal = document.getElementById("edit-profile-modal");
@@ -22,12 +24,29 @@ const countryInput = document.getElementById("country-input");
 const profilePictureInput = document.getElementById("profile-picture-input");
 
 
+
 const runsContainer = document.getElementById("runs-container");
-const moddedRunsContainer = document.getElementById("modded-runs-container")
+const moddedRunsContainer = document.getElementById("modded-runs-container");
 
 let profileUid = null;
 
 const storage = getStorage();
+
+const orderedRoles = ['admin', 'site-developer', 'moderator', 'verifier', 'modded-verifier'];
+const roleMap = {
+  "modded-verifier": "Modded Verifier",
+  "admin": "Manager",
+  "moderator": "Community Moderator",
+  "verifier": "Verifier",
+  "site-developer": "Site Developer"
+};
+const roleColors = {
+  "modded-verifier": "#640000",
+  "admin": "#f00",
+  "moderator": "#f8c22c",
+  "verifier": "#2146bd",
+  "site-developer": "#4bffc0"
+}
 
 async function fetchUserByUsername(username) {
   const usersRef = collection(db, "users");
@@ -68,8 +87,17 @@ onAuthStateChanged(auth, async (user) => {
     const countryFlag = countryFlags[userData.country] || '';
     countryDisplay.innerHTML = `${userData.country || "Country: Not set"} ${countryFlag}`;
 
+    if (userData.roles?.length > 0){
+      const rolesDisplay = document.createElement('div');
+      rolesDisplay.id = "roles-display";
+      rolesDisplay.classList.add("roles-display");
+      rolesDisplay.innerHTML = orderedRoles.filter(role => userData.roles.includes(role)).map(role => `<p class="role" style="color: ${roleColors[role]}">${roleMap[role]}</p>`).join('');
+      profileDetailsSection.appendChild(rolesDisplay);
+    }
+
     if (user && user.uid === profileUid) {
       editProfileButton.style.display = "block";
+      profileCard.classList.add("padding-top-50");
     }
     displayPlayerRuns(username);
   }
@@ -198,9 +226,15 @@ async function displayPlayerRuns(username) {
     if (collectionName.startsWith("lc_modded")){
         moddedRunsContainer.appendChild(sectionHeader);
         moddedRunsContainer.appendChild(collectionContainer);
+        if (moddedRunsContainer.classList.contains("disabled")){
+          moddedRunsContainer.classList.remove("disabled");
+        }
     }else{
       runsContainer.appendChild(sectionHeader);
       runsContainer.appendChild(collectionContainer);
+      if (runsContainer.classList.contains("disabled")){
+        runsContainer.classList.remove("disabled");
+      }
     }
 
     querySnapshot.forEach((docSnapshot) => {
@@ -222,11 +256,14 @@ async function displayPlayerRuns(username) {
 
       const metadataDiv = document.createElement('p');
       metadataDiv.classList.add('run-metadata');
-      if (collectionName.endsWith("smhq") || collectionName.endsWith("sdc")){
+      if (collectionName.endsWith("_smhq")){
         metadataDiv.textContent = `Moon: ${run.moon} - Version: ${version}`;
-      }else{
-      metadataDiv.textContent = `Version: ${version}`;
+      } else if (collectionName.endsWith("_sdc")){
+        metadataDiv.textContent = `Moon: ${run.moon} - Scrap Type: ${run.scrapType} - Version: ${version}`;
+      }else if (collectionName.endsWith("_hq")){
+        metadataDiv.textContent = `Version: ${version}`;
       }
+
       if (!run.verified)
         {
           metadataDiv.innerHTML += ` - <strong class="pending-color">Pending verification</strong>`;

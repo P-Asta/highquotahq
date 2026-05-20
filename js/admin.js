@@ -441,6 +441,9 @@ export async function fetchUnverifiedRuns(role) {
                     dateElement.textContent = `${dateDisplay}`;
                     if (runDateThreshold !== null){
                         dateElement.style = `color: ${THRESHOLD_COLORS[runDateThreshold]};`;
+                        if (runDateThreshold === LATE_THRESHOLDS[2] || runDateThreshold === LATE_THRESHOLDS[3]){
+                            runItem.classList.add("run-item-old");
+                        }
                     }
                     rightSide.appendChild(dateElement);
 
@@ -453,6 +456,7 @@ export async function fetchUnverifiedRuns(role) {
                             claimRun(runId, collectionName, role);
                         });
                         rightSide.appendChild(claimButton);
+                        runItem.classList.add("unclaimed");
                     }else{
                         claimedByElement.textContent = `Claimed by ${claimedBy}`;
                     }

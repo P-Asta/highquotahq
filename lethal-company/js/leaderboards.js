@@ -32,6 +32,8 @@ document.querySelector('[data-filter="1"]').classList.add('active');
 const CACHE_KEY_PREFIX = 'leaderboard-cache-';
 const CACHE_EXPIRY_MS = 10 * 60 * 1000 * 144; // 24 hrs
 
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
 // Fetch raw runs data from cache or Firestore
 const fetchRawRuns = async (collectionName) => {
   const cacheKey = CACHE_KEY_PREFIX + collectionName;
@@ -280,6 +282,29 @@ const displayLatest = (runs) => {
     }
     runDiv.appendChild(versionDiv);
 
+    const dateDiv = document.createElement('div');
+    dateDiv.classList.add('recent-version');
+    if (run.date){
+      const runMs = run.date.seconds * 1000;
+      const daysAgo = Math.round((runMs - Date.now()) / MS_PER_DAY);
+      const absoluteDays = Math.abs(daysAgo);
+      const rtf = new Intl.RelativeTimeFormat('en', {numeric: 'auto'});
+      let dateDisplay = '';
+      if (absoluteDays >= 365) {
+        const yearsAgo = Math.round(daysAgo / 365);
+        dateDisplay = rtf.format(yearsAgo, 'year');
+      } else if (absoluteDays >= 30) {
+        const monthsAgo = Math.round(daysAgo / 30);
+        dateDisplay = rtf.format(monthsAgo, 'month');
+      } else {
+        dateDisplay = rtf.format(daysAgo, 'day');
+      }
+      dateDiv.textContent = `${dateDisplay}`;
+    } else {
+      dateDiv.textContent = 'Unknown Date';
+    }
+    runDiv.appendChild(dateDiv);
+
     const valueDiv = document.createElement('div');
     valueDiv.classList.add('recent-value');
     if (activeCollection.endsWith('hq')){
@@ -330,19 +355,46 @@ const displayLeaderboard = (runs) => {
     const runDiv = document.createElement('div');
     runDiv.classList.add('run-entry');
 
+    if (run.verifiedAt){
+      const runVerifiedMs = run.verifiedAt.seconds * 1000;
+      const daysAgoVerified = Math.round((runVerifiedMs - Date.now()) / MS_PER_DAY);
+      const absoluteVerifiedDays = Math.abs(daysAgoVerified);
+      if (absoluteVerifiedDays <= 30){
+        const newRunDiv = document.createElement('div');
+        newRunDiv.classList.add('new-run-indicator');
+        newRunDiv.textContent = 'NEW';
+        const newRunTooltip = document.createElement('div');
+        newRunTooltip.classList.add('new-run-tooltip');
+        newRunTooltip.textContent = 'Verified within the last 30 days.';
+        newRunDiv.appendChild(newRunTooltip);
+        runDiv.appendChild(newRunDiv);
+      } 
+    }
+
+    const placementDiv = document.createElement('div');
+    placementDiv.classList.add('run-placement');
+
     const positionDiv = document.createElement('div');
     positionDiv.classList.add('run-position');
     positionDiv.textContent = `#${currentRank}`;
 
-    if (currentRank === 1) positionDiv.classList.add('gold');
-    else if (currentRank === 2) positionDiv.classList.add('silver');
-    else if (currentRank === 3) positionDiv.classList.add('bronze');
+    if (currentRank === 1) {
+      positionDiv.classList.add('gold');
+      runDiv.classList.add('gold-border');
+    }
+    else if (currentRank === 2) {
+      positionDiv.classList.add('silver');
+      runDiv.classList.add('silver-border');
+    }
+    else if (currentRank === 3) {
+      positionDiv.classList.add('bronze');
+      runDiv.classList.add('bronze-border');
+    }
 
-    runDiv.appendChild(positionDiv);
+    placementDiv.appendChild(positionDiv);
 
     const playersDiv = document.createElement('div');
     playersDiv.classList.add('run-players');
-    playersDiv.textContent = `Players: `;
 
     run.players.forEach((player, i) => {
       const playerLink = document.createElement('a');
@@ -357,13 +409,43 @@ const displayLeaderboard = (runs) => {
       }
     });
 
-    runDiv.appendChild(playersDiv);
+    placementDiv.appendChild(playersDiv);
 
+    runDiv.appendChild(placementDiv);
+
+    const metadataDiv = document.createElement('div');
+    metadataDiv.classList.add('run-metadata');
     const versionDiv = document.createElement('div');
     versionDiv.classList.add('run-version');
     versionDiv.textContent = `Version: ${run.version}`;
-    runDiv.appendChild(versionDiv);
 
+    metadataDiv.appendChild(versionDiv);
+
+    const dateDiv = document.createElement('div');
+    dateDiv.classList.add('run-date');
+    if (run.date){
+      const runMs = run.date.seconds * 1000;
+      const daysAgo = Math.round((runMs - Date.now()) / MS_PER_DAY);
+      const absoluteDays = Math.abs(daysAgo);
+      const rtf = new Intl.RelativeTimeFormat('en', {numeric: 'auto'});
+      let dateDisplay = '';
+      if (absoluteDays >= 365) {
+        const yearsAgo = Math.round(daysAgo / 365);
+        dateDisplay = rtf.format(yearsAgo, 'year');
+      } else if (absoluteDays >= 30) {
+        const monthsAgo = Math.round(daysAgo / 30);
+        dateDisplay = rtf.format(monthsAgo, 'month');
+      } else {
+        dateDisplay = rtf.format(daysAgo, 'day');
+      }
+      dateDiv.textContent = `${dateDisplay}`;
+    } else {
+      dateDiv.textContent = 'Unknown Date';
+    }
+    metadataDiv.appendChild(dateDiv);
+
+    runDiv.appendChild(metadataDiv);
+    
     const valueDiv = document.createElement('div');
     valueDiv.classList.add('run-value');
 

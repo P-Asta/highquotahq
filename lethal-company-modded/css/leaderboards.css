@@ -14,8 +14,6 @@
   .collection-btn,
   .filter-btn {
     font-family: 'systematic_jcool';
-    src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-          url('/assets/fonts/9systema-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
     font-size: 0.9rem;
@@ -75,8 +73,6 @@
 
 .recent-btn {
 font-family: 'systematic_jcool';
-src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-      url('/assets/fonts/9systema-webfont.woff') format('woff');
 font-weight: normal;
 font-style: normal;
 font-size: 0.8rem;
@@ -207,8 +203,6 @@ font-size: 0.8rem;
 
 .filter-category h3 {
   font-family: 'systematic_jcool';
-  src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-        url('/assets/fonts/9systema-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-size: 1.5rem;
@@ -218,8 +212,6 @@ font-size: 0.8rem;
 
 .filter-btn {
   font-family: 'systematic_jcool';
-  src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-        url('/assets/fonts/9systema-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   padding: 8px 15px;
@@ -263,44 +255,6 @@ font-size: 0.8rem;
   background-color: #444;
 }
 
-@media (max-width: 768px) {
-  .content {
-    padding: 15px;
-  }
-
-  .modpack-btn,
-  .collection-btn,
-  .filter-btn {
-    padding: 8px 10px;
-    font-family: 'systematic_jcool';
-    src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-          url('/assets/fonts/9systema-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    font-size: 0.9rem;
-  }
-
-  .run {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  #recent-runs-container{
-    max-width: 140px;
-    min-width: 140px;
-  }
-}
-
-@media (max-width: 500px){
-  .page-content {
-    flex-direction: column-reverse;
-  }
-  
-  #recent-runs-container{
-    max-width: none;
-    min-width: none;
-  }
-}
   
 /* Leaderboard container */
 #leaderboard {
@@ -355,7 +309,7 @@ font-size: 0.8rem;
     display: flex;
     flex-direction: column;
     padding: 15px;
-    margin: 10px 0;
+    margin: 4px 0;
     background-color: rgba(45, 45, 45, 0.9);
     border: 1px solid #555;
     border-radius: 8px;
@@ -368,19 +322,65 @@ font-size: 0.8rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   }
 
+  .new-run-indicator {
+    background-color: #d70b;
+    padding: 8px;
+    border-radius: 16px;
+    font-size: .8rem;
+    position: absolute;
+    align-self: flex-end;
+    height: 16px;
+    width: 32px;
+  }
+
+  .new-run-tooltip {
+    visibility: hidden;
+    width: 150px;
+    background-color: black;
+    color: #bbb;
+    text-align: center;
+    border-radius: 12px;
+    padding: 5px 2px;
+    margin-left: -65px;
+    margin-top: 15px;
+  }
+
+  .new-run-indicator:hover .new-run-tooltip {
+    visibility: visible;
+  }
+
+  .run-placement {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
   .run-players {
-    font-size: 1.1rem;
+    font-size: 1.4rem;
     font-weight: bold;
     color: #f0f0f0;
     margin-bottom: 8px;
     text-align: left;
   }
 
-  .run-version {
+  .run-metadata {
     font-size: 1rem;
     color: #ddd;
     margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .run-version {
     text-align: left;
+  }
+
+  .run-date {
+    text-align: right;
   }
 
   .run-value {
@@ -397,6 +397,21 @@ font-size: 0.8rem;
     margin-bottom: 5px;
     width: 50px;
     text-align: left;
+  }
+
+  .gold-border {
+    border-color: gold;
+    border-width: 2px;
+  }
+
+  .silver-border {
+    border-color: silver;
+    border-width: 2px;
+  }
+
+  .bronze-border {
+    border-color: #cd7f32;
+    border-width: 2px;
   }
 
   .run-position.gold {
@@ -456,6 +471,7 @@ font-size: 0.8rem;
   right: 0;
   bottom: 0;
   padding: 20px;
+  margin-bottom: 50px;
   background-color: #1a1a1aa2;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -562,4 +578,47 @@ button.close-btn {
 
 button.close-btn:hover {
   color: #ff5555;
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 15px;
+  }
+
+  .modpack-btn,
+  .collection-btn,
+  .filter-btn {
+    padding: 8px 10px;
+    font-family: 'systematic_jcool';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 0.9rem;
+  }
+
+  .run {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  #recent-runs-container{
+    max-width: 140px;
+    min-width: 140px;
+  }
+}
+
+@media (max-width: 500px){
+  .page-content {
+    flex-direction: column-reverse;
+  }
+  
+  #recent-runs-container{
+    max-width: none;
+    min-width: none;
+  }
+
+  .new-run-indicator {
+    width: 24px;
+    height: 12px;
+    font-size: 0.5rem;
+  }
 }

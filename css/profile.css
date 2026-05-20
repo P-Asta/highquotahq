@@ -20,6 +20,7 @@ a:hover {
 .content {
   max-width: 1200px;
   margin: auto;
+  margin-bottom: 50px;
   color: #fff;
   transition: all 0.3s ease;
   position: relative;
@@ -30,7 +31,7 @@ a:hover {
 .content h1 {
   text-align: center;
   font-size: 2.5rem;
-  margin-bottom: 20px;
+  margin: 5px 0px;
   color: #ff3e3e;
 }
 
@@ -38,13 +39,21 @@ a:hover {
   /* Profile Container */
 .profile-card {
     max-width: 800px;
-    margin: 80px auto 20px;
+    margin: 20px auto 20px;
     padding: 20px;
     background-color: #1e1e1ecb;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
     position: relative;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .profile-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: row-reverse;
+    justify-content: space-evenly;
   }
   
   /* Edit Profile Button */
@@ -71,13 +80,12 @@ a:hover {
 
 /* Profile Picture */
 #profile-picture {
-  width: 120px;
-  height: 120px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid #ff0000b6;
-  margin-top: 25px;
-  margin-bottom: 15px;
+  margin: 5px 0px;
 }
 
 /* Profile Info */
@@ -85,12 +93,16 @@ a:hover {
   text-align: center;
 }
 
+.roles-display p {
+  margin: 4px 0px;
+}
+
 #username-display {
   font-size: 1.5rem;
   font-weight: bold;
 }
 
-#created-at, #pronouns, #country {
+#profile-section-details p {
   font-size: 1.1rem;
   font-weight: bold;
   color: #bdbdbd;
@@ -268,6 +280,20 @@ button:hover {
   box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
+.element-link:hover {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.run-entry {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.run-entry:hover {
+  transform: scale(1.005);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
 .run:hover {
   background-color: #444;
 }
@@ -286,18 +312,28 @@ button:hover {
 
 
 .run-players {
-  font-size: 2rem;
+  font-size: 1.4rem;
   font-weight: bold;
   color: #f0f0f0;
-  margin-bottom: 3px;
+  margin: 1px 0px;
   text-align: left;
 }
 
 .run-metadata {
   font-size: 1rem;
   color: #ddd;
-  margin-top: 5px;
+  margin: 1px 0px; 
   text-align: left;
+  display: flex;
+  justify-content: space-between;
+}
+
+.run-version {
+  text-align: left;
+}
+
+.run-date {
+  text-align: right;
 }
 
 .run-value {
@@ -305,6 +341,11 @@ button:hover {
   color: #ddd;
   text-align: center;
   margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+.padding-top-50 {
+  padding-top: 50px;
 }
 
 #runs-container, #modded-runs-container {
@@ -317,19 +358,16 @@ button:hover {
   border-radius: 8px;
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
 
-.view-details-btn {
-  background-color: transparent;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #fff;
-  padding: 0 10px;
-  margin-left: auto;
-  display: flex;
-  align-items: center;
+  h2 {
+    margin: 4px 0px;
+    font-size: 1.8rem;
+  }
 
+  h3 {
+    margin: 2px 0px;
+    font-size: 1.5rem;
+  }
 }
 
 #runs-container:hover, #modded-runs-container:hover, #profile-card:hover {
@@ -359,6 +397,7 @@ button:hover {
   right: 0;
   bottom: 0;
   padding: 20px;
+  margin-bottom: 50px;
   background-color: #1a1a1aa2;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -398,7 +437,7 @@ button:hover {
   border-radius: 8px;
 }
 
-.stats-section p {
+.run-stat {
   margin: 12px 0;
   font-size: 20px;
 }
@@ -467,10 +506,25 @@ button.close-btn:hover {
   color: #ff5555;
 }
 
-.pending-verification {
+.pending-text {
+  margin: 12px 0;
+  font-size: 25px;
+}
+
+.pending-color {
   color: #ff4;
 }
 
 .pending-verification.hidden {
   display: none;
+}
+
+.pending-claimed {
+  margin: 12px 0;
+  color: #fb6;
+  font-size: 15px;
+}
+
+.disabled {
+  display: none !important; 
 }

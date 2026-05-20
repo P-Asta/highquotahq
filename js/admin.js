@@ -124,8 +124,6 @@ const hideAllInterfaces = () => {
     recentVerifiedRunsSection.classList.remove("show");
 };
 
-
-
 // admin interface
 
 const assignRolesButton = document.getElementById('assign-roles-button');
@@ -240,8 +238,20 @@ const banUser = async () => {
         await updateDoc(userDoc.ref, { banned: true });
 
         const collections = [
-            'leaderboards_hq', 'leaderboards_sdc', 'leaderboards_smhq',
-            'modded_hq', 'modded_sdc', 'modded_smhq'
+            'leaderboards_hq', 
+            'leaderboards_sdc', 
+            'leaderboards_smhq',
+            'lc_modded_brutal_hq',
+            'lc_modded_brutal_smhq',
+            'lc_modded_brutal_sdc',
+            'lc_modded_eclipsed_hq',
+            'lc_modded_eclipsed_smhq',
+            'lc_modded_wesleysmoons_hq',
+            'lc_modded_wesleysmoons_smhq',
+            'lc_modded_wesleysmoons_sdc',
+            'lc_modded_classicmoons_hq',
+            'lc_modded_classicmoons_smhq',
+            'lc_modded_classicmoons_sdc'
         ];
 
         const batch = writeBatch(db);
@@ -300,6 +310,14 @@ const unbanUser = async () => {
 
 // verifier interface
 
+const LATE_THRESHOLDS = [28, 42, 56, 70];
+const THRESHOLD_COLORS = {
+    28: '#dd8',
+    42: '#d86',
+    56: '#d53',
+    70: '#d22'
+}
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
 export async function fetchUnverifiedRuns(role) {
 
@@ -345,25 +363,31 @@ export async function fetchUnverifiedRuns(role) {
     runListContainer.innerHTML = '';
     let displayNoRunsMessage = true;
 
-    for (const collectionName of collections){
-        const sectionHeader = document.createElement('h3');
-        sectionHeader.textContent = collectionDisplayNames[collectionName] || collectionName;
-        runListContainer.appendChild(sectionHeader);
-
-        const collectionContainer = document.createElement('div');
-        runListContainer.appendChild(collectionContainer);
-
+    const promises = collections.map(collectionName => {
         const runsRef = collection(db, collectionName); 
         const q = query(runsRef, where('verified', '==', false), orderBy('date', 'asc'));
+        return getDocs(q);
+    });
+
+    try {
+        const querySnapshots = await Promise.all(promises);
 
 
-        try {
-            const querySnapshot = await getDocs(q);
+        collections.forEach((collectionName, index) => {
+            const querySnapshot = querySnapshots[index];
+
             if (querySnapshot.empty){
-                sectionHeader.style.display = 'none';
-                collectionContainer.innerHTML = `<p>No pending runs.</p>`;
-                collectionContainer.style.display = 'none';
+                return;
             }
+
+            displayNoRunsMessage = false;
+
+            const sectionHeader = document.createElement('h3');
+            sectionHeader.textContent = collectionDisplayNames[collectionName] || collectionName;
+            runListContainer.appendChild(sectionHeader);
+
+            const collectionContainer = document.createElement('div');
+            runListContainer.appendChild(collectionContainer);
 
             querySnapshot.forEach((docSnapshot) => {
                     const run = docSnapshot.data();
@@ -371,7 +395,13 @@ export async function fetchUnverifiedRuns(role) {
                     const claimedBy = run.claimedBy || 'Unclaimed';
 
                     const players = run.players || ['Unknown Player'];
-                    const date = run.date ? new Date(run.date.seconds * 1000).toLocaleString() : 'Unknown Date';
+                    const runMs = run.date.seconds * 1000;
+                    const daysAgo = Math.round((runMs - Date.now()) / MS_PER_DAY);
+                    const ageInDays = (Date.now() - (runMs)) / MS_PER_DAY;
+                    const runDateThreshold = LATE_THRESHOLDS.findLast(t => ageInDays >= t) || null;
+
+                    const rtf = new Intl.RelativeTimeFormat('en', {numeric: 'auto'});
+                    const dateDisplay = rtf.format(daysAgo, 'day');
                     const version = run.version || 'Unknown Version';
                     const videos = run.videos || {};
 
@@ -381,81 +411,101 @@ export async function fetchUnverifiedRuns(role) {
                     runItem.setAttribute('data-run-id', runId);
                     runItem.setAttribute('data-collection', collectionName);
 
-                    let additionalInfo = '';
+                    const leftSide = document.createElement('div');
+                    leftSide.classList.add("runLeft");
+                    const rightSide = document.createElement('div');
+                    rightSide.classList.add("runRight");
 
-                    if (collectionName.endsWith('_hq')) {
-                        const quotaAmount = run.quotaAmount || 'N/A';
-                        const quotaFulfilled = run.quotaFulfilled || 'N/A';
-                        const quotaReached = run.quotaReached || 'N/A';
-                        const totalScrap = run.totalScrap || 'N/A';
+                    const playersElement = document.createElement('p');
+                    const additionalDataElement = document.createElement('p');
+                    const claimedByElement = document.createElement('p');
 
-                        additionalInfo = `
-                            <p><strong>Quota Amount:</strong> ${quotaAmount}</p>
-                            <p><strong>Quota Fulfilled:</strong> ${quotaFulfilled}</p>
-                            <p><strong>Quota Reached:</strong> ${quotaReached}</p>
-                            <p><strong>Total Scrap:</strong> ${totalScrap}</p>
-                        `;
-                    } else if (collectionName.endsWith('_sdc')) {
-                        const equipment = Array.isArray(run.equipment) ? run.equipment.join(', ') : (typeof run.equipment === 'string' ? run.equipment : '');
-                        const moon = run.moon || 'Unknown Moon';
-                        const scrapType = run.scrapType || 'Unknown Scrap Type';
-                        const totalScrap = run.totalScrap || 'N/A';
+                    const dateElement = document.createElement('p');
+                    const versionElement = document.createElement('p');
 
-                        additionalInfo = `
-                            <p><strong>Equipment:</strong> ${equipment}</p>
-                            <p><strong>Moon:</strong> ${moon}</p>
-                            <p><strong>Scrap Type:</strong> ${scrapType}</p>
-                            <p><strong>Total Scrap:</strong> ${totalScrap}</p>
-                        `;
-                    } else if (collectionName.endsWith('_smhq')) {
-                        const moon = run.moon || 'Unknown Moon';
-                        const quotaAmount = run.quotaAmount || 'N/A';
-                        const quotaFulfilled = run.quotaFulfilled || 'N/A';
-                        const quotaReached = run.quotaReached || 'N/A';
-                        const totalScrap = run.totalScrap || 'N/A';
+                    const claimButton = document.createElement('button');
 
-                        additionalInfo = `
-                            <p><strong>Moon:</strong> ${moon}</p>
-                            <p><strong>Quota Amount:</strong> ${quotaAmount}</p>
-                            <p><strong>Quota Fulfilled:</strong> ${quotaFulfilled}</p>
-                            <p><strong>Quota Reached:</strong> ${quotaReached}</p>
-                            <p><strong>Total Scrap:</strong> ${totalScrap}</p>
-                        `;
+                    const morePlayersCount = players.length - 2;
+                    if (morePlayersCount > 0){
+                        const playerCountSpanElement = document.createElement('span');
+                        playerCountSpanElement.textContent = ` + ${morePlayersCount} more`;
+                        playersElement.textContent = `${players.slice(0, 2).join(', ')}`;
+                        playersElement.appendChild(playerCountSpanElement);
+                    }else {
+                        playersElement.textContent = `${players.slice(0, 2).join(', ')}`;
                     }
+                    leftSide.appendChild(playersElement);
+                    
+                    if (collectionName.endsWith('_hq')){
+                        additionalDataElement.textContent = `Quota ${run.quotaReached}: ${run.quotaAmount}`;
+                    } else if (collectionName.endsWith('_smhq')){
+                        additionalDataElement.textContent = `${run.moon} - Quota ${run.quotaReached}: ${run.quotaAmount}`;
+                    } else if (collectionName.endsWith('_sdc')){
+                        if (collectionName.startsWith('lc_modded_brutal')){
+                            additionalDataElement.textContent = `${run.moon} - Collected: ${run.totalScrap}`;
+                        }else{s
+                            additionalDataElement.textContent = `${run.moon} - Collected: ${run.totalScrap} - Scrap Type: ${run.scrapType}`;
+                        }
+                        
+                    }else {
+                        additionalDataElement.textContent = `Unknown category1! Please contact site-developers!`;
+                    }
+                    leftSide.appendChild(additionalDataElement);
 
-                    const runItemHTML = `
-                        <p><strong>Players:</strong> ${players.slice(0, 3).join(', ')}${players.length > 3 ? ' and more' : ''}</p>
-                        <p><strong>Date:</strong> ${date}</p>
-                        <p><strong>Version:</strong> ${version}</p>
-                        <p><strong>Claimed By:</strong> ${claimedBy}</p>
-                        ${additionalInfo}
-                    `;
-                    runItem.innerHTML = runItemHTML;
+                    versionElement.textContent = `${version}`;
+                    rightSide.appendChild(versionElement);
 
-                    if (!claimedBy || claimedBy == "Unclaimed") {
-                        const claimButton = document.createElement('button');
+                    dateElement.textContent = `${dateDisplay}`;
+                    if (runDateThreshold !== null){
+                        dateElement.style = `color: ${THRESHOLD_COLORS[runDateThreshold]};`;
+                        if (runDateThreshold === LATE_THRESHOLDS[2] || runDateThreshold === LATE_THRESHOLDS[3]){
+                            runItem.classList.add("run-item-old");
+                        }
+                    }
+                    rightSide.appendChild(dateElement);
+
+                    if (!claimedBy || claimedBy == "Unclaimed"){
+                        claimedByElement.textContent = `Unclaimed`;
                         claimButton.innerText = 'Claim Run';
                         claimButton.classList.add('claim-button');
-                        claimButton.addEventListener('click', () => claimRun(runId, collectionName, role));
-                        runItem.appendChild(claimButton);
+                        claimButton.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            claimRun(runId, collectionName, role);
+                        });
+                        rightSide.appendChild(claimButton);
+                        runItem.classList.add("unclaimed");
+                    }else{
+                        claimedByElement.textContent = `Claimed by ${claimedBy}`;
                     }
+                    leftSide.appendChild(claimedByElement);
+                    
+                    runItem.appendChild(leftSide);
+                    runItem.appendChild(rightSide);
                     
                     collectionContainer.appendChild(runItem);
 
                     runItem.addEventListener('click', () => {
                         showRunDetails(runId, collectionName, run, role);
                     });
-                    displayNoRunsMessage = false;
             });
-        } catch (error) {
-            console.error(`Error fetching unverified runs from ${collectionName}:`, error);
-        }
+        });
+    } catch (error) {
+        console.error(error);
+        const errorMessage = document.createElement('h3');
+        errorMessage.textContent = "Error trying to fetch pending runs! If this happens again, ask for help from managers or site developers!";
+        errorMessage.style = "color: #f44;";
+        displayNoRunsMessage = false;
+        runListContainer.appendChild(errorMessage);
     }
+
     if (displayNoRunsMessage){
         const noRunsMessage = document.createElement('h3');
-        noRunsMessage.textContent = "No runs pending!";
+        noRunsMessage.textContent = "No pending runs.";
         runListContainer.appendChild(noRunsMessage);
     }
+
+
+
 }
 
 export function showRunDetails(runId, collectionName, run, role) {
@@ -514,13 +564,20 @@ export function showRunDetails(runId, collectionName, run, role) {
         const moon = run.moon || 'Unknown Moon';
         const scrapType = run.scrapType || 'Unknown Scrap Type';
         const totalScrap = run.totalScrap || 0;
-
-        additionalInfo = `
-            <label>Equipment: <input type="text" value="${equipment}" disabled data-field="equipment"></label><br>
-            <label>Moon: <input type="text" value="${moon}" disabled data-field="moon"></label><br>
-            <label>Scrap Type: <input type="text" value="${scrapType}" disabled data-field="scrapType"></label><br>
-            <label>Total Scrap: <input type="number" value="${totalScrap}" disabled data-field="totalScrap"></label><br>
+        if (collectionName.startsWith('lc_modded_brutal')){
+            additionalInfo = `
+                <label>Equipment: <input type="text" value="${equipment}" disabled data-field="equipment"></label><br>
+                <label>Moon: <input type="text" value="${moon}" disabled data-field="moon"></label><br>
+                <label>Total Scrap: <input type="number" value="${totalScrap}" disabled data-field="totalScrap"></label><br>
         `;
+        } else {
+            additionalInfo = `
+                <label>Equipment: <input type="text" value="${equipment}" disabled data-field="equipment"></label><br>
+                <label>Moon: <input type="text" value="${moon}" disabled data-field="moon"></label><br>
+                <label>Scrap Type: <input type="text" value="${scrapType}" disabled data-field="scrapType"></label><br>
+                <label>Total Scrap: <input type="number" value="${totalScrap}" disabled data-field="totalScrap"></label><br>
+            `;
+        }
     } else if (collectionName.endsWith('_smhq')) {
         const moon = run.moon || 'Unknown Moon';
         const quotaAmount = run.quotaAmount || 0;

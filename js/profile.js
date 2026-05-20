@@ -11,6 +11,8 @@ const createdAtDisplay = document.getElementById("created-at");
 const bioDisplay = document.getElementById("bio");
 const pronounsDisplay = document.getElementById("pronouns");
 const countryDisplay = document.getElementById("country");
+const profileCard = document.getElementById("profile-card");
+const profileDetailsSection = document.getElementById("profile-section-details");
 
 const editProfileButton = document.getElementById("edit-profile-button");
 const editProfileModal = document.getElementById("edit-profile-modal");
@@ -22,12 +24,30 @@ const countryInput = document.getElementById("country-input");
 const profilePictureInput = document.getElementById("profile-picture-input");
 
 
+
 const runsContainer = document.getElementById("runs-container");
-const moddedRunsContainer = document.getElementById("modded-runs-container")
+const moddedRunsContainer = document.getElementById("modded-runs-container");
 
 let profileUid = null;
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
 const storage = getStorage();
+
+const orderedRoles = ['admin', 'site-developer', 'moderator', 'verifier', 'modded-verifier'];
+const roleMap = {
+  "modded-verifier": "Modded Verifier",
+  "admin": "Manager",
+  "moderator": "Community Moderator",
+  "verifier": "Verifier",
+  "site-developer": "Site Developer"
+};
+const roleColors = {
+  "modded-verifier": "#640000",
+  "admin": "#f00",
+  "moderator": "#f8c22c",
+  "verifier": "#2146bd",
+  "site-developer": "#4bffc0"
+}
 
 async function fetchUserByUsername(username) {
   const usersRef = collection(db, "users");
@@ -68,8 +88,17 @@ onAuthStateChanged(auth, async (user) => {
     const countryFlag = countryFlags[userData.country] || '';
     countryDisplay.innerHTML = `${userData.country || "Country: Not set"} ${countryFlag}`;
 
+    if (userData.roles?.length > 0){
+      const rolesDisplay = document.createElement('div');
+      rolesDisplay.id = "roles-display";
+      rolesDisplay.classList.add("roles-display");
+      rolesDisplay.innerHTML = orderedRoles.filter(role => userData.roles.includes(role)).map(role => `<p class="role" style="color: ${roleColors[role]};">${roleMap[role]}</p>`).join('');
+      profileDetailsSection.appendChild(rolesDisplay);
+    }
+
     if (user && user.uid === profileUid) {
       editProfileButton.style.display = "block";
+      profileCard.classList.add("padding-top-50");
     }
     displayPlayerRuns(username);
   }
@@ -185,73 +214,125 @@ async function displayPlayerRuns(username) {
   runsContainer.innerHTML = "<h2>Lethal Company</h2>";
   moddedRunsContainer.innerHTML = "<h2>Modded Lethal Company</h2>";
 
-  for (const collectionName of leaderboardCollections) {
-    const runsRef = collection(db, collectionName);
-    const q = query(runsRef, where("players", "array-contains", normalizedUsername));
-    const querySnapshot = await getDocs(q);
-    if (querySnapshot.empty){
-      continue;
-    }
-    const sectionHeader = document.createElement('h3');
-    sectionHeader.textContent = collectionDisplayNames[collectionName] || collectionName;
-    const collectionContainer = document.createElement('div');
-    if (collectionName.startsWith("lc_modded")){
-        moddedRunsContainer.appendChild(sectionHeader);
-        moddedRunsContainer.appendChild(collectionContainer);
-    }else{
-      runsContainer.appendChild(sectionHeader);
-      runsContainer.appendChild(collectionContainer);
-    }
-
-    querySnapshot.forEach((docSnapshot) => {
-      const run = docSnapshot.data();
-      const runId = docSnapshot.id;
-      
-      const players = run.players || ['Unknown Player'];
-      const version = run.version || 'Unknown Version';
-
-      const runDiv = document.createElement('div');
-      runDiv.classList.add('run-entry');
-
-      // basic run info
-      const playersDiv = document.createElement('div');
-      playersDiv.classList.add('run-players');
-      playersDiv.textContent = `Players: ${run.players.join(', ')}`;
-      runDiv.appendChild(playersDiv);
-
-      const metadataDiv = document.createElement('div');
-      metadataDiv.classList.add('run-metadata');
-      if (collectionName.endsWith("smhq") || collectionName.endsWith("sdc")){
-        metadataDiv.textContent = `Moon: ${run.moon} - Version: ${version}`;
-      }else{
-      metadataDiv.textContent = `Version: ${version}`;
-      }
-      if (!run.verified)
-        {
-          metadataDiv.innerHTML += ` - <strong class="pending-verification">Pending verification</strong>`;
-        }
-      runDiv.appendChild(metadataDiv);
-
-      const valueDiv = document.createElement('div');
-      valueDiv.classList.add('run-value');
-
-      if (collectionName.endsWith('hq')) {
-        valueDiv.textContent = `Quota Amount: ${run.quotaAmount || 0}`;
-      } else if (collectionName.endsWith('sdc')) {
-        valueDiv.textContent = `Total Scrap: ${run.totalScrap || 0}`;
-      }
-
-      runDiv.appendChild(valueDiv);
-
-      const detailsButton = document.createElement('button');
-      detailsButton.classList.add('view-details-btn');
-      detailsButton.innerHTML = '→';
-      detailsButton.onclick = () => showRunDetails(run, runId, collectionName);
-      runDiv.appendChild(detailsButton);
-
-      collectionContainer.appendChild(runDiv);
+  try {
+    const promises = leaderboardCollections.map(collectionName => {
+      const runsRef = collection(db, collectionName);
+      const q = query(runsRef, where("players", "array-contains", normalizedUsername));
+      return getDocs(q);
     });
+    
+    const querySnapshots = await Promise.all(promises);
+
+    leaderboardCollections.forEach((collectionName, index) => {
+      const querySnapshot = querySnapshots[index];
+      if (querySnapshot.empty){
+        return;
+      }
+      const sectionHeader = document.createElement('h3');
+      sectionHeader.textContent = collectionDisplayNames[collectionName] || collectionName;
+      const collectionContainer = document.createElement('div');
+      if (collectionName.startsWith("lc_modded")){
+          moddedRunsContainer.appendChild(sectionHeader);
+          moddedRunsContainer.appendChild(collectionContainer);
+          if (moddedRunsContainer.classList.contains("disabled")){
+            moddedRunsContainer.classList.remove("disabled");
+          }
+      }else{
+        runsContainer.appendChild(sectionHeader);
+        runsContainer.appendChild(collectionContainer);
+        if (runsContainer.classList.contains("disabled")){
+          runsContainer.classList.remove("disabled");
+        }
+      }
+
+      querySnapshot.forEach((docSnapshot) => {
+        const run = docSnapshot.data();
+        const runId = docSnapshot.id;
+        
+        const players = run.players || ['Unknown Player'];
+        const version = run.version || 'Unknown Version';
+
+        const runDiv = document.createElement('div');
+        runDiv.classList.add('run-entry');
+
+        // basic run info
+        const playersDiv = document.createElement('p');
+        playersDiv.classList.add('run-players');
+        const playerLinks = run.players.map(player => ` <a href="profile.html?username=${encodeURIComponent(player)}" class="player-link">${player}</a>`);
+        playersDiv.innerHTML = `Players: ${playerLinks}`;
+        runDiv.appendChild(playersDiv);
+
+        const metadataDiv = document.createElement('p');
+        metadataDiv.classList.add('run-metadata');
+        const versionDiv = document.createElement('div');
+        versionDiv.classList.add('run-version');
+        if (collectionName.endsWith("_smhq")){
+          versionDiv.textContent = `Moon: ${run.moon} - Version: ${version}`;
+        } else if (collectionName.endsWith("_sdc")){
+          if (collectionName.startsWith("lc_modded_brutal")){
+            versionDiv.textContent = `Moon: ${run.moon} - Version: ${version}`;
+          }else {
+            versionDiv.textContent = `Moon: ${run.moon} - Scrap Type: ${run.scrapType} - Version: ${version}`;
+          }
+        }else if (collectionName.endsWith("_hq")){
+          versionDiv.textContent = `Version: ${version}`;
+        }
+
+        if (!run.verified)
+          {
+            versionDiv.innerHTML += ` - <strong class="pending-color">Pending verification</strong>`;
+          }
+        metadataDiv.appendChild(versionDiv);
+
+        const dateDiv = document.createElement('div');
+        dateDiv.classList.add('run-date');
+        if (run.date){
+          const runMs = run.date.seconds * 1000;
+          const daysAgo = Math.round((runMs - Date.now()) / MS_PER_DAY);
+          const absoluteDays = Math.abs(daysAgo);
+          const rtf = new Intl.RelativeTimeFormat('en', {numeric: 'auto'});
+          let dateDisplay = '';
+          if (absoluteDays >= 365) {
+            const yearsAgo = Math.round(daysAgo / 365);
+            dateDisplay = rtf.format(yearsAgo, 'year');
+          } else if (absoluteDays >= 30) {
+            const monthsAgo = Math.round(daysAgo / 30);
+            dateDisplay = rtf.format(monthsAgo, 'month');
+          } else {
+            dateDisplay = rtf.format(daysAgo, 'day');
+          }
+          dateDiv.textContent = `${dateDisplay}`;
+        } else {
+          dateDiv.textContent = 'Unknown Date';
+        }
+        metadataDiv.appendChild(dateDiv);
+
+        runDiv.appendChild(metadataDiv);
+
+        const valueDiv = document.createElement('p');
+        valueDiv.classList.add('run-value');
+
+        if (collectionName.endsWith('hq')) {
+          valueDiv.textContent = `Quota ${run.quotaReached}: ${run.quotaAmount || 0}`;
+        } else if (collectionName.endsWith('sdc')) {
+          valueDiv.textContent = `Collected: ${run.totalScrap || 0}`;
+        }
+        runDiv.appendChild(valueDiv);
+
+        const aDiv = document.createElement('a');
+        aDiv.classList.add('element-link');
+        aDiv.onclick = () => showRunDetails(run, runId, collectionName);
+        aDiv.appendChild(runDiv);
+
+        collectionContainer.appendChild(aDiv);
+      });
+    });
+  } catch (error) {
+    console.error(error);
+    runsContainer.classList.remove("disabled");
+    runsContainer.innerHTML = `<p style="color: #f55; font-size: 30px;">There was an error while loading runs. Reload page to try again. Contact us if issues persist.</p>`;
   }
+
 }
 
 export function showRunDetails(run, index, collectionName) {
@@ -305,63 +386,71 @@ export function showRunDetails(run, index, collectionName) {
     <div class="run-details">
       <div class="video-section">${formatVideos(run.videos)}</div>
       <div class="stats-section">
-        <div class="pending-text">
-          <p class="pending-verification">⚠ Run pending verification ⚠</p>
+        <div class="pending-verification">
+          <p class="pending-text pending-color">⚠ Run pending verification ⚠</p>
         </div>
         <h3>Run Information</h3>
-        <p><strong>Players:</strong> 
+        <p class="run-stat"><strong>Players:</strong> 
           ${run.players.map(player => 
             `<a href="/pages/profile.html?username=${encodeURIComponent(player)}" class="player-link">${player}</a>`
           ).join(', ')}
         </p>
-        <p><strong>Date:</strong> ${formatTimestamp(run.date)}</p>
+        <p class="run-stat"><strong>Date:</strong> ${formatTimestamp(run.date)}</p>
   `;
 
   if (collectionName.endsWith('_hq')) {
     runDetailsHtml += `
-      <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
-      <p><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
-      <p><strong>Quota Reached:</strong> ${run.quotaReached}</p>
-      <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
-      <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-      <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
-      <p><strong>Version:</strong> ${run.version}</p>
+      <p class="run-stat"><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
+      <p class="run-stat"><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
+      <p class="run-stat"><strong>Quota Reached:</strong> ${run.quotaReached}</p>
+      <p class="run-stat"><strong>Total Scrap:</strong> ${run.totalScrap}</p>
+      <p class="run-stat"><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
+      <p class="run-stat"><strong>Verified By:</strong> ${run.verifiedBy}</p>
+      <p class="run-stat"><strong>Version:</strong> ${run.version}</p>
     `;
   }
   else if (collectionName.endsWith('_sdc')) {
     runDetailsHtml += `
-      <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
-      <p><strong>Scrap Type:</strong> ${run.scrapType}</p>
-      <p><strong>Equipment:</strong> ${run.equipment}</p>
-      <p><strong>Moon:</strong> ${run.moon}</p>
-      <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-      <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
-      <p><strong>Version:</strong> ${run.version}</p>
+      <p class="run-stat"><strong>Total Scrap:</strong> ${run.totalScrap}</p>
+      <p class="run-stat"><strong>Scrap Type:</strong> ${run.scrapType}</p>
+      <p class="run-stat"><strong>Equipment:</strong> ${run.equipment}</p>
+      <p class="run-stat"><strong>Moon:</strong> ${run.moon}</p>
+      <p class="run-stat"><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
+      <p class="run-stat"><strong>Verified By:</strong> ${run.verifiedBy}</p>
+      <p class="run-stat"><strong>Version:</strong> ${run.version}</p>
     `;
   }
   else if (collectionName.endsWith('_smhq')) {
     runDetailsHtml += `
-      <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
-      <p><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
-      <p><strong>Quota Reached:</strong> ${run.quotaReached}</p>
-      <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
-      <p><strong>Moon:</strong> ${run.moon}</p>
-      <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-      <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
-      <p><strong>Version:</strong> ${run.version}</p>
+      <p class="run-stat"><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
+      <p class="run-stat"><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
+      <p class="run-stat"><strong>Quota Reached:</strong> ${run.quotaReached}</p>
+      <p class="run-stat"><strong>Total Scrap:</strong> ${run.totalScrap}</p>
+      <p class="run-stat"><strong>Moon:</strong> ${run.moon}</p>
+      <p class="run-stat"><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
+      <p class="run-stat"><strong>Verified By:</strong> ${run.verifiedBy}</p>
+      <p class="run-stat"><strong>Version:</strong> ${run.version}</p>
     `;
   }
   else {
     runDetailsHtml += `
-      <p><strong>Additional Info:</strong> ${run.someOtherDetail || 'No additional info available.'}</p>
+      <p class="run-stat"><strong>Additional Info:</strong> ${run.someOtherDetail || 'No additional info available.'}</p>
     `;
   }
 
   
   detailsPanel.innerHTML = runDetailsHtml;
 
+  console.log(run.claimedAt);
+  console.log(run.verified);
   if (run.verified) {
     detailsPanel.querySelector('.pending-verification').classList.add('hidden');
+  }else if (run.claimedAt !== undefined){
+    const runPendingDiv = detailsPanel.querySelector('.pending-verification');
+    const runClaimedAt = document.createElement('p');
+    runClaimedAt.classList.add('pending-claimed');
+    runClaimedAt.textContent = `Claimed at ${formatTimestamp(run.claimedAt)}`;
+    runPendingDiv.appendChild(runClaimedAt);
   }
 
   setTimeout(() => {

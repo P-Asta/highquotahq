@@ -42,6 +42,8 @@ document.querySelector('[data-filter="1"]').classList.add('active');
 const CACHE_KEY_PREFIX = 'leaderboard-cache-';
 const CACHE_EXPIRY_MS = 1000 * 60 * 60 * 24; // 24 hrs
 
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
 // Fetch raw runs data from cache or Firestore
 const fetchRawRuns = async () => {
   const cacheKey = CACHE_KEY_PREFIX + activeCollection;
@@ -352,6 +354,29 @@ const displayLatest = (runs) => {
     }
     runDiv.appendChild(versionDiv);
 
+    const dateDiv = document.createElement('div');
+    dateDiv.classList.add('recent-version');
+    if (run.date){
+      const runMs = run.date.seconds * 1000;
+      const daysAgo = Math.round((runMs - Date.now()) / MS_PER_DAY);
+      const absoluteDays = Math.abs(daysAgo);
+      const rtf = new Intl.RelativeTimeFormat('en', {numeric: 'auto'});
+      let dateDisplay = '';
+      if (absoluteDays >= 365) {
+        const yearsAgo = Math.round(daysAgo / 365);
+        dateDisplay = rtf.format(yearsAgo, 'year');
+      } else if (absoluteDays >= 30) {
+        const monthsAgo = Math.round(daysAgo / 30);
+        dateDisplay = rtf.format(monthsAgo, 'month');
+      } else {
+        dateDisplay = rtf.format(daysAgo, 'day');
+      }
+      dateDiv.textContent = `${dateDisplay}`;
+    } else {
+      dateDiv.textContent = 'Unknown Date';
+    }
+    runDiv.appendChild(dateDiv);
+
     const valueDiv = document.createElement('div');
     valueDiv.classList.add('recent-value');
     if (activeCollection.endsWith('hq')){
@@ -406,9 +431,18 @@ const displayLeaderboard = (runs) => {
     positionDiv.classList.add('run-position');
     positionDiv.textContent = `#${currentRank}`;
 
-    if (currentRank === 1) positionDiv.classList.add('gold');
-    else if (currentRank === 2) positionDiv.classList.add('silver');
-    else if (currentRank === 3) positionDiv.classList.add('bronze');
+    if (currentRank === 1) {
+      positionDiv.classList.add('gold');
+      runDiv.classList.add('gold-border');
+    }
+    else if (currentRank === 2) {
+      positionDiv.classList.add('silver');
+      runDiv.classList.add('silver-border');
+    }
+    else if (currentRank === 3) {
+      positionDiv.classList.add('bronze');
+      runDiv.classList.add('bronze-border');
+    }
 
     runDiv.appendChild(positionDiv);
 
@@ -428,13 +462,40 @@ const displayLeaderboard = (runs) => {
         playersDiv.appendChild(document.createTextNode(', '));
       }
     });
-
     runDiv.appendChild(playersDiv);
 
+    const metadataDiv = document.createElement('p');
+    metadataDiv.classList.add('run-metadata');
     const versionDiv = document.createElement('div');
     versionDiv.classList.add('run-version');
     versionDiv.textContent = `Version: ${run.version}`;
-    runDiv.appendChild(versionDiv);
+
+    metadataDiv.appendChild(versionDiv);
+
+    const dateDiv = document.createElement('div');
+    dateDiv.classList.add('run-date');
+    if (run.date){
+      const runMs = run.date.seconds * 1000;
+      const daysAgo = Math.round((runMs - Date.now()) / MS_PER_DAY);
+      const absoluteDays = Math.abs(daysAgo);
+      const rtf = new Intl.RelativeTimeFormat('en', {numeric: 'auto'});
+      let dateDisplay = '';
+      if (absoluteDays >= 365) {
+        const yearsAgo = Math.round(daysAgo / 365);
+        dateDisplay = rtf.format(yearsAgo, 'year');
+      } else if (absoluteDays >= 30) {
+        const monthsAgo = Math.round(daysAgo / 30);
+        dateDisplay = rtf.format(monthsAgo, 'month');
+      } else {
+        dateDisplay = rtf.format(daysAgo, 'day');
+      }
+      dateDiv.textContent = `${dateDisplay}`;
+    } else {
+      dateDiv.textContent = 'Unknown Date';
+    }
+    metadataDiv.appendChild(dateDiv);
+
+    runDiv.appendChild(metadataDiv);
 
     const valueDiv = document.createElement('div');
     valueDiv.classList.add('run-value');

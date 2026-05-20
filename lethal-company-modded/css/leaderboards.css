@@ -376,11 +376,20 @@ font-size: 0.8rem;
     text-align: left;
   }
 
-  .run-version {
+  .run-metadata {
     font-size: 1rem;
     color: #ddd;
     margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .run-version {
     text-align: left;
+  }
+
+  .run-date {
+    text-align: right;
   }
 
   .run-value {
@@ -397,6 +406,21 @@ font-size: 0.8rem;
     margin-bottom: 5px;
     width: 50px;
     text-align: left;
+  }
+
+  .gold-border {
+    border-color: gold;
+    border-width: 2px;
+  }
+
+  .silver-border {
+    border-color: silver;
+    border-width: 2px;
+  }
+
+  .bronze-border {
+    border-color: #cd7f32;
+    border-width: 2px;
   }
 
   .run-position.gold {

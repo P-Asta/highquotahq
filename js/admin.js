@@ -238,8 +238,20 @@ const banUser = async () => {
         await updateDoc(userDoc.ref, { banned: true });
 
         const collections = [
-            'leaderboards_hq', 'leaderboards_sdc', 'leaderboards_smhq',
-            'modded_hq', 'modded_sdc', 'modded_smhq'
+            'leaderboards_hq', 
+            'leaderboards_sdc', 
+            'leaderboards_smhq',
+            'lc_modded_brutal_hq',
+            'lc_modded_brutal_smhq',
+            'lc_modded_brutal_sdc',
+            'lc_modded_eclipsed_hq',
+            'lc_modded_eclipsed_smhq',
+            'lc_modded_wesleysmoons_hq',
+            'lc_modded_wesleysmoons_smhq',
+            'lc_modded_wesleysmoons_sdc',
+            'lc_modded_classicmoons_hq',
+            'lc_modded_classicmoons_smhq',
+            'lc_modded_classicmoons_sdc'
         ];
 
         const batch = writeBatch(db);
@@ -429,7 +441,12 @@ export async function fetchUnverifiedRuns(role) {
                     } else if (collectionName.endsWith('_smhq')){
                         additionalDataElement.textContent = `${run.moon} - Quota ${run.quotaReached}: ${run.quotaAmount}`;
                     } else if (collectionName.endsWith('_sdc')){
-                        additionalDataElement.textContent = `${run.moon} - Collected: ${run.totalScrap} - Scrap Type: ${run.scrapType}`;
+                        if (collectionName.startsWith('lc_modded_brutal')){
+                            additionalDataElement.textContent = `${run.moon} - Collected: ${run.totalScrap}`;
+                        }else{s
+                            additionalDataElement.textContent = `${run.moon} - Collected: ${run.totalScrap} - Scrap Type: ${run.scrapType}`;
+                        }
+                        
                     }else {
                         additionalDataElement.textContent = `Unknown category1! Please contact site-developers!`;
                     }
@@ -547,13 +564,20 @@ export function showRunDetails(runId, collectionName, run, role) {
         const moon = run.moon || 'Unknown Moon';
         const scrapType = run.scrapType || 'Unknown Scrap Type';
         const totalScrap = run.totalScrap || 0;
-
-        additionalInfo = `
-            <label>Equipment: <input type="text" value="${equipment}" disabled data-field="equipment"></label><br>
-            <label>Moon: <input type="text" value="${moon}" disabled data-field="moon"></label><br>
-            <label>Scrap Type: <input type="text" value="${scrapType}" disabled data-field="scrapType"></label><br>
-            <label>Total Scrap: <input type="number" value="${totalScrap}" disabled data-field="totalScrap"></label><br>
+        if (collectionName.startsWith('lc_modded_brutal')){
+            additionalInfo = `
+                <label>Equipment: <input type="text" value="${equipment}" disabled data-field="equipment"></label><br>
+                <label>Moon: <input type="text" value="${moon}" disabled data-field="moon"></label><br>
+                <label>Total Scrap: <input type="number" value="${totalScrap}" disabled data-field="totalScrap"></label><br>
         `;
+        } else {
+            additionalInfo = `
+                <label>Equipment: <input type="text" value="${equipment}" disabled data-field="equipment"></label><br>
+                <label>Moon: <input type="text" value="${moon}" disabled data-field="moon"></label><br>
+                <label>Scrap Type: <input type="text" value="${scrapType}" disabled data-field="scrapType"></label><br>
+                <label>Total Scrap: <input type="number" value="${totalScrap}" disabled data-field="totalScrap"></label><br>
+            `;
+        }
     } else if (collectionName.endsWith('_smhq')) {
         const moon = run.moon || 'Unknown Moon';
         const quotaAmount = run.quotaAmount || 0;

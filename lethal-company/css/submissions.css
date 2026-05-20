@@ -9,8 +9,6 @@
 body {
   color: #ffffff;
   font-family: 'systematic_jcool';
-  src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-       url('/assets/fonts/9systema-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   margin: 0;
@@ -47,8 +45,6 @@ form {
 
 label {
   font-family: 'systematic_jcool';
-  src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-       url('/assets/fonts/9systema-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-size: 18px;
@@ -68,8 +64,6 @@ select {
   border-radius: 5px;
   padding: 10px;
   font-family: 'systematic_jcool';
-  src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-       url('/assets/fonts/9systema-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-size: 14px;
@@ -117,8 +111,6 @@ button[type="submit"] {
   border-radius: 5px;
   padding: 12px;
   font-family: 'systematic_jcool';
-  src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-       url('/assets/fonts/9systema-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-size: 16px;
@@ -139,8 +131,6 @@ button[type="submit"]:hover {
   textarea,
   select {
     font-family: 'systematic_jcool';
-    src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-         url('/assets/fonts/9systema-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
     font-size: 13px;
@@ -148,8 +138,6 @@ button[type="submit"]:hover {
 
   button[type="submit"] {
     font-family: 'systematic_jcool';
-    src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-         url('/assets/fonts/9systema-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
     font-size: 14px;
@@ -164,8 +152,6 @@ textarea,
 select,
 button {
   font-family: 'systematic_jcool';
-  src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-       url('/assets/fonts/9systema-webfont.woff') format('woff');
   font-style: normal;
   font-weight: bold;
 }

@@ -269,7 +269,11 @@ async function displayPlayerRuns(username) {
         if (collectionName.endsWith("_smhq")){
           versionDiv.textContent = `Moon: ${run.moon} - Version: ${version}`;
         } else if (collectionName.endsWith("_sdc")){
-          versionDiv.textContent = `Moon: ${run.moon} - Scrap Type: ${run.scrapType} - Version: ${version}`;
+          if (collectionName.startsWith("lc_modded_brutal")){
+            versionDiv.textContent = `Moon: ${run.moon} - Version: ${version}`;
+          }else {
+            versionDiv.textContent = `Moon: ${run.moon} - Scrap Type: ${run.scrapType} - Version: ${version}`;
+          }
         }else if (collectionName.endsWith("_hq")){
           versionDiv.textContent = `Version: ${version}`;
         }

@@ -612,15 +612,26 @@ export function showRunDetails(run, index) {
     `;
   }
   else if (activeCollection.endsWith('_sdc')) {
-    runDetailsHtml += `
-      <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
-      <p><strong>Scrap Type:</strong> ${run.scrapType}</p>
-      <p><strong>Equipment:</strong> ${run.equipment}</p>
-      <p><strong>Moon:</strong> ${run.moon}</p>
-      <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-      <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
-      <p><strong>Version:</strong> ${run.version}</p>
-    `;
+    if (activeCollection.startsWith('lc_modded_brutal')){
+      runDetailsHtml += `
+        <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
+        <p><strong>Equipment:</strong> ${run.equipment}</p>
+        <p><strong>Moon:</strong> ${run.moon}</p>
+        <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
+        <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
+        <p><strong>Version:</strong> ${run.version}</p>
+      `;
+    } else {
+      runDetailsHtml += `
+        <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
+        <p><strong>Scrap Type:</strong> ${run.scrapType}</p>
+        <p><strong>Equipment:</strong> ${run.equipment}</p>
+        <p><strong>Moon:</strong> ${run.moon}</p>
+        <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
+        <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
+        <p><strong>Version:</strong> ${run.version}</p>
+      `;
+    }
   }
   else if (activeCollection === '_smhq') {
     runDetailsHtml += `

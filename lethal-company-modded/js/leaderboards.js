@@ -435,6 +435,10 @@ const displayLeaderboard = (runs) => {
         const newRunDiv = document.createElement('div');
         newRunDiv.classList.add('new-run-indicator');
         newRunDiv.textContent = 'NEW';
+        const newRunTooltip = document.createElement('div');
+        newRunTooltip.classList.add('new-run-tooltip');
+        newRunTooltip.textContent = 'Verified within the last 60 days.';
+        newRunDiv.appendChild(newRunTooltip);
         runDiv.appendChild(newRunDiv);
       } 
     }

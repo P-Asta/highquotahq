@@ -359,10 +359,14 @@ const displayLeaderboard = (runs) => {
       const runVerifiedMs = run.verifiedAt.seconds * 1000;
       const daysAgoVerified = Math.round((runVerifiedMs - Date.now()) / MS_PER_DAY);
       const absoluteVerifiedDays = Math.abs(daysAgoVerified);
-      if (absoluteVerifiedDays <= 60){
+      if (absoluteVerifiedDays <= 30){
         const newRunDiv = document.createElement('div');
         newRunDiv.classList.add('new-run-indicator');
         newRunDiv.textContent = 'NEW';
+        const newRunTooltip = document.createElement('div');
+        newRunTooltip.classList.add('new-run-tooltip');
+        newRunTooltip.textContent = 'Verified within the last 30 days.';
+        newRunDiv.appendChild(newRunTooltip);
         runDiv.appendChild(newRunDiv);
       } 
     }

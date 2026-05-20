@@ -29,6 +29,7 @@ const runsContainer = document.getElementById("runs-container");
 const moddedRunsContainer = document.getElementById("modded-runs-container");
 
 let profileUid = null;
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
 const storage = getStorage();
 
@@ -263,18 +264,45 @@ async function displayPlayerRuns(username) {
 
         const metadataDiv = document.createElement('p');
         metadataDiv.classList.add('run-metadata');
+        const versionDiv = document.createElement('div');
+        versionDiv.classList.add('run-version');
         if (collectionName.endsWith("_smhq")){
-          metadataDiv.textContent = `Moon: ${run.moon} - Version: ${version}`;
+          versionDiv.textContent = `Moon: ${run.moon} - Version: ${version}`;
         } else if (collectionName.endsWith("_sdc")){
-          metadataDiv.textContent = `Moon: ${run.moon} - Scrap Type: ${run.scrapType} - Version: ${version}`;
+          versionDiv.textContent = `Moon: ${run.moon} - Scrap Type: ${run.scrapType} - Version: ${version}`;
         }else if (collectionName.endsWith("_hq")){
-          metadataDiv.textContent = `Version: ${version}`;
+          versionDiv.textContent = `Version: ${version}`;
         }
 
         if (!run.verified)
           {
-            metadataDiv.innerHTML += ` - <strong class="pending-color">Pending verification</strong>`;
+            versionDiv.innerHTML += ` - <strong class="pending-color">Pending verification</strong>`;
           }
+        metadataDiv.appendChild(versionDiv);
+
+        const dateDiv = document.createElement('div');
+        dateDiv.classList.add('run-date');
+        if (run.date){
+          const runMs = run.date.seconds * 1000;
+          const daysAgo = Math.round((runMs - Date.now()) / MS_PER_DAY);
+          const absoluteDays = Math.abs(daysAgo);
+          const rtf = new Intl.RelativeTimeFormat('en', {numeric: 'auto'});
+          let dateDisplay = '';
+          if (absoluteDays >= 365) {
+            const yearsAgo = Math.round(daysAgo / 365);
+            dateDisplay = rtf.format(yearsAgo, 'year');
+          } else if (absoluteDays >= 30) {
+            const monthsAgo = Math.round(daysAgo / 30);
+            dateDisplay = rtf.format(monthsAgo, 'month');
+          } else {
+            dateDisplay = rtf.format(daysAgo, 'day');
+          }
+          dateDiv.textContent = `${dateDisplay}`;
+        } else {
+          dateDiv.textContent = 'Unknown Date';
+        }
+        metadataDiv.appendChild(dateDiv);
+
         runDiv.appendChild(metadataDiv);
 
         const valueDiv = document.createElement('p');

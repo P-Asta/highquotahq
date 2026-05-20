@@ -20,6 +20,7 @@ a:hover {
 .content {
   max-width: 1200px;
   margin: auto;
+  margin-bottom: 50px;
   color: #fff;
   transition: all 0.3s ease;
   position: relative;
@@ -323,6 +324,16 @@ button:hover {
   color: #ddd;
   margin: 1px 0px; 
   text-align: left;
+  display: flex;
+  justify-content: space-between;
+}
+
+.run-version {
+  text-align: left;
+}
+
+.run-date {
+  text-align: right;
 }
 
 .run-value {
@@ -386,6 +397,7 @@ button:hover {
   right: 0;
   bottom: 0;
   padding: 20px;
+  margin-bottom: 50px;
   background-color: #1a1a1aa2;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);

@@ -443,7 +443,7 @@ export async function fetchUnverifiedRuns(role) {
                     } else if (collectionName.endsWith('_sdc')){
                         if (collectionName.startsWith('lc_modded_brutal')){
                             additionalDataElement.textContent = `${run.moon} - Collected: ${run.totalScrap}`;
-                        }else{s
+                        }else{
                             additionalDataElement.textContent = `${run.moon} - Collected: ${run.totalScrap} - Scrap Type: ${run.scrapType}`;
                         }
                         

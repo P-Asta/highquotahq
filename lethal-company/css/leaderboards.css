@@ -331,7 +331,7 @@
     display: flex;
     flex-direction: column;
     padding: 15px;
-    margin: 10px 0;
+    margin: 4px 0;
     background-color: rgba(45, 45, 45, 0.9);
     border: 1px solid #555;
     border-radius: 8px;
@@ -343,9 +343,26 @@
     transform: scale(1.01);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   }
+
+  .new-run-indicator {
+    background-color: #d70b;
+    padding: 8px;
+    border-radius: 16px;
+    font-size: .8rem;
+    position: absolute;
+    align-self: flex-end;
+  }
+
+  .run-placement {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
   
   .run-players {
-    font-size: 1.1rem;
+    font-size: 1.4rem;
     font-weight: bold;
     color: #f0f0f0;
     margin-bottom: 8px;
@@ -358,6 +375,8 @@
     margin-top: 5px;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
   }
 
   .run-version {

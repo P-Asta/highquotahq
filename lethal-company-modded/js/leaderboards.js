@@ -427,6 +427,21 @@ const displayLeaderboard = (runs) => {
     const runDiv = document.createElement('div');
     runDiv.classList.add('run-entry');
 
+    if (run.verifiedAt){
+      const runVerifiedMs = run.verifiedAt.seconds * 1000;
+      const daysAgoVerified = Math.round((runVerifiedMs - Date.now()) / MS_PER_DAY);
+      const absoluteVerifiedDays = Math.abs(daysAgoVerified);
+      if (absoluteVerifiedDays <= 60){
+        const newRunDiv = document.createElement('div');
+        newRunDiv.classList.add('new-run-indicator');
+        newRunDiv.textContent = 'NEW';
+        runDiv.appendChild(newRunDiv);
+      } 
+    }
+
+    const placementDiv = document.createElement('div');
+    placementDiv.classList.add('run-placement');
+
     const positionDiv = document.createElement('div');
     positionDiv.classList.add('run-position');
     positionDiv.textContent = `#${currentRank}`;
@@ -444,11 +459,10 @@ const displayLeaderboard = (runs) => {
       runDiv.classList.add('bronze-border');
     }
 
-    runDiv.appendChild(positionDiv);
+    placementDiv.appendChild(positionDiv);
 
     const playersDiv = document.createElement('div');
     playersDiv.classList.add('run-players');
-    playersDiv.textContent = `Players: `;
 
     run.players.forEach((player, i) => {
       const playerLink = document.createElement('a');
@@ -462,9 +476,11 @@ const displayLeaderboard = (runs) => {
         playersDiv.appendChild(document.createTextNode(', '));
       }
     });
-    runDiv.appendChild(playersDiv);
+    placementDiv.appendChild(playersDiv);
 
-    const metadataDiv = document.createElement('p');
+    runDiv.appendChild(placementDiv);
+
+    const metadataDiv = document.createElement('div');
     metadataDiv.classList.add('run-metadata');
     const versionDiv = document.createElement('div');
     versionDiv.classList.add('run-version');

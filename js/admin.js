@@ -124,8 +124,6 @@ const hideAllInterfaces = () => {
     recentVerifiedRunsSection.classList.remove("show");
 };
 
-
-
 // admin interface
 
 const assignRolesButton = document.getElementById('assign-roles-button');
@@ -345,25 +343,31 @@ export async function fetchUnverifiedRuns(role) {
     runListContainer.innerHTML = '';
     let displayNoRunsMessage = true;
 
-    for (const collectionName of collections){
-        const sectionHeader = document.createElement('h3');
-        sectionHeader.textContent = collectionDisplayNames[collectionName] || collectionName;
-        runListContainer.appendChild(sectionHeader);
-
-        const collectionContainer = document.createElement('div');
-        runListContainer.appendChild(collectionContainer);
-
+    const promises = collections.map(collectionName => {
         const runsRef = collection(db, collectionName); 
         const q = query(runsRef, where('verified', '==', false), orderBy('date', 'asc'));
+        return getDocs(q);
+    });
+
+    try {
+        const querySnapshots = await Promise.all(promises);
 
 
-        try {
-            const querySnapshot = await getDocs(q);
+        collections.forEach((collectionName, index) => {
+            const querySnapshot = querySnapshots[index];
+
             if (querySnapshot.empty){
-                sectionHeader.style.display = 'none';
-                collectionContainer.innerHTML = `<p>No pending runs.</p>`;
-                collectionContainer.style.display = 'none';
+                return;
             }
+
+            displayNoRunsMessage = false;
+
+            const sectionHeader = document.createElement('h3');
+            sectionHeader.textContent = collectionDisplayNames[collectionName] || collectionName;
+            runListContainer.appendChild(sectionHeader);
+
+            const collectionContainer = document.createElement('div');
+            runListContainer.appendChild(collectionContainer);
 
             querySnapshot.forEach((docSnapshot) => {
                     const run = docSnapshot.data();
@@ -381,81 +385,86 @@ export async function fetchUnverifiedRuns(role) {
                     runItem.setAttribute('data-run-id', runId);
                     runItem.setAttribute('data-collection', collectionName);
 
-                    let additionalInfo = '';
+                    const leftSide = document.createElement('div');
+                    leftSide.classList.add("runLeft");
+                    const rightSide = document.createElement('div');
+                    rightSide.classList.add("runRight");
 
-                    if (collectionName.endsWith('_hq')) {
-                        const quotaAmount = run.quotaAmount || 'N/A';
-                        const quotaFulfilled = run.quotaFulfilled || 'N/A';
-                        const quotaReached = run.quotaReached || 'N/A';
-                        const totalScrap = run.totalScrap || 'N/A';
+                    const playersElement = document.createElement('p');
+                    const additionalDataElement = document.createElement('p');
+                    const claimedByElement = document.createElement('p');
 
-                        additionalInfo = `
-                            <p><strong>Quota Amount:</strong> ${quotaAmount}</p>
-                            <p><strong>Quota Fulfilled:</strong> ${quotaFulfilled}</p>
-                            <p><strong>Quota Reached:</strong> ${quotaReached}</p>
-                            <p><strong>Total Scrap:</strong> ${totalScrap}</p>
-                        `;
-                    } else if (collectionName.endsWith('_sdc')) {
-                        const equipment = Array.isArray(run.equipment) ? run.equipment.join(', ') : (typeof run.equipment === 'string' ? run.equipment : '');
-                        const moon = run.moon || 'Unknown Moon';
-                        const scrapType = run.scrapType || 'Unknown Scrap Type';
-                        const totalScrap = run.totalScrap || 'N/A';
+                    const dateElement = document.createElement('p');
+                    const versionElement = document.createElement('p');
 
-                        additionalInfo = `
-                            <p><strong>Equipment:</strong> ${equipment}</p>
-                            <p><strong>Moon:</strong> ${moon}</p>
-                            <p><strong>Scrap Type:</strong> ${scrapType}</p>
-                            <p><strong>Total Scrap:</strong> ${totalScrap}</p>
-                        `;
-                    } else if (collectionName.endsWith('_smhq')) {
-                        const moon = run.moon || 'Unknown Moon';
-                        const quotaAmount = run.quotaAmount || 'N/A';
-                        const quotaFulfilled = run.quotaFulfilled || 'N/A';
-                        const quotaReached = run.quotaReached || 'N/A';
-                        const totalScrap = run.totalScrap || 'N/A';
+                    const claimButton = document.createElement('button');
 
-                        additionalInfo = `
-                            <p><strong>Moon:</strong> ${moon}</p>
-                            <p><strong>Quota Amount:</strong> ${quotaAmount}</p>
-                            <p><strong>Quota Fulfilled:</strong> ${quotaFulfilled}</p>
-                            <p><strong>Quota Reached:</strong> ${quotaReached}</p>
-                            <p><strong>Total Scrap:</strong> ${totalScrap}</p>
-                        `;
+                    const morePlayersCount = players.length - 2;
+                    if (morePlayersCount > 0){
+                        playersElement.textContent = `${players.slice(0, 2).join(', ')} + ` + morePlayersCount;
+                    }else {
+                        playersElement.textContent = `${players.slice(0, 2).join(', ')}`;
                     }
+                    leftSide.appendChild(playersElement);
+                    
+                    if (collectionName.endsWith('_hq')){
+                        additionalDataElement.textContent = `Quota ${run.quotaReached}: ${run.quotaAmount}`;
+                    } else if (collectionName.endsWith('_smhq')){
+                        additionalDataElement.textContent = `${run.moon} - Quota ${run.quotaReached}: ${run.quotaAmount}`;
+                    } else if (collectionName.endsWith('_sdc')){
+                        additionalDataElement.textContent = `${run.moon} - Collected: ${run.totalScrap} - Scrap Type: ${run.scrapType}`;
+                    }else {
+                        additionalDataElement.textContent = `Unknown category1! Please contact site-developers!`;
+                    }
+                    leftSide.appendChild(additionalDataElement);
 
-                    const runItemHTML = `
-                        <p><strong>Players:</strong> ${players.slice(0, 3).join(', ')}${players.length > 3 ? ' and more' : ''}</p>
-                        <p><strong>Date:</strong> ${date}</p>
-                        <p><strong>Version:</strong> ${version}</p>
-                        <p><strong>Claimed By:</strong> ${claimedBy}</p>
-                        ${additionalInfo}
-                    `;
-                    runItem.innerHTML = runItemHTML;
+                    versionElement.textContent = `${version}`;
+                    rightSide.appendChild(versionElement);
 
-                    if (!claimedBy || claimedBy == "Unclaimed") {
-                        const claimButton = document.createElement('button');
+                    dateElement.textContent = `${date}`;
+                    rightSide.appendChild(dateElement);
+
+                    if (!claimedBy || claimedBy == "Unclaimed"){
+                        claimedByElement.textContent = `Unclaimed`;
                         claimButton.innerText = 'Claim Run';
                         claimButton.classList.add('claim-button');
-                        claimButton.addEventListener('click', () => claimRun(runId, collectionName, role));
-                        runItem.appendChild(claimButton);
+                        claimButton.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            claimRun(runId, collectionName, role);
+                        });
+                        rightSide.appendChild(claimButton);
+                    }else{
+                        claimedByElement.textContent = `Claimed by ${claimedBy}`;
                     }
+                    leftSide.appendChild(claimedByElement);
+                    
+                    runItem.appendChild(leftSide);
+                    runItem.appendChild(rightSide);
                     
                     collectionContainer.appendChild(runItem);
 
                     runItem.addEventListener('click', () => {
                         showRunDetails(runId, collectionName, run, role);
                     });
-                    displayNoRunsMessage = false;
             });
-        } catch (error) {
-            console.error(`Error fetching unverified runs from ${collectionName}:`, error);
-        }
+        });
+    } catch (error) {
+        console.error(error);
+        const errorMessage = document.createElement('h3');
+        errorMessage.textContent = "Error trying to fetch pending runs! If this happens again, ask for help from managers or site developers!";
+        errorMessage.style = "color: #f44;";
+        displayNoRunsMessage = false;
+        runListContainer.appendChild(errorMessage);
     }
+
     if (displayNoRunsMessage){
         const noRunsMessage = document.createElement('h3');
-        noRunsMessage.textContent = "No runs pending!";
+        noRunsMessage.textContent = "No pending runs.";
         runListContainer.appendChild(noRunsMessage);
     }
+
+
+
 }
 
 export function showRunDetails(runId, collectionName, run, role) {

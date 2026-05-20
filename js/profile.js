@@ -91,7 +91,7 @@ onAuthStateChanged(auth, async (user) => {
       const rolesDisplay = document.createElement('div');
       rolesDisplay.id = "roles-display";
       rolesDisplay.classList.add("roles-display");
-      rolesDisplay.innerHTML = orderedRoles.filter(role => userData.roles.includes(role)).map(role => `<p class="role" style="color: ${roleColors[role]}">${roleMap[role]}</p>`).join('');
+      rolesDisplay.innerHTML = orderedRoles.filter(role => userData.roles.includes(role)).map(role => `<p class="role" style="color: ${roleColors[role]};">${roleMap[role]}</p>`).join('');
       profileDetailsSection.appendChild(rolesDisplay);
     }
 
@@ -298,7 +298,7 @@ async function displayPlayerRuns(username) {
   } catch (error) {
     console.error(error);
     runsContainer.classList.remove("disabled");
-    runsContainer.innerHTML = `<p style="color: #f55">There was an error while loading runs. Reload page to try again. Contact us if issues persist.</p>`;
+    runsContainer.innerHTML = `<p style="color: #f55; font-size: 30px;">There was an error while loading runs. Reload page to try again. Contact us if issues persist.</p>`;
   }
 
 }

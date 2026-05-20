@@ -195,10 +195,6 @@ button:hover {
   text-decoration: underline;
 }
 
-.runRight {
-  text-align: right;
-}
-
 /* Modal Styles */
 .modal {
   display: none;

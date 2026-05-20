@@ -298,6 +298,14 @@ const unbanUser = async () => {
 
 // verifier interface
 
+const LATE_THRESHOLDS = [28, 42, 56, 70];
+const THRESHOLD_COLORS = {
+    28: '#dd8',
+    42: '#d86',
+    56: '#d53',
+    70: '#d22'
+}
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
 export async function fetchUnverifiedRuns(role) {
 
@@ -375,7 +383,13 @@ export async function fetchUnverifiedRuns(role) {
                     const claimedBy = run.claimedBy || 'Unclaimed';
 
                     const players = run.players || ['Unknown Player'];
-                    const date = run.date ? new Date(run.date.seconds * 1000).toLocaleString() : 'Unknown Date';
+                    const runMs = run.date.seconds * 1000;
+                    const daysAgo = Math.round((runMs - Date.now()) / MS_PER_DAY);
+                    const ageInDays = (Date.now() - (runMs)) / MS_PER_DAY;
+                    const runDateThreshold = LATE_THRESHOLDS.findLast(t => ageInDays >= t) || null;
+
+                    const rtf = new Intl.RelativeTimeFormat('en', {numeric: 'auto'});
+                    const dateDisplay = rtf.format(daysAgo, 'day');
                     const version = run.version || 'Unknown Version';
                     const videos = run.videos || {};
 
@@ -401,7 +415,10 @@ export async function fetchUnverifiedRuns(role) {
 
                     const morePlayersCount = players.length - 2;
                     if (morePlayersCount > 0){
-                        playersElement.textContent = `${players.slice(0, 2).join(', ')} + ` + morePlayersCount;
+                        const playerCountSpanElement = document.createElement('span');
+                        playerCountSpanElement.textContent = ` + ${morePlayersCount} more`;
+                        playersElement.textContent = `${players.slice(0, 2).join(', ')}`;
+                        playersElement.appendChild(playerCountSpanElement);
                     }else {
                         playersElement.textContent = `${players.slice(0, 2).join(', ')}`;
                     }
@@ -421,7 +438,10 @@ export async function fetchUnverifiedRuns(role) {
                     versionElement.textContent = `${version}`;
                     rightSide.appendChild(versionElement);
 
-                    dateElement.textContent = `${date}`;
+                    dateElement.textContent = `${dateDisplay}`;
+                    if (runDateThreshold !== null){
+                        dateElement.style = `color: ${THRESHOLD_COLORS[runDateThreshold]};`;
+                    }
                     rightSide.appendChild(dateElement);
 
                     if (!claimedBy || claimedBy == "Unclaimed"){

@@ -247,8 +247,11 @@
     font-family: 'systematic_jcool';
     font-weight: normal;
     font-style: normal;
-    font-size: 14px;
-    line-height: 1.4;
+    font-size: 0.8em;
+}
+
+.runRight {
+  text-align: right;
 }
 
 /* input fields */

@@ -449,7 +449,7 @@ export function showRunDetails(run, index, collectionName) {
     const runPendingDiv = detailsPanel.querySelector('.pending-verification');
     const runClaimedAt = document.createElement('p');
     runClaimedAt.classList.add('pending-claimed');
-    runClaimedAt.textContent = `Claimed at ${formatTimestamp(run.claimedAt)}`;
+    runClaimedAt.textContent = `A verifier has claimed this run for verification at ${formatTimestamp(run.claimedAt)}`;
     runPendingDiv.appendChild(runClaimedAt);
   }
 

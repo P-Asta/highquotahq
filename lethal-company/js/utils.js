@@ -1,5 +1,5 @@
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-import { doc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { doc, getDoc, getDocs, query, collection, updateDoc, deleteDoc, orderBy, limit, startAt, endAt } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 import { db, auth } from "./firebase.js"; // Ensure this points to your Firebase setup
 
 export function loadNavbar(onLoadedCallback) {
@@ -70,6 +70,63 @@ export function loadNavbar(onLoadedCallback) {
 
               // Collapse the dropdown
               dropdown.classList.remove('active');
+            }
+          });
+        }
+
+        function debounce(func, delay){
+          let timeoutId;
+          return function (...args){
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => func.apply(this, args), delay);
+          };
+        }
+
+        const searchBar = document.getElementById('user-search-input');
+        const resultsList = document.getElementById('user-results-dropdown');
+        if (searchBar){
+          searchBar.addEventListener('input', debounce(async (e) => {
+            const searchTerm = e.target.value.trim().toLowerCase();
+
+            if (searchTerm.length < 3){
+              resultsList.innerHTML = '';
+              return;
+            }
+            try {
+              const usersRef = collection(db, "users");
+              const q = query(usersRef, orderBy("usernameLower"), startAt(searchTerm), endAt(searchTerm + "\uf8ff"), limit(10));
+
+              const querySnapshot = await getDocs(q);
+              resultsList.innerHTML = '';
+
+              querySnapshot.forEach((doc) => {
+                const userData = doc.data();
+                const username = userData.username;
+
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = `/pages/profile.html?username=${encodeURIComponent(username)}`;
+                a.textContent = username;
+
+                li.appendChild(a);
+                resultsList.appendChild(li);
+              });
+            }catch (error){
+              console.error("Error fetching usernames: ", error);
+            }
+          }, 500));
+          document.addEventListener('click', (event) => {
+            const searchContainer = document.querySelector('.search-container');
+            const resultsList = document.getElementById('user-results-dropdown');
+
+            if (!searchContainer.contains(event.target)){
+              resultsList.innerHTML = '';
+            }
+          });
+          document.addEventListener('keydown', (event) => {
+            if (event.key === "Escape"){
+              document.getElementById('user-results-dropdown').innerHTML = '';
+              document.getElementById('user-search-input').blur();
             }
           });
         }

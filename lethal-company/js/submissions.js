@@ -8,6 +8,7 @@ const playersContainer = document.getElementById('playerFields');
 const addPlayerBtn = document.getElementById('addPlayerBtn');
 
 let totalPlayerBlocks = 0;
+let loggedPlayerName = '';
 const MAX_PLAYERS = 4;
 const MAX_VIDEOS_PER_PLAYER = 9;
 
@@ -26,7 +27,7 @@ function createPlayerBlock(defaultUsername = "", isPrimary = false){
     <div class="player-header">
       
       <div class="search-wrapper" style="position: relative; display: inline-block; width: 200px;">
-        <label>Player ${totalPlayerBlocks+1} name:</label>
+        <label>Player ${totalPlayerBlocks+1} Name:</label>
         <input type="text" class="player-input" value="${defaultUsername}" autocomplete="off" required>
         
         <ul class="results-dropdown" style="display: none;"></ul>
@@ -119,22 +120,31 @@ document.getElementById("runSubmissionForm").addEventListener("submit", async (e
   const leaderboardType = document.getElementById("leaderboardType").value;
   const date = document.getElementById("date").value;
   
-  // Collect players (up to 4)
-  const players = [
-    document.getElementById("player1").value.trim(),
-    document.getElementById("player2").value.trim(),
-    document.getElementById("player3").value.trim(),
-    document.getElementById("player4").value.trim(),
-  ].filter(player => player); // Remove empty fields
+  let players = []
+  document.querySelectorAll('.player-input').forEach(player => {
+    if (player){
+      players.push(player.value.trim());
+    }
+  });
   
   const version = document.getElementById("version").value.trim();
   
   // Handle video inputs for each player
   const videos = {};
-  players.forEach((player, index) => {
-    const videosInput = document.getElementById(`videos${index + 1}`).value.trim();
-    if (videosInput) {
-      videos[player] = videosInput.split(",").map(v => v.trim()); // Split videos by commas
+  document.querySelectorAll('.player-block').forEach(playerBlock => {
+    if (playerBlock.querySelector('.video-url-input')){
+      const playerName = playerBlock.querySelector('.player-input').value;
+      if (playerName){
+        let videoInputs = [];
+        playerBlock.querySelectorAll('.video-url-input').forEach(videoInput => {
+          if (videoInput.value){
+            videoInputs.push(videoInput.value.trim());
+          }
+        });
+        videos[playerName.trim()] = videoInputs;
+      }else{
+        alert("Please input player name.");
+      }
     }
   });
 
@@ -144,9 +154,12 @@ document.getElementById("runSubmissionForm").addEventListener("submit", async (e
 
   const publicComments = document.getElementById("publicComments").value;
 
+  const submitter = loggedPlayerName;
+
   let runData = {
     date: new Date(date),
     submissionDate: new Date(Date.now()),
+    submitter,
     players,
     version,
     videos,
@@ -190,6 +203,10 @@ document.getElementById("runSubmissionForm").addEventListener("submit", async (e
     await addDoc(leaderboardRef, runData);
     alert("Run submitted successfully!");
     document.getElementById("runSubmissionForm").reset();
+    const playerFields = document.getElementById('playerFields');
+    playerFields.innerHTML = '';
+    totalPlayerBlocks = 0;
+    createPlayerBlock(loggedPlayerName, true);
   } catch (error) {
     console.error("Error submitting run:", error);
     alert("There was an error submitting your run. Please try again.");
@@ -296,6 +313,7 @@ onAuthStateChanged(auth, (user) => {
       if (docSnapshot.exists()){
         const userData = docSnapshot.data();
         document.querySelector('.player-input').value = userData.username;
+        loggedPlayerName = userData.username;
       }
     });
   } else {

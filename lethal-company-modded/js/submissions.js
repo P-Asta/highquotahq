@@ -175,14 +175,18 @@ document.getElementById("runSubmissionForm").addEventListener("submit", async (e
 
   const comments = document.getElementById("comments").value;
 
+  const publicComments = document.getElementById("publicComments").value;
+
   let runData = {
     date: new Date(date),
+    submissionDate: new Date(Date.now()),
     players,
     version,
     videos,
     verified: false,
     logs,
     comments,
+    publicComments
   };
 
   // Add leaderboard-specific fields

@@ -324,6 +324,7 @@ footer {
     margin-bottom: 0px;
     background-color: #ddd;
     box-shadow: inset -2px -2px 6px rgba(0, 0, 0, 0.5);
+    color: #222;
 }
 
 #user-search-input:focus-within {

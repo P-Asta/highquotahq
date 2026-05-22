@@ -146,19 +146,6 @@ button[type="submit"]:hover {
   }
 }
 
-body,
-h3,
-label,
-input,
-textarea,
-select,
-button {
-  font-family: 'systematic_jcool';
-  font-weight: normal;
-  font-style: normal;
-  font-weight: bold;
-}
-
 /* Placeholder text styling */
 input::placeholder,
 textarea::placeholder {

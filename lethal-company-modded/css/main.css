@@ -11,8 +11,6 @@
 body {
     color: white;
     font-family: 'systematic_jcool';
-    src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-         url('/assets/fonts/9systema-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
     margin: 0;
@@ -126,8 +124,6 @@ footer {
     box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
     font-family: 'systematic_jcool';
-    src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-         url('/assets/fonts/9systema-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
     border-radius: 10px;
@@ -327,6 +323,7 @@ footer {
     margin-bottom: 0px;
     background-color: #ddd;
     box-shadow: inset -2px -2px 6px rgba(0, 0, 0, 0.5);
+    color: #222;
 }
 
 #user-search-input:focus-within {

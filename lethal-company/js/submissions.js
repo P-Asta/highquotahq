@@ -1,94 +1,189 @@
 import { loadNavbar } from './utils.js';
 import { handleAuthButtons } from './auth.js';
-import { doc, getDoc, setDoc, collection, addDoc } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
-import {  } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+import { doc, getDoc, setDoc, collection, addDoc, orderBy, limit, startAt, endAt, query, getDocs } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
 import { auth, db } from './firebase.js';
 
+const playersContainer = document.getElementById('playerFields');
+const addPlayerBtn = document.getElementById('addPlayerBtn');
+
+let totalPlayerBlocks = 0;
+const MAX_PLAYERS = 4;
+const MAX_VIDEOS_PER_PLAYER = 9;
+
+function createPlayerBlock(defaultUsername = "", isPrimary = false){
+  if (!isPrimary && totalPlayerBlocks >= MAX_PLAYERS){
+    alert("Max playercount is 4!");
+    return;
+  }
+
+  const playerIndex = Date.now();
+  const playerBlock = document.createElement('div');
+  playerBlock.className = 'player-block';
+  playerBlock.setAttribute('data-player-id', playerIndex);
+
+  playerBlock.innerHTML = `
+    <div class="player-header">
+      
+      <div class="search-wrapper" style="position: relative; display: inline-block; width: 200px;">
+        <label>Player ${totalPlayerBlocks+1} name:</label>
+        <input type="text" class="player-input" value="${defaultUsername}" autocomplete="off" required>
+        
+        <ul class="results-dropdown" style="display: none;"></ul>
+      </div>
+
+      ${!isPrimary ? `<button type="button" class="remove-player-btn">Remove player</button>` : ''}
+    </div>
+    
+    <div class="videos-section" style="margin-left: 20px; padding: 10px;">
+      <label>Player ${totalPlayerBlocks+1} Videos</label>
+      <div class="videos-list-container">
+        <div class="video-input-wrapper">
+          <input type="url" class="video-url-input" placeholder="https://video-link.com" required>
+          ${!isPrimary ? `<button type="button" class="remove-first-video-btn">X</button>` : ''}
+        </div>
+      </div>
+      <button type="button" class="add-video-btn">+ Add another video 🎥</button>
+    </div>
+  `;
+
+  playersContainer.appendChild(playerBlock);
+  totalPlayerBlocks++;
+
+  const removePlayerBtn = playerBlock.querySelector('.remove-player-btn');
+  const addVideoBtn = playerBlock.querySelector('.add-video-btn');
+  const videoListContainer = playerBlock.querySelector('.videos-list-container');
+  const removeFirstVideoBtn = playerBlock.querySelector('.remove-first-video-btn');
+
+  if (removePlayerBtn){
+    removePlayerBtn.addEventListener('click', () => {
+      playerBlock.remove();
+      totalPlayerBlocks--;
+    });
+  }
+
+  if (removeFirstVideoBtn) {
+    removeFirstVideoBtn.addEventListener('click', () => {
+      removeFirstVideoBtn.closest('.video-input-wrapper').remove();
+    })
+  }
+
+  addVideoBtn.addEventListener('click', () => {
+    const currentVideoCount = videoListContainer.querySelectorAll('.video-url-input').length;
+
+    if (currentVideoCount >= 10) {
+      alert("You're limited to 10 videos per player.");
+      return;
+    }
+
+    const videoWrapper = document.createElement('div');
+    videoWrapper.className = 'video-input-wrapper';
+    videoWrapper.innerHTML = `
+      <input type="url" class="video-url-input" placeholder="https://video-link.com" required>
+      <button type="button" class="remove-video-btn">X</button>
+    `;
+
+    videoListContainer.appendChild(videoWrapper);
+
+    videoWrapper.querySelector('.remove-video-btn').addEventListener('click', () => {
+      videoWrapper.remove();
+    });
+  });
+}
+
+addPlayerBtn.addEventListener('click', () => {
+  createPlayerBlock('', false);
+});
+0
 document.getElementById("leaderboardType").addEventListener("change", (event) => {
-    const hqFields = document.getElementById("hqFields");
-    const sdcFields = document.getElementById("sdcFields");
-    const smhqFields = document.getElementById("smhqFields");
+  const hqFields = document.getElementById("hqFields");
+  const sdcFields = document.getElementById("sdcFields");
+  const smhqFields = document.getElementById("smhqFields");
+
+  hqFields.style.display = "none";
+  sdcFields.style.display = "none";
+  smhqFields.style.display = "none";
+
+  if (event.target.value === "leaderboards_hq") {
+    hqFields.style.display = "block";
+  } else if (event.target.value === "leaderboards_sdc") {
+    sdcFields.style.display = "block";
+  } else if (event.target.value === "leaderboards_smhq") {
+    smhqFields.style.display = "block";
+  }
+});
   
-    hqFields.style.display = "none";
-    sdcFields.style.display = "none";
-    smhqFields.style.display = "none";
+document.getElementById("runSubmissionForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const leaderboardType = document.getElementById("leaderboardType").value;
+  const date = document.getElementById("date").value;
   
-    if (event.target.value === "leaderboards_hq") {
-      hqFields.style.display = "block";
-    } else if (event.target.value === "leaderboards_sdc") {
-      sdcFields.style.display = "block";
-    } else if (event.target.value === "leaderboards_smhq") {
-      smhqFields.style.display = "block";
+  // Collect players (up to 4)
+  const players = [
+    document.getElementById("player1").value.trim(),
+    document.getElementById("player2").value.trim(),
+    document.getElementById("player3").value.trim(),
+    document.getElementById("player4").value.trim(),
+  ].filter(player => player); // Remove empty fields
+  
+  const version = document.getElementById("version").value.trim();
+  
+  // Handle video inputs for each player
+  const videos = {};
+  players.forEach((player, index) => {
+    const videosInput = document.getElementById(`videos${index + 1}`).value.trim();
+    if (videosInput) {
+      videos[player] = videosInput.split(",").map(v => v.trim()); // Split videos by commas
     }
   });
-  
-  document.getElementById("runSubmissionForm").addEventListener("submit", async (event) => {
-    event.preventDefault();
-  
-    const leaderboardType = document.getElementById("leaderboardType").value;
-    const date = document.getElementById("date").value;
-    
-    // Collect players (up to 4)
-    const players = [
-      document.getElementById("player1").value.trim(),
-      document.getElementById("player2").value.trim(),
-      document.getElementById("player3").value.trim(),
-      document.getElementById("player4").value.trim(),
-    ].filter(player => player); // Remove empty fields
-    
-    const version = document.getElementById("version").value.trim();
-    
-    // Handle video inputs for each player
-    const videos = {};
-    players.forEach((player, index) => {
-      const videosInput = document.getElementById(`videos${index + 1}`).value.trim();
-      if (videosInput) {
-        videos[player] = videosInput.split(",").map(v => v.trim()); // Split videos by commas
-      }
-    });
 
-    const logs = document.getElementById("logs").value;
+  const logs = document.getElementById("logs").value;
 
-    const comments = document.getElementById("comments").value;
-  
-    let runData = {
-      date: new Date(date),
-      players,
-      version,
-      videos,
-      verified: false,
-      logs,
-      comments,
+  const comments = document.getElementById("comments").value;
+
+  const publicComments = document.getElementById("publicComments").value;
+
+  let runData = {
+    date: new Date(date),
+    submissionDate: new Date(Date.now()),
+    players,
+    version,
+    videos,
+    verified: false,
+    logs,
+    comments,
+    publicComments
+  };
+
+  // Add leaderboard-specific fields
+  if (leaderboardType === "leaderboards_hq") {
+    runData = {
+      ...runData,
+      quotaAmount: parseInt(document.getElementById("quotaAmount").value, 10),
+      quotaFulfilled: parseInt(document.getElementById("quotaFulfilled").value, 10),
+      quotaReached: parseInt(document.getElementById("quotaReached").value, 10),
+      totalScrap: parseInt(document.getElementById("totalScrap").value, 10),
     };
-  
-    // Add leaderboard-specific fields
-    if (leaderboardType === "leaderboards_hq") {
-      runData = {
-        ...runData,
-        quotaAmount: parseInt(document.getElementById("quotaAmount").value, 10),
-        quotaFulfilled: parseInt(document.getElementById("quotaFulfilled").value, 10),
-        quotaReached: parseInt(document.getElementById("quotaReached").value, 10),
-        totalScrap: parseInt(document.getElementById("totalScrap").value, 10),
-      };
-    } else if (leaderboardType === "leaderboards_sdc") {
-      runData = {
-        ...runData,
-        moon: document.getElementById("moon").value.trim(),
-        scrapType: document.getElementById("scrapType").value.trim(),
-        totalScrap: parseInt(document.getElementById("totalScrapSDC").value, 10),
-        equipment: document.getElementById("equipment").value.trim().split(",").map(item => item.trim()), // Split input into an array
-      };
-    } else if (leaderboardType === "leaderboards_smhq") {
-      runData = {
-        ...runData,
-        moon: document.getElementById("moonSMHQ").value.trim(),
-        quotaAmount: parseInt(document.getElementById("quotaAmountSMHQ").value, 10),
-        quotaFulfilled: parseInt(document.getElementById("quotaFulfilledSMHQ").value, 10),
-        quotaReached: parseInt(document.getElementById("quotaReachedSMHQ").value, 10),
-        totalScrap: parseInt(document.getElementById("totalScrapSMHQ").value, 10),
-      };
-    }
-  
+  } else if (leaderboardType === "leaderboards_sdc") {
+    runData = {
+      ...runData,
+      moon: document.getElementById("moon").value.trim(),
+      scrapType: document.getElementById("scrapType").value.trim(),
+      totalScrap: parseInt(document.getElementById("totalScrapSDC").value, 10),
+      equipment: document.getElementById("equipment").value.trim().split(",").map(item => item.trim()), // Split input into an array
+    };
+  } else if (leaderboardType === "leaderboards_smhq") {
+    runData = {
+      ...runData,
+      moon: document.getElementById("moonSMHQ").value.trim(),
+      quotaAmount: parseInt(document.getElementById("quotaAmountSMHQ").value, 10),
+      quotaFulfilled: parseInt(document.getElementById("quotaFulfilledSMHQ").value, 10),
+      quotaReached: parseInt(document.getElementById("quotaReachedSMHQ").value, 10),
+      totalScrap: parseInt(document.getElementById("totalScrapSMHQ").value, 10),
+    };
+  }
+
   // Use modular SDK syntax to add the document
   try {
     const leaderboardRef = collection(db, leaderboardType);
@@ -101,7 +196,109 @@ document.getElementById("leaderboardType").addEventListener("change", (event) =>
   }
 });
   
+document.addEventListener('DOMContentLoaded', () => {
+  createPlayerBlock('', true);
 
-document.addEventListener('DOMContentLoaded', function() {
-    loadNavbar(handleAuthButtons);
+  loadNavbar(handleAuthButtons);
+});
+
+function debounce(func, delay){
+  let timeoutId;
+  return function (...args){
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+
+document.addEventListener('input', debounce(async (e) => {
+  if (!e.target.classList.contains('player-input')) return;
+
+  const inputField = e.target;
+  const wrapper = inputField.closest('.search-wrapper');
+  const localDropdown = wrapper.querySelector('.results-dropdown');
+  const searchTerm = inputField.value.trim().toLowerCase();
+
+  if (searchTerm.length < 3){
+    localDropdown.innerHTML = '';
+    localDropdown.style.display = 'none';
+    return;
+  }
+
+  try {
+    const usersRef = collection(db, 'users');
+    const q = query(
+      usersRef,
+      orderBy('usernameLower'),
+      startAt(searchTerm),
+      endAt(searchTerm + "\uf8ff"),
+      limit(10)
+    );
+
+    const querySnapshot = await getDocs(q);
+    localDropdown.innerHTML = '';
+
+    if (querySnapshot.empty) {
+      localDropdown.style.display = 'none';
+      return;
+    }
+
+    querySnapshot.forEach((doc) => {
+      const userData = doc.data();
+      const username = userData.username;
+
+      const li = document.createElement('li');
+      li.style.padding = "8px 12px";
+      li.style.cursor = "pointer";
+      li.className = "suggestion-item";
+      li.textContent = username;
+
+      li.addEventListener('click', () => {
+        inputField.value = username;
+        localDropdown.innerHTML = '';
+        localDropdown.style.display = 'none';
+      });
+
+      localDropdown.appendChild(li);
+    });
+
+    localDropdown.style.display = 'block';
+    
+  } catch (error) {
+    console.error("Error matching usernames: ", error);
+  }
+}, 500));
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.search-wrapper')){
+    document.querySelectorAll('.results-dropdown').forEach(dropdown => {
+      dropdown.innerHTML = '';
+      dropdown.style.display = 'none';
+    });
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape'){
+    document.querySelectorAll('.results-dropdown').forEach(dropdown => {
+      dropdown.innerHTML = '';
+      dropdown.style.display = 'none';
+    });
+    if (document.activeElement.classList.contains('player-input')) {
+      document.activeElement.blur();
+    }
+  }
+});
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const userDocRef = doc(db, 'users', user.uid);
+    getDoc(userDocRef).then((docSnapshot) => {
+      if (docSnapshot.exists()){
+        const userData = docSnapshot.data();
+        document.querySelector('.player-input').value = userData.username;
+      }
+    });
+  } else {
+    console.log("No user authenticated");
+  }
 });

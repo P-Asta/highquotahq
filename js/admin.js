@@ -28,14 +28,14 @@ function loadAdminInterface(user) {
                     adminBtn.textContent = "Admin";
                     sidebar.appendChild(adminBtn);
                 }
-                if (roles.includes('verifier') || roles.includes('site-developer')) {
+                if (roles.includes('verifier') || roles.includes('site-developer') || roles.includes('admin')) {
                     const verifierBtn = document.createElement("button");
                     verifierBtn.id = "verifier-btn";
                     verifierBtn.classList.add("sidebar-btn");
                     verifierBtn.textContent = "Verifier";
                     sidebar.appendChild(verifierBtn);
                 }
-                if (roles.includes('modded-verifier') || roles.includes('site-developer')) {
+                if (roles.includes('modded-verifier') || roles.includes('site-developer') || roles.includes('admin')) {
                     const moddedVerifierBtn = document.createElement("button");
                     moddedVerifierBtn.id = "modded-verifier-btn";
                     moddedVerifierBtn.classList.add("sidebar-btn");

@@ -174,12 +174,7 @@ export function loadNavbar(onLoadedCallback) {
 
             // Show logout button and hide login button
             if (loginButton) loginButton.setAttribute('hidden', true); // Hide login button
-            if (logoutButton) {
-              logoutButton.removeAttribute('hidden'); // Show logout button
-              logoutButton.addEventListener('click', () => {
-                auth.signOut().then(() => window.location.reload());
-              });
-            }
+            if (logoutButton) logoutButton.removeAttribute('hidden'); // Show logout button
           } else {
             // User is not logged in; show login button and hide logout button
             if (loginButton) loginButton.removeAttribute('hidden'); // Show login button

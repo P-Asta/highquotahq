@@ -157,12 +157,7 @@ export function loadNavbar(onLoadedCallback) {
             }
 
             if (loginButton) loginButton.setAttribute('hidden', true);
-            if (logoutButton) {
-              logoutButton.removeAttribute('hidden');
-              logoutButton.addEventListener('click', () => {
-                auth.signOut().then(() => window.location.reload());
-              });
-            }
+            if (logoutButton) logoutButton.removeAttribute('hidden');
           } else {
             if (loginButton) loginButton.removeAttribute('hidden');
             if (logoutButton) logoutButton.setAttribute('hidden', true);

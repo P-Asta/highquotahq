@@ -1,21 +1,21 @@
 <nav class="navbar">
-    <!-- dropdown container -->
-    <div class="dropdown">
-      <button class="dropdown-button">
-          <img src="/assets/high-quota-logo.png" alt="High Quota HQ" class="logo" />
-      </button>
-      <ul class="dropdown-menu" hidden>
-              <!-- home button -->
-      <li data-home="true">
-        <img src="/assets/high-quota-logo.png" alt="Home" class="dropdown-logo" />
-      </li>
-          <li data-game="lethal-company" data-logo="/assets/lethal-company-logo.png">
-              <img src="/assets/lethal-company-logo.png" alt="Lethal Company" class="dropdown-logo" />
-          </li>
-          <li data-game="lethal-company-modded" data-logo="/assets/lethal-company-modded-logo.png">
-              <img src="/assets/lethal-company-modded-logo.png" alt="Lethal Company Modded" class="dropdown-logo" />
-          </li>
-      </ul>
+  <!-- dropdown container -->
+  <div class="dropdown">
+    <button class="dropdown-button">
+        <img src="/assets/high-quota-logo.png" alt="High Quota HQ" class="logo" />
+    </button>
+    <ul class="dropdown-menu" hidden>
+            <!-- home button -->
+    <li data-home="true">
+      <img src="/assets/high-quota-logo.png" alt="Home" class="dropdown-logo" />
+    </li>
+        <li data-game="lethal-company" data-logo="/assets/lethal-company-logo.png">
+            <img src="/assets/lethal-company-logo.png" alt="Lethal Company" class="dropdown-logo" />
+        </li>
+        <li data-game="lethal-company-modded" data-logo="/assets/lethal-company-modded-logo.png">
+            <img src="/assets/lethal-company-modded-logo.png" alt="Lethal Company Modded" class="dropdown-logo" />
+        </li>
+    </ul>
   </div>
   <ul>
     <li><button id="home-button">Home</button></li>
@@ -35,3 +35,12 @@
     
   </ul>
 </nav>
+<div class="logout-confirmation logout-hidden" id="logout-confirmation">
+  <div class="confirm-box">
+    <p>Logout?</p>
+    <div class="logout-buttons">
+      <button id="cancel-logout" class="logout-cancel-button">Cancel</button>
+      <button id="confirm-logout" class="logout-confirm-button">Logout</button>
+    </div>
+  </div>
+</div>

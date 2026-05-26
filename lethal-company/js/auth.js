@@ -5,36 +5,42 @@ import { auth, db } from './firebase.js';
 function handleAuthButtons() {
     const loginButton = document.getElementById('login-button');
     const logoutButton = document.getElementById('logout-button');
-  
+    const logoutConfirmationBox = document.getElementById('logout-confirmation');
+    const logoutConfirmButton = document.getElementById('confirm-logout');
+    const logoutCancelButton = document.getElementById('cancel-logout');
+
     if (!loginButton || !logoutButton) {
       console.error('Login or Logout button not found!');
       return;
     }
   
-    // Redirect to login page when login button is clicked
     loginButton.addEventListener('click', () => {
       window.location.href = '/pages/login.html';
     });
   
-    // Listen for auth state changes
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        // User is logged in
         loginButton.style.display = 'none';
         logoutButton.style.display = 'block';
       } else {
-        // User is logged out
         loginButton.style.display = 'block';
         logoutButton.style.display = 'none';
       }
     });
   
-    // Logout functionality
     logoutButton.addEventListener('click', () => {
+      logoutConfirmationBox.classList.remove('logout-hidden');
+    });
+
+    logoutCancelButton.addEventListener('click', () => {
+      logoutConfirmationBox.classList.add('logout-hidden');
+    });
+
+    logoutConfirmButton.addEventListener('click', () => {
       signOut(auth)
         .then(() => {
           console.log('User logged out');
-          window.location.href = '/'; // Redirect to home page after logout
+          window.location.href = '/';
         })
         .catch((error) => {
           console.error('Error logging out:', error);

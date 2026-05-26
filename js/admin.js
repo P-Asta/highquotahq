@@ -1,7 +1,7 @@
 import { loadNavbar } from './utils.js';
 import { handleAuthButtons } from './auth.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-import { doc, getDoc, getDocs, collection, query, where, updateDoc, Timestamp, orderBy, limit, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { doc, getDoc, getDocs, collection, query, where, updateDoc, Timestamp, orderBy, limit, deleteDoc, writeBatch, startAt, endAt } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 import { db, auth } from "./firebase.js";
 
 
@@ -934,4 +934,89 @@ document.addEventListener('DOMContentLoaded', function() {
     removeRoleButton.addEventListener('click', removeRole);
     banUserButton.addEventListener('click', banUser);
     unbanUserButton.addEventListener('click', unbanUser);
+});
+
+function debounce(func, delay){
+  let timeoutId;
+  return function (...args){
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+
+document.addEventListener('input', debounce(async (e) => {
+  if (!e.target.classList.contains('username-input')) return;
+
+  const inputField = e.target;
+  const wrapper = inputField.closest('.username-input-group');
+  const localDropdown = wrapper.querySelector('.results-dropdown');
+  const searchTerm = inputField.value.trim().toLowerCase();
+
+  if (searchTerm.length < 2){
+    localDropdown.innerHTML = '';
+    localDropdown.style.display = 'none';
+    return;
+  }
+
+  try {
+    const usersRef = collection(db, 'users');
+    const q = query(
+      usersRef,
+      orderBy('usernameLower'),
+      startAt(searchTerm),
+      endAt(searchTerm + "\uf8ff"),
+      limit(10)
+    );
+
+    const querySnapshot = await getDocs(q);
+    localDropdown.innerHTML = '';
+
+    if (querySnapshot.empty) {
+      localDropdown.style.display = 'none';
+      return;
+    }
+
+    querySnapshot.forEach((doc) => {
+      const userData = doc.data();
+      const username = userData.username;
+
+      const li = document.createElement('li');
+      li.className = "suggestion-item";
+      li.textContent = username;
+
+      li.addEventListener('click', () => {
+        inputField.value = username;
+        localDropdown.innerHTML = '';
+        localDropdown.style.display = 'none';
+      });
+
+      localDropdown.appendChild(li);
+    });
+
+    localDropdown.style.display = 'block';
+    
+  } catch (error) {
+    console.error("Error matching usernames: ", error);
+  }
+}, 500));
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.search-wrapper')){
+    document.querySelectorAll('.results-dropdown').forEach(dropdown => {
+      dropdown.innerHTML = '';
+      dropdown.style.display = 'none';
+    });
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape'){
+    document.querySelectorAll('.results-dropdown').forEach(dropdown => {
+      dropdown.innerHTML = '';
+      dropdown.style.display = 'none';
+    });
+    if (document.activeElement.classList.contains('username-input')) {
+      document.activeElement.blur();
+    }
+  }
 });

@@ -26,7 +26,7 @@ function createPlayerBlock(defaultUsername = "", isPrimary = false){
   playerBlock.innerHTML = `
     <div class="player-header">
       
-      <div class="search-wrapper" style="position: relative; display: inline-block; width: 200px;">
+      <div class="search-wrapper">
         <label>Player ${totalPlayerBlocks+1} Name:</label>
         <input type="text" class="player-input" value="${defaultUsername}" autocomplete="off" required>
         
@@ -95,7 +95,7 @@ function createPlayerBlock(defaultUsername = "", isPrimary = false){
 addPlayerBtn.addEventListener('click', () => {
   createPlayerBlock('', false);
 });
-0
+
 document.getElementById("leaderboardType").addEventListener("change", (event) => {
   const hqFields = document.getElementById("hqFields");
   const sdcFields = document.getElementById("sdcFields");
@@ -264,8 +264,6 @@ document.addEventListener('input', debounce(async (e) => {
       const username = userData.username;
 
       const li = document.createElement('li');
-      li.style.padding = "8px 12px";
-      li.style.cursor = "pointer";
       li.className = "suggestion-item";
       li.textContent = username;
 

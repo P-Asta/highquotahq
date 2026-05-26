@@ -178,6 +178,7 @@ textarea {
 
 .add-video-btn, .add-player-btn {
   border-radius: 16px;
+  padding: 8px 16px;
   background-color: #ddd;
 }
 
@@ -185,12 +186,7 @@ textarea {
   background-color: #888;
 }
 
-.add-video-btn {
-  height: 32px;
-}
-
 .add-player-btn {
-  height: 40px;
   border-radius: 24px;
 }
 

@@ -404,9 +404,6 @@ export function showRunDetails(run, index, collectionName) {
       <p class="run-stat"><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
       <p class="run-stat"><strong>Quota Reached:</strong> ${run.quotaReached}</p>
       <p class="run-stat"><strong>Total Scrap:</strong> ${run.totalScrap}</p>
-      <p class="run-stat"><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-      <p class="run-stat"><strong>Verified By:</strong> ${run.verifiedBy}</p>
-      <p class="run-stat"><strong>Version:</strong> ${run.version}</p>
     `;
   }
   else if (collectionName.endsWith('_sdc')) {
@@ -415,9 +412,6 @@ export function showRunDetails(run, index, collectionName) {
       <p class="run-stat"><strong>Scrap Type:</strong> ${run.scrapType}</p>
       <p class="run-stat"><strong>Equipment:</strong> ${run.equipment}</p>
       <p class="run-stat"><strong>Moon:</strong> ${run.moon}</p>
-      <p class="run-stat"><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-      <p class="run-stat"><strong>Verified By:</strong> ${run.verifiedBy}</p>
-      <p class="run-stat"><strong>Version:</strong> ${run.version}</p>
     `;
   }
   else if (collectionName.endsWith('_smhq')) {
@@ -427,9 +421,6 @@ export function showRunDetails(run, index, collectionName) {
       <p class="run-stat"><strong>Quota Reached:</strong> ${run.quotaReached}</p>
       <p class="run-stat"><strong>Total Scrap:</strong> ${run.totalScrap}</p>
       <p class="run-stat"><strong>Moon:</strong> ${run.moon}</p>
-      <p class="run-stat"><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-      <p class="run-stat"><strong>Verified By:</strong> ${run.verifiedBy}</p>
-      <p class="run-stat"><strong>Version:</strong> ${run.version}</p>
     `;
   }
   else {
@@ -438,6 +429,13 @@ export function showRunDetails(run, index, collectionName) {
     `;
   }
 
+  runDetailsHtml += `
+    <p class="run-stat"><strong>Version:</strong> ${run.version}</p>
+    <p class="run-stat"><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
+    <p class="run-stat"><strong>Verified By:</strong> ${run.verifiedBy}</p>
+    <p class="run-stat"><strong>Submitted By:</strong> ${run.submitter}</p>
+    <p class="run-stat"><strong>Submitted At:</strong> ${formatTimestamp(run.submissionDate)}</p>
+  `;
   
   detailsPanel.innerHTML = runDetailsHtml;
 

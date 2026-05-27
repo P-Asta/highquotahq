@@ -606,9 +606,6 @@ export function showRunDetails(run, index) {
       <p><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
       <p><strong>Quota Reached:</strong> ${run.quotaReached}</p>
       <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
-      <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-      <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
-      <p><strong>Version:</strong> ${run.version}</p>
     `;
   }
   else if (activeCollection.endsWith('_sdc')) {
@@ -617,9 +614,6 @@ export function showRunDetails(run, index) {
         <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
         <p><strong>Equipment:</strong> ${run.equipment}</p>
         <p><strong>Moon:</strong> ${run.moon}</p>
-        <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-        <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
-        <p><strong>Version:</strong> ${run.version}</p>
       `;
     } else {
       runDetailsHtml += `
@@ -627,9 +621,6 @@ export function showRunDetails(run, index) {
         <p><strong>Scrap Type:</strong> ${run.scrapType}</p>
         <p><strong>Equipment:</strong> ${run.equipment}</p>
         <p><strong>Moon:</strong> ${run.moon}</p>
-        <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-        <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
-        <p><strong>Version:</strong> ${run.version}</p>
       `;
     }
   }
@@ -640,9 +631,6 @@ export function showRunDetails(run, index) {
       <p><strong>Quota Reached:</strong> ${run.quotaReached}</p>
       <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
       <p><strong>Moon:</strong> ${run.moon}</p>
-      <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-      <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
-      <p><strong>Version:</strong> ${run.version}</p>
     `;
   }
   else {
@@ -651,7 +639,14 @@ export function showRunDetails(run, index) {
     `;
   }
 
-  
+  runDetailsHtml += `
+    <p class="run-stat"><strong>Version:</strong> ${run.version}</p>
+    <p class="run-stat"><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
+    <p class="run-stat"><strong>Verified By:</strong> ${run.verifiedBy}</p>
+    <p class="run-stat"><strong>Submitted By:</strong> ${run.submitter}</p>
+    <p class="run-stat"><strong>Submitted At:</strong> ${formatTimestamp(run.submissionDate)}</p>
+  `;
+
   detailsPanel.innerHTML = runDetailsHtml;
 
   setTimeout(() => {

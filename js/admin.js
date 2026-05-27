@@ -395,13 +395,13 @@ export async function fetchUnverifiedRuns(role) {
                     const claimedBy = run.claimedBy || 'Unclaimed';
 
                     const players = run.players || ['Unknown Player'];
-                    const runMs = run.date.seconds * 1000;
+                    const runMs = run.submissionDate ? run.submissionDate.seconds * 1000 : run.date.seconds * 1000;
                     const daysAgo = Math.round((runMs - Date.now()) / MS_PER_DAY);
                     const ageInDays = (Date.now() - (runMs)) / MS_PER_DAY;
                     const runDateThreshold = LATE_THRESHOLDS.findLast(t => ageInDays >= t) || null;
 
                     const rtf = new Intl.RelativeTimeFormat('en', {numeric: 'auto'});
-                    const dateDisplay = rtf.format(daysAgo, 'day');
+                    const submissionDateDisplay = rtf.format(daysAgo, 'day');
                     const version = run.version || 'Unknown Version';
                     const videos = run.videos || {};
 
@@ -420,7 +420,7 @@ export async function fetchUnverifiedRuns(role) {
                     const additionalDataElement = document.createElement('p');
                     const claimedByElement = document.createElement('p');
 
-                    const dateElement = document.createElement('p');
+                    const submissionDateElement = document.createElement('p');
                     const versionElement = document.createElement('p');
 
                     const claimButton = document.createElement('button');
@@ -455,14 +455,14 @@ export async function fetchUnverifiedRuns(role) {
                     versionElement.textContent = `${version}`;
                     rightSide.appendChild(versionElement);
 
-                    dateElement.textContent = `${dateDisplay}`;
+                    submissionDateElement.textContent = `${submissionDateDisplay}`;
                     if (runDateThreshold !== null){
-                        dateElement.style = `color: ${THRESHOLD_COLORS[runDateThreshold]};`;
+                        submissionDateElement.style = `color: ${THRESHOLD_COLORS[runDateThreshold]};`;
                         if (runDateThreshold === LATE_THRESHOLDS[2] || runDateThreshold === LATE_THRESHOLDS[3]){
                             runItem.classList.add("run-item-old");
                         }
                     }
-                    rightSide.appendChild(dateElement);
+                    rightSide.appendChild(submissionDateElement);
 
                     if (!claimedBy || claimedBy == "Unclaimed"){
                         claimedByElement.textContent = `Unclaimed`;
@@ -537,6 +537,7 @@ export function showRunDetails(runId, collectionName, run, role) {
         }
     }
     const submitter = run.submitter || 'Unknown Submitter';
+    const submissionDate = run.submissionDate? run.submissionDate.toDate().toLocaleString() : 'Unknown Date';
     const players = run.players || ['Unknown Player'];
     const date = run.date ? run.date.toDate().toLocaleString() : 'Unknown Date';
     const version = run.version || 'Unknown Version';
@@ -596,9 +597,12 @@ export function showRunDetails(runId, collectionName, run, role) {
     }
 
     let runDetails = `
-        <h4>Run Details (ID: ${runId})</h4>
+        <h4>Run Details</h4>
+        <p>ID: ${runId}</p>
+        <p>Submitted by: ${submitter}</p>
+        <p>Submission date: ${submissionDate}</p>
+        <br>
         <label>Players: <input type="text" value="${Array.isArray(players) ? players.join(', ') : players}" disabled data-field="players"></label><br>
-        <label>Submitter: <input type="text" value="${submitter}" disabled data-field="submitter></label><br>
         <label>Date: <input type="text" value="${date}" disabled data-field="date"></label><br>
         <label>Version: <input type="text" value="${version}" disabled data-field="version"></label><br>
         <label>Claimed By: <input type="text" value="${claimedBy}" disabled data-field="claimedBy"></label><br>

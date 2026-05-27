@@ -207,11 +207,11 @@ document.getElementById("runSubmissionForm").addEventListener("submit", async (e
   }
 
   if ((runData.quotaReached ?? 0) >= 100)
-    { 
-      console.warn('quotaReached cannot be higher than 99.');
-      alert('Number of Quotas Reached cannot be 100 or higher. This field is for how many quotas you reached during your run. It is the same as the number of your last quota (but not the value).');
-      return;
-    }
+  { 
+    console.warn('quotaReached cannot be higher than 99.');
+    alert('Number of Quotas Reached cannot be 100 or higher. This field is for how many quotas you reached during your run. It is the same as the number of your last quota (but not the value).');
+    return;
+  }
 
   // Use modular SDK syntax to add the document
   try {

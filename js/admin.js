@@ -536,13 +536,14 @@ export function showRunDetails(runId, collectionName, run, role) {
             claimButton.style.display = 'none';
         }
     }
-
+    const submitter = run.submitter || 'Unknown Submitter';
     const players = run.players || ['Unknown Player'];
     const date = run.date ? run.date.toDate().toLocaleString() : 'Unknown Date';
     const version = run.version || 'Unknown Version';
     const videos = run.videos || {};
     const logs = run.logs || 'Unknown Logs';
-    const comments = run.comments || 'No Comments';
+    const comments = run.comments || '';
+    const publicComments = run.publicComments || '';
 
     let additionalInfo = '';
     let equipmentField = '';
@@ -589,7 +590,7 @@ export function showRunDetails(runId, collectionName, run, role) {
             <label>Moon: <input type="text" value="${moon}" disabled data-field="moon"></label><br>
             <label>Quota Amount: <input type="number" value="${quotaAmount}" disabled data-field="quotaAmount"></label><br>
             <label>Quota Fulfilled: <input type="number" value="${quotaFulfilled}" disabled data-field="quotaFulfilled"></label><br>
-            <label>Quota Reached: <input type="number" value="${quotaReached}" disabled data-field="quotaReached"></label><br>
+            <label>Number of Quotas Reached: <input type="number" value="${quotaReached}" disabled data-field="quotaReached"></label><br>
             <label>Total Scrap: <input type="number" value="${totalScrap}" disabled data-field="totalScrap"></label><br>
         `;
     }
@@ -597,11 +598,13 @@ export function showRunDetails(runId, collectionName, run, role) {
     let runDetails = `
         <h4>Run Details (ID: ${runId})</h4>
         <label>Players: <input type="text" value="${Array.isArray(players) ? players.join(', ') : players}" disabled data-field="players"></label><br>
+        <label>Submitter: <input type="text" value="${submitter}" disabled data-field="submitter></label><br>
         <label>Date: <input type="text" value="${date}" disabled data-field="date"></label><br>
         <label>Version: <input type="text" value="${version}" disabled data-field="version"></label><br>
         <label>Claimed By: <input type="text" value="${claimedBy}" disabled data-field="claimedBy"></label><br>
         <label>Logs: <input type="text" value="${logs}" disabled data-field="logs"></label><br>
         <label>Comments: <input type="text" value="${comments}" disabled data-field="comments"></label><br>
+        <label>Public Comments: <input type="text" value="${publicComments}" disabled data-field="publicComments"></label><br>
         ${additionalInfo}
         <h5>Video Links:</h5>
     `;
@@ -609,7 +612,9 @@ export function showRunDetails(runId, collectionName, run, role) {
     for (const [player, urls] of Object.entries(videos)) {
         runDetails += `<label>${player}: 
             <input type="text" value="${urls.join(', ')}" disabled data-field="videos-${player}">
-        </label><br>`;
+        </label>
+        <div class="video-links-container"></div>
+        <br>`;
     }
 
     runDetails += `
@@ -627,6 +632,27 @@ export function showRunDetails(runId, collectionName, run, role) {
 
     runDetailsContainer.innerHTML = runDetails;
 
+    const videoLinksContainers = document.querySelectorAll('.video-links-container');
+
+    videoLinksContainers.forEach(container => {
+        const previousLabel = container.previousElementSibling;
+        if (previousLabel) {
+            const input = previousLabel.querySelector('input');
+            if (input){
+                const urls = input.value.split(',').map(url => url.trim());
+                
+                urls.forEach(url => {
+                    const urlElement = document.createElement('a');
+                    urlElement.href = url;
+                    urlElement.classList.add('video-url-link');
+                    urlElement.textContent = url;
+                    container.appendChild(urlElement);
+                    const brElement = document.createElement('br');
+                    container.appendChild(brElement);
+                });
+            } else console.warn('No input box found for video link container!');
+        } else console.warn('No previous label found for video link container!');
+    })
 
     resetButtonStates();
 

@@ -878,6 +878,27 @@ async function claimRun(runId, collectionName, role) {
     }
 }
 
+async function updateVerificationProgress(runId, collectionName, role) {
+    const user = auth.currentUser;
+
+    if (user) {
+
+        if (username) {
+            const runRef = doc(db, collectionName, runId);
+            await updateDoc(runRef, {
+                verificationProgress: 
+            })
+            .then(() => {
+                console.log(`Verification progress for run ${runId} from ${collectionName} has been updated.`);
+                fetchUnverifiedRuns(role);
+            })
+            .catch((error) => {
+                console.error('Error updating verification progress for run:', error);
+            })
+        }
+    }
+}
+
 async function displayRecentlyVerifiedRuns() {
     const collections = [
         'leaderboards_hq',

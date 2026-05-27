@@ -289,6 +289,8 @@ document.getElementById("runSubmissionForm").addEventListener("submit", async (e
 
   const submitter = loggedPlayerName;
 
+  const verificationProgress = 0;
+
   let runData = {
     date: new Date(date),
     submissionDate: new Date(Date.now()),
@@ -299,7 +301,8 @@ document.getElementById("runSubmissionForm").addEventListener("submit", async (e
     verified: false,
     logs,
     comments,
-    publicComments
+    publicComments,
+    verificationProgress
   };
 
   // Add leaderboard-specific fields

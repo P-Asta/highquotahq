@@ -580,6 +580,18 @@ button.close-btn:hover {
   color: #ff5555;
 }
 
+.comments-div {
+  margin-top: 15px;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.comments-title {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 5px;
+}
+
 @media (max-width: 768px) {
   .content {
     padding: 15px;

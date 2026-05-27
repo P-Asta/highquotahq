@@ -338,11 +338,24 @@ async function displayPlayerRuns(username) {
 export function showRunDetails(run, index, collectionName) {
   const detailsPanel = document.getElementById('details-panel');
   
+  // Helper function to format timestamps
   const formatTimestamp = (timestamp) => {
-    if (timestamp && timestamp.toDate) {
-      return new Date(timestamp.toDate()).toLocaleString();
+    if (!timestamp) return 'N/A';
+
+    let date;
+
+    if (typeof timestamp.toDate === 'function'){
+      date = timestamp.toDate();
+    }else if (timestamp.seconds){
+      date = new Date(timestamp.seconds);
+    }else if (timestamp instanceof Date) {
+      date = timestamp;
+    } else {
+      return 'N/A';
     }
-    return 'N/A';
+
+    const hasTime = date.getUTCHours() !== 0 || date.getUTCMinutes() !== 0 || date.getUTCSeconds() !== 0 || date.getUTCMilliseconds() !== 0;
+    return hasTime ? date.toLocaleString() : date.toLocaleDateString();
   };
 
   const formatVideos = (videosMap) => {
@@ -388,6 +401,7 @@ export function showRunDetails(run, index, collectionName) {
       <div class="stats-section">
         <div class="pending-verification">
           <p class="pending-text pending-color">⚠ Run pending verification ⚠</p>
+          <p class="pending-status-title">Verification status:</p>
         </div>
         <h3>Run Information</h3>
         <p class="run-stat"><strong>Players:</strong> 
@@ -402,7 +416,7 @@ export function showRunDetails(run, index, collectionName) {
     runDetailsHtml += `
       <p class="run-stat"><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
       <p class="run-stat"><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
-      <p class="run-stat"><strong>Quota Reached:</strong> ${run.quotaReached}</p>
+      <p class="run-stat"><strong>Number of Quotas Reached:</strong> ${run.quotaReached}</p>
       <p class="run-stat"><strong>Total Scrap:</strong> ${run.totalScrap}</p>
     `;
   }
@@ -418,7 +432,7 @@ export function showRunDetails(run, index, collectionName) {
     runDetailsHtml += `
       <p class="run-stat"><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
       <p class="run-stat"><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
-      <p class="run-stat"><strong>Quota Reached:</strong> ${run.quotaReached}</p>
+      <p class="run-stat"><strong>Number of Quotas Reached:</strong> ${run.quotaReached}</p>
       <p class="run-stat"><strong>Total Scrap:</strong> ${run.totalScrap}</p>
       <p class="run-stat"><strong>Moon:</strong> ${run.moon}</p>
     `;
@@ -439,16 +453,51 @@ export function showRunDetails(run, index, collectionName) {
   
   detailsPanel.innerHTML = runDetailsHtml;
 
-  console.log(run.claimedAt);
-  console.log(run.verified);
+  if (run.publicComments){
+    const commentsDiv = document.createElement('div');
+    commentsDiv.classList.add('comments-div');
+    const commentsLabel = document.createElement('h3');
+    commentsLabel.classList.add('comments-title');
+    commentsLabel.textContent = "Comments:";
+    const commentsContent = document.createElement('p');
+    commentsContent.classList.add('public-comment');
+    commentsContent.textContent = run.publicComments;
+    commentsDiv.appendChild(commentsLabel);
+    commentsDiv.appendChild(commentsContent);
+    detailsPanel.appendChild(commentsDiv);
+  }
+
+  const runPendingDiv = detailsPanel.querySelector('.pending-verification');
+
   if (run.verified) {
-    detailsPanel.querySelector('.pending-verification').classList.add('hidden');
+    runPendingDiv.classList.add('hidden');
   }else if (run.claimedAt !== undefined){
-    const runPendingDiv = detailsPanel.querySelector('.pending-verification');
+    const runMs = run.claimedAt.seconds * 1000;
+    const daysAgo = Math.round((runMs - Date.now()) / MS_PER_DAY);
+    const rtf = new Intl.RelativeTimeFormat('en', {numeric: 'auto'});
+    const pendingDateDisplay = rtf.format(daysAgo, 'day');
+    if (run.verificationProgress !== undefined && run.verificationProgress !== 0){
+      const verificationProgressBarTitle = document.createElement('p');
+      verificationProgressBarTitle.classList.add('verification-progress-bar-title');
+      verificationProgressBarTitle.textContent = `${run.verificationProgress}%`;
+      runPendingDiv.appendChild(verificationProgressBarTitle);
+      const verificationProgressBar = document.createElement('progress');
+      verificationProgressBar.classList.add('verification-progress-bar');
+      verificationProgressBar.max = 100;
+      verificationProgressBar.id = "verification-progress";
+      verificationProgressBar.value = run.verificationProgress;
+      verificationProgressBar.textContent = `${run.verificationProgress}%`;
+      runPendingDiv.appendChild(verificationProgressBar);
+    }
     const runClaimedAt = document.createElement('p');
     runClaimedAt.classList.add('pending-claimed');
-    runClaimedAt.textContent = `A verifier has claimed this run for verification at ${formatTimestamp(run.claimedAt)}`;
+    runClaimedAt.textContent = `A verifier has claimed this run for verification ${pendingDateDisplay}.`;
     runPendingDiv.appendChild(runClaimedAt);
+  }else{
+    const runNotClaimed = document.createElement('p');
+    runNotClaimed.classList.add('pending-claimed');
+    runNotClaimed.textContent = `This run has not yet been claimed by a verifier.`;
+    runPendingDiv.appendChild(runNotClaimed);
   }
 
   setTimeout(() => {

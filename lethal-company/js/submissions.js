@@ -32,7 +32,9 @@ function createPlayerBlock(defaultUsername = "", isPrimary = false){
         
         <ul class="results-dropdown" style="display: none;"></ul>
       </div>
-
+      <div class="player-profile-picture-div pfp-hidden">
+        <img class="player-profile-picture" src="/assets/default-avatar.png" />
+      </div>
       ${!isPrimary ? `<button type="button" class="remove-player-btn">Remove player</button>` : ''}
     </div>
     
@@ -126,6 +128,13 @@ document.getElementById("runSubmissionForm").addEventListener("submit", async (e
       players.push(player.value.trim());
     }
   });
+
+  const hasDuplicates = new Set(players).size !== players.length;
+  if (hasDuplicates) {
+    console.error("Duplicate players in submission form. " + players);
+    alert("You cannot use the same player multiple times in the same submission!");
+    return;
+  }
   
   const version = document.getElementById("version").value.trim();
   
@@ -232,8 +241,14 @@ document.addEventListener('input', debounce(async (e) => {
 
   const inputField = e.target;
   const wrapper = inputField.closest('.search-wrapper');
+  const playerContainer = wrapper.closest('.player-header');
   const localDropdown = wrapper.querySelector('.results-dropdown');
   const searchTerm = inputField.value.trim().toLowerCase();
+  const playerProfileIconDiv = playerContainer.querySelector('.player-profile-picture-div');
+  const playerProfileIcon = playerContainer.querySelector('.player-profile-picture');
+  if (!playerProfileIconDiv.classList.contains('pfp-hidden')){
+    playerProfileIconDiv.classList.add('pfp-hidden');
+  }
 
   if (searchTerm.length < 3){
     localDropdown.innerHTML = '';
@@ -271,6 +286,8 @@ document.addEventListener('input', debounce(async (e) => {
         inputField.value = username;
         localDropdown.innerHTML = '';
         localDropdown.style.display = 'none';
+        playerProfileIcon.src = userData.profilePicture || "/assets/default-avatar.png";
+        playerProfileIconDiv.classList.remove('pfp-hidden');
       });
 
       localDropdown.appendChild(li);
@@ -312,6 +329,8 @@ onAuthStateChanged(auth, (user) => {
         const userData = docSnapshot.data();
         document.querySelector('.player-input').value = userData.username;
         loggedPlayerName = userData.username;
+        document.querySelector('.player-profile-picture-div').classList.remove('pfp-hidden');
+        document.querySelector('.player-profile-picture').src = userData.profilePicture || "/assets/default-avatar.png";
       }
     });
   } else {

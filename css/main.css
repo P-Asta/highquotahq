@@ -160,6 +160,12 @@ footer {
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #ff0000b6;
+    box-shadow: 0px 6px 11px #000a;
+}
+
+button#profile-button:hover {
+    background-color: transparent;
+    box-shadow: none;
 }
 
 .navbar .login-logout-buttons {

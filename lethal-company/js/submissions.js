@@ -165,7 +165,7 @@ document.getElementById("runSubmissionForm").addEventListener("submit", async (e
 
   const submitter = loggedPlayerName;
 
-  const verificationProgress = 0;
+  const verificationProgress = Number('0');
 
   let runData = {
     date: new Date(date),

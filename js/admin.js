@@ -545,6 +545,7 @@ export function showRunDetails(runId, collectionName, run, role) {
     const logs = run.logs || 'Unknown Logs';
     const comments = run.comments || '';
     const publicComments = run.publicComments || '';
+    const verProg = run.verificationProgress || 0;
 
     let additionalInfo = '';
     let equipmentField = '';
@@ -629,6 +630,11 @@ export function showRunDetails(runId, collectionName, run, role) {
             <button class="verify-button" id="verify-button">Verify</button>
             <button class="reject-button" id="reject-button">Reject</button>
         </div>
+        <div class="update-progress-group">
+            <p class="verification-progress-title">${verProg}%</p>
+            <input type="range" id="verification-progress" name="update-progress" min="0" max="100" value="${verProg}">
+            <button class="update-progress" id="update-progress">Update Progress</button>
+        </div>
         <button id="back-to-list">Back to List</button>
     `;
 
@@ -662,6 +668,13 @@ export function showRunDetails(runId, collectionName, run, role) {
 
     runDetailsContainer.removeEventListener('click', handleRunDetailsClick);
     runDetailsContainer.addEventListener('click', handleRunDetailsClick);
+    const verifProgressBar = runDetailsContainer.querySelector('#verification-progress');
+    if (verifProgressBar) {
+        verifProgressBar.addEventListener('input', () => {
+            runDetailsContainer.querySelector('.verification-progress-title').textContent = `${verifProgressBar.value}%`;
+        });
+    }
+
 
     function handleRunDetailsClick(event) {
         const target = event.target;
@@ -717,6 +730,9 @@ export function showRunDetails(runId, collectionName, run, role) {
         } else if (target.matches('#back-to-list')) {
             console.log("🔄 Back button clicked via delegation!");
             backToList(role);
+        } else if (target.matches('#update-progress')) {
+            console.log("Update progress clicked");
+            updateVerificationProgress(runId, collectionName, role);
         }
     }
 
@@ -880,22 +896,20 @@ async function claimRun(runId, collectionName, role) {
 
 async function updateVerificationProgress(runId, collectionName, role) {
     const user = auth.currentUser;
-
+    const currentUpdateProgress = document.getElementById('verification-progress');
     if (user) {
-
-        if (username) {
-            const runRef = doc(db, collectionName, runId);
-            await updateDoc(runRef, {
-                verificationProgress: 
-            })
-            .then(() => {
-                console.log(`Verification progress for run ${runId} from ${collectionName} has been updated.`);
-                fetchUnverifiedRuns(role);
-            })
-            .catch((error) => {
-                console.error('Error updating verification progress for run:', error);
-            })
-        }
+        const runRef = doc(db, collectionName, runId);
+        await updateDoc(runRef, {
+            verificationProgress: Number(currentUpdateProgress.value)
+        })
+        .then(() => {
+            alert('Verification progress updated successfully.');
+            console.log(`Verification progress for run ${runId} from ${collectionName} has been updated.`);
+            fetchUnverifiedRuns(role);
+        })
+        .catch((error) => {
+            console.error('Error updating verification progress for run:', error);
+        });
     }
 }
 

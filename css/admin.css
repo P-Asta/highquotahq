@@ -356,3 +356,20 @@
 #recent-verified-runs th {
     background-color: #161616b2;
 }
+
+.update-progress-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input#verification-progress {
+    width: 100%;
+    accent-color: darkorange;
+}
+
+p.verification-progress-title {
+    color: darkorange;
+    font-size: 2rem;
+    font-weight: bold;
+}

@@ -284,6 +284,8 @@ document.getElementById("runSubmissionForm").addEventListener("submit", async (e
 
   const logs = document.getElementById("logs").value;
 
+  const spreadsheet = document.getElementById("spreadsheet").value;
+
   const comments = document.getElementById("comments").value;
 
   const publicComments = document.getElementById("publicComments").value;
@@ -301,6 +303,7 @@ document.getElementById("runSubmissionForm").addEventListener("submit", async (e
     videos,
     verified: false,
     logs,
+    spreadsheet,
     comments,
     publicComments,
     verificationProgress

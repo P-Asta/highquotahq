@@ -546,6 +546,7 @@ export function showRunDetails(runId, collectionName, run, role) {
     const comments = run.comments || '';
     const publicComments = run.publicComments || '';
     const verProg = run.verificationProgress || 0;
+    const spreadsheet = run.spreadsheet || '';
 
     let additionalInfo = '';
     let equipmentField = '';
@@ -610,6 +611,7 @@ export function showRunDetails(runId, collectionName, run, role) {
         <label>Logs: <input type="text" value="${logs}" disabled data-field="logs"></label><br>
         <label>Comments: <input type="text" value="${comments}" disabled data-field="comments"></label><br>
         <label>Public Comments: <input type="text" value="${publicComments}" disabled data-field="publicComments"></label><br>
+        <label>Spreadsheet: <input type="text" value="${spreadsheet}" disabled data-field="spreadsheet"></label><br>
         ${additionalInfo}
         <h5>Video Links:</h5>
     `;

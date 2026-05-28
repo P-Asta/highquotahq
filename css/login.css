@@ -46,8 +46,6 @@ input[type="text"], input[type="password"] {
   margin-top: 10px;
   padding: 10px;
   font-family: 'systematic_jcool';
-  src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-        url('/assets/fonts/9systema-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-size: 16px;
@@ -65,8 +63,6 @@ button[type="submit"] {
   border-radius: 5px;
   color: white;
   font-family: 'systematic_jcool';
-  src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-        url('/assets/fonts/9systema-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-size: 16px;

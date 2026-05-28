@@ -13,8 +13,6 @@
 body {
     color: white;
     font-family: 'systematic_jcool';
-    src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-         url('/assets/fonts/9systema-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
     margin: 0;
@@ -128,8 +126,6 @@ footer {
     box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
     font-family: 'systematic_jcool';
-    src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-         url('/assets/fonts/9systema-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
     border-radius: 10px;
@@ -164,6 +160,12 @@ footer {
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #ff0000b6;
+    box-shadow: 0px 6px 11px #000a;
+}
+
+button#profile-button:hover {
+    background-color: transparent;
+    box-shadow: none;
 }
 
 .navbar .login-logout-buttons {
@@ -311,6 +313,119 @@ footer {
     width: auto;
 }
 
+.search-container {
+    position: relative;
+    width: 200px;
+}
+
+#user-search-input {
+    font-family: 'systematic_jcool';
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 14px;
+    border: 1px solid #dcdcdc;
+    border-radius: 6px;
+    outline: none;
+    box-sizing: border-box;
+    margin-bottom: 0px;
+    background-color: #ddd;
+    box-shadow: inset -2px -2px 6px rgba(0, 0, 0, 0.5);
+    color: #222;
+}
+
+#user-search-input:focus-within {
+    box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.8);
+
+}
+
+#user-search-input::placeholder {
+    color: #0008;
+    font-weight: normal;
+}
+
+#user-results-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    margin: 4px 0 0 0;
+    padding: 0;
+    list-style: none;
+    background-color: #ddd;
+    border-radius: 6px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    max-height: 350px;
+    overflow-y: auto;
+    z-index: 999;
+    gap: 0px;
+    display: block;
+}
+
+#user-results-dropdown li {
+    border-bottom: 1px solid #f1f5f9;
+}
+
+#user-results-dropdown li:last-child {
+    border-bottom: none;
+}
+
+#user-results-dropdown a {
+    display: block;
+    padding: 8px 8px;
+    color: #334155;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.15s ease;
+}
+
+/* 5. Hover state for clean UX */
+#user-results-dropdown a:hover {
+    color: #0284c7;
+}
+
+.logout-confirmation {
+    background-color: #0006;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    align-self: center;
+    width: 100vw;
+    height: 100vh;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.confirm-box {
+    background-color: #222;
+    padding: 20px 40px;
+    border: dashed 6px #ddd;
+    border-radius: 20px;
+    box-shadow: 0px 8px 20px 10px #0008
+}
+
+.logout-buttons button {
+    font-size: 1rem;
+    font-family: 'systematic_jcool';
+}
+
+.logout-confirm-button {
+    background-color: #f66;
+}
+
+.logout-cancel-button {
+    background-color: #ddd;
+}
+
+.logout-hidden {
+    display: none;
+}
+
 @media (max-width: 1200px){
     .navbar ul {
         gap: 12px;
@@ -330,6 +445,15 @@ footer {
     .navbar ul li button {
         padding: 6px 8px;
         font-size: 13px;
+    }
+
+    .search-container {
+        width: 120px;
+        font-size: 12px;
+    }
+
+    #user-results-dropdown a {
+        font-size: 12px;
     }
 }
 

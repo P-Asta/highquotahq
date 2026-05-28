@@ -5,6 +5,9 @@ import { auth, db } from './firebase.js';
 function handleAuthButtons() {
     const loginButton = document.getElementById('login-button');
     const logoutButton = document.getElementById('logout-button');
+    const logoutConfirmationBox = document.getElementById('logout-confirmation');
+    const logoutConfirmButton = document.getElementById('confirm-logout');
+    const logoutCancelButton = document.getElementById('cancel-logout');
   
     if (!loginButton || !logoutButton) {
       console.error('Login or Logout button not found!');
@@ -24,8 +27,16 @@ function handleAuthButtons() {
         logoutButton.style.display = 'none';
       }
     });
-  
+
     logoutButton.addEventListener('click', () => {
+      logoutConfirmationBox.classList.remove('logout-hidden');
+    });
+
+    logoutCancelButton.addEventListener('click', () => {
+      logoutConfirmationBox.classList.add('logout-hidden');
+    });
+
+    logoutConfirmButton.addEventListener('click', () => {
       signOut(auth)
         .then(() => {
           console.log('User logged out');

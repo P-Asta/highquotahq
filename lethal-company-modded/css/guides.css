@@ -6,7 +6,6 @@
   font-style: normal;
 }
 
-
 .guides-container {
     max-width: 800px;
     margin: auto;
@@ -25,8 +24,6 @@
     border: none;
     text-align: left;
     font-family: 'systematic_jcool';
-    src: url('/assets/fonts/9systema-webfont.woff2') format('woff2'),
-         url('/assets/fonts/9systema-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
     font-size: 18px;

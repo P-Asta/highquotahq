@@ -25,6 +25,11 @@
     <li><button id="guides-button">Guides</button></li>
     <li><button id="admin-button" style="display: none;">Admin</button></li>
 
+    <div class="search-container">
+      <input type="text" id="user-search-input" placeholder="Search users..." autocomplete="off">
+      <ul id="user-results-dropdown" class="user-results-dropdown"></ul>
+    </div>
+
     <li class="login-logout-buttons">
       <button id="login-button" style="display: none;">Login</button>
       <button id="logout-button" style="display: none;">Logout</button>
@@ -32,3 +37,12 @@
     </li>
   </ul>
 </nav>
+<div class="logout-confirmation logout-hidden" id="logout-confirmation">
+  <div class="confirm-box">
+    <p>Logout?</p>
+    <div class="logout-buttons">
+      <button id="cancel-logout" class="logout-cancel-button">Cancel</button>
+      <button id="confirm-logout" class="logout-confirm-button">Logout</button>
+    </div>
+  </div>
+</div>

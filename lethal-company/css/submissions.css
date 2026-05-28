@@ -78,6 +78,7 @@ textarea {
 input::placeholder,
 textarea::placeholder {
   color: #b0b0b0;
+  font-weight: normal;
 }
 
 input:focus,
@@ -122,6 +123,117 @@ button[type="submit"]:hover {
   background-color: #ff5f5f;
 }
 
+/* placeholder text */
+input::placeholder,
+textarea::placeholder {
+  color: #b0b0b0;
+  font-weight: bold;
+}
+
+input,
+textarea {
+  padding: 10px;
+  background-color: #2c2c2ca2;
+  color: #ffffff;
+  border: 1px solid #444444;
+  border-radius: 5px;
+  box-sizing: border-box;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.search-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 200px;
+}
+
+.results-dropdown {
+  position: relative;
+  top: 100%;
+  left: 0px;
+  width: 100%;
+  list-style: none;
+  padding: 0px;
+  background: #111;
+  border: 1px solid rgb(204, 204, 204);
+  z-index: 10;
+  margin-top: -4px;
+  display: block;
+}
+
+.suggestion-item {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.remove-video-btn, .add-video-btn, .remove-player-btn, .add-player-btn, .remove-first-video-btn {
+  font-family: 'systematic_jcool';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.add-video-btn, .add-player-btn {
+  border-radius: 16px;
+  padding: 8px 16px;
+  background-color: #ddd;
+}
+
+.add-video-btn:hover, .add-player-btn:hover {
+  background-color: #888;
+}
+
+.add-player-btn {
+  border-radius: 24px;
+}
+
+.remove-video-btn, .remove-player-btn, .remove-first-video-btn {
+  background-color: #ff3e3e;
+  color: #fff;
+  border-radius: 16px;
+}
+
+.remove-video-btn:hover, .remove-player-btn:hover, .remove-first-video-btn:hover {
+  background-color: #ff5f5f;
+}
+
+.remove-video-btn, .remove-first-video-btn {
+  width: 32px;
+  height: 32px;
+}
+
+.remove-player-btn {
+  width: auto;
+  height: 40px;
+  border-radius: 24px;
+}
+
+.video-url-input {
+  margin: 5px 0px;
+}
+
+.video-input-wrapper, .player-header {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.player-profile-picture {
+  height: 48px;
+  width: 48px;
+  border-radius: 50%;
+  border: solid 2px #ff0000b6;
+  object-fit: cover;
+  box-shadow: 0px 6px 11px #000a;
+}
+
+.pfp-hidden {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .submission-form-container {
     padding: 15px;
@@ -143,34 +255,4 @@ button[type="submit"]:hover {
     font-size: 14px;
     padding: 10px;
   }
-}
-
-body,
-label,
-input,
-textarea,
-select,
-button {
-  font-family: 'systematic_jcool';
-  font-style: normal;
-  font-weight: bold;
-}
-
-/* placeholder text */
-input::placeholder,
-textarea::placeholder {
-  color: #b0b0b0;
-  font-weight: bold;
-}
-
-input,
-textarea {
-  padding: 10px;
-  background-color: #2c2c2ca2;
-  color: #ffffff;
-  border: 1px solid #444444;
-  border-radius: 5px;
-  box-sizing: border-box;
-  width: 100%;
-  margin-bottom: 15px;
 }

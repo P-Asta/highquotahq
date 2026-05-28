@@ -1,7 +1,7 @@
 import { loadNavbar } from './utils.js';
 import { handleAuthButtons } from './auth.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-import { doc, getDoc, getDocs, collection, query, where, updateDoc, Timestamp, orderBy, limit, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { doc, getDoc, getDocs, collection, query, where, updateDoc, Timestamp, orderBy, limit, deleteDoc, writeBatch, startAt, endAt } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 import { db, auth } from "./firebase.js";
 
 
@@ -28,14 +28,14 @@ function loadAdminInterface(user) {
                     adminBtn.textContent = "Admin";
                     sidebar.appendChild(adminBtn);
                 }
-                if (roles.includes('verifier') || roles.includes('site-developer')) {
+                if (roles.includes('verifier') || roles.includes('site-developer') || roles.includes('admin')) {
                     const verifierBtn = document.createElement("button");
                     verifierBtn.id = "verifier-btn";
                     verifierBtn.classList.add("sidebar-btn");
                     verifierBtn.textContent = "Verifier";
                     sidebar.appendChild(verifierBtn);
                 }
-                if (roles.includes('modded-verifier') || roles.includes('site-developer')) {
+                if (roles.includes('modded-verifier') || roles.includes('site-developer') || roles.includes('admin')) {
                     const moddedVerifierBtn = document.createElement("button");
                     moddedVerifierBtn.id = "modded-verifier-btn";
                     moddedVerifierBtn.classList.add("sidebar-btn");
@@ -395,13 +395,13 @@ export async function fetchUnverifiedRuns(role) {
                     const claimedBy = run.claimedBy || 'Unclaimed';
 
                     const players = run.players || ['Unknown Player'];
-                    const runMs = run.date.seconds * 1000;
+                    const runMs = run.submissionDate ? run.submissionDate.seconds * 1000 : run.date.seconds * 1000;
                     const daysAgo = Math.round((runMs - Date.now()) / MS_PER_DAY);
                     const ageInDays = (Date.now() - (runMs)) / MS_PER_DAY;
                     const runDateThreshold = LATE_THRESHOLDS.findLast(t => ageInDays >= t) || null;
 
                     const rtf = new Intl.RelativeTimeFormat('en', {numeric: 'auto'});
-                    const dateDisplay = rtf.format(daysAgo, 'day');
+                    const submissionDateDisplay = rtf.format(daysAgo, 'day');
                     const version = run.version || 'Unknown Version';
                     const videos = run.videos || {};
 
@@ -420,7 +420,7 @@ export async function fetchUnverifiedRuns(role) {
                     const additionalDataElement = document.createElement('p');
                     const claimedByElement = document.createElement('p');
 
-                    const dateElement = document.createElement('p');
+                    const submissionDateElement = document.createElement('p');
                     const versionElement = document.createElement('p');
 
                     const claimButton = document.createElement('button');
@@ -455,14 +455,14 @@ export async function fetchUnverifiedRuns(role) {
                     versionElement.textContent = `${version}`;
                     rightSide.appendChild(versionElement);
 
-                    dateElement.textContent = `${dateDisplay}`;
+                    submissionDateElement.textContent = `${submissionDateDisplay}`;
                     if (runDateThreshold !== null){
-                        dateElement.style = `color: ${THRESHOLD_COLORS[runDateThreshold]};`;
+                        submissionDateElement.style = `color: ${THRESHOLD_COLORS[runDateThreshold]};`;
                         if (runDateThreshold === LATE_THRESHOLDS[2] || runDateThreshold === LATE_THRESHOLDS[3]){
                             runItem.classList.add("run-item-old");
                         }
                     }
-                    rightSide.appendChild(dateElement);
+                    rightSide.appendChild(submissionDateElement);
 
                     if (!claimedBy || claimedBy == "Unclaimed"){
                         claimedByElement.textContent = `Unclaimed`;
@@ -536,13 +536,17 @@ export function showRunDetails(runId, collectionName, run, role) {
             claimButton.style.display = 'none';
         }
     }
-
+    const submitter = run.submitter || 'Unknown Submitter';
+    const submissionDate = run.submissionDate? run.submissionDate.toDate().toLocaleString() : 'Unknown Date';
     const players = run.players || ['Unknown Player'];
     const date = run.date ? run.date.toDate().toLocaleString() : 'Unknown Date';
     const version = run.version || 'Unknown Version';
     const videos = run.videos || {};
     const logs = run.logs || 'Unknown Logs';
-    const comments = run.comments || 'No Comments';
+    const comments = run.comments || '';
+    const publicComments = run.publicComments || '';
+    const verProg = run.verificationProgress || 0;
+    const spreadsheet = run.spreadsheet || '';
 
     let additionalInfo = '';
     let equipmentField = '';
@@ -589,19 +593,25 @@ export function showRunDetails(runId, collectionName, run, role) {
             <label>Moon: <input type="text" value="${moon}" disabled data-field="moon"></label><br>
             <label>Quota Amount: <input type="number" value="${quotaAmount}" disabled data-field="quotaAmount"></label><br>
             <label>Quota Fulfilled: <input type="number" value="${quotaFulfilled}" disabled data-field="quotaFulfilled"></label><br>
-            <label>Quota Reached: <input type="number" value="${quotaReached}" disabled data-field="quotaReached"></label><br>
+            <label>Number of Quotas Reached: <input type="number" value="${quotaReached}" disabled data-field="quotaReached"></label><br>
             <label>Total Scrap: <input type="number" value="${totalScrap}" disabled data-field="totalScrap"></label><br>
         `;
     }
 
     let runDetails = `
-        <h4>Run Details (ID: ${runId})</h4>
+        <h4>Run Details</h4>
+        <p>ID: ${runId}</p>
+        <p>Submitted by: ${submitter}</p>
+        <p>Submission date: ${submissionDate}</p>
+        <br>
         <label>Players: <input type="text" value="${Array.isArray(players) ? players.join(', ') : players}" disabled data-field="players"></label><br>
         <label>Date: <input type="text" value="${date}" disabled data-field="date"></label><br>
         <label>Version: <input type="text" value="${version}" disabled data-field="version"></label><br>
         <label>Claimed By: <input type="text" value="${claimedBy}" disabled data-field="claimedBy"></label><br>
         <label>Logs: <input type="text" value="${logs}" disabled data-field="logs"></label><br>
         <label>Comments: <input type="text" value="${comments}" disabled data-field="comments"></label><br>
+        <label>Public Comments: <input type="text" value="${publicComments}" disabled data-field="publicComments"></label><br>
+        <label>Spreadsheet: <input type="text" value="${spreadsheet}" disabled data-field="spreadsheet"></label><br>
         ${additionalInfo}
         <h5>Video Links:</h5>
     `;
@@ -609,7 +619,9 @@ export function showRunDetails(runId, collectionName, run, role) {
     for (const [player, urls] of Object.entries(videos)) {
         runDetails += `<label>${player}: 
             <input type="text" value="${urls.join(', ')}" disabled data-field="videos-${player}">
-        </label><br>`;
+        </label>
+        <div class="video-links-container"></div>
+        <br>`;
     }
 
     runDetails += `
@@ -620,6 +632,11 @@ export function showRunDetails(runId, collectionName, run, role) {
             <button class="verify-button" id="verify-button">Verify</button>
             <button class="reject-button" id="reject-button">Reject</button>
         </div>
+        <div class="update-progress-group">
+            <p class="verification-progress-title">${verProg}%</p>
+            <input type="range" id="verification-progress" name="update-progress" min="0" max="100" value="${verProg}">
+            <button class="update-progress" id="update-progress">Update Progress</button>
+        </div>
         <button id="back-to-list">Back to List</button>
     `;
 
@@ -627,11 +644,39 @@ export function showRunDetails(runId, collectionName, run, role) {
 
     runDetailsContainer.innerHTML = runDetails;
 
+    const videoLinksContainers = document.querySelectorAll('.video-links-container');
+
+    videoLinksContainers.forEach(container => {
+        const previousLabel = container.previousElementSibling;
+        if (previousLabel) {
+            const input = previousLabel.querySelector('input');
+            if (input){
+                const urls = input.value.split(',').map(url => url.trim());
+                
+                urls.forEach(url => {
+                    const urlElement = document.createElement('a');
+                    urlElement.href = url;
+                    urlElement.classList.add('video-url-link');
+                    urlElement.textContent = url;
+                    container.appendChild(urlElement);
+                    const brElement = document.createElement('br');
+                    container.appendChild(brElement);
+                });
+            } else console.warn('No input box found for video link container!');
+        } else console.warn('No previous label found for video link container!');
+    })
 
     resetButtonStates();
 
     runDetailsContainer.removeEventListener('click', handleRunDetailsClick);
     runDetailsContainer.addEventListener('click', handleRunDetailsClick);
+    const verifProgressBar = runDetailsContainer.querySelector('#verification-progress');
+    if (verifProgressBar) {
+        verifProgressBar.addEventListener('input', () => {
+            runDetailsContainer.querySelector('.verification-progress-title').textContent = `${verifProgressBar.value}%`;
+        });
+    }
+
 
     function handleRunDetailsClick(event) {
         const target = event.target;
@@ -687,6 +732,9 @@ export function showRunDetails(runId, collectionName, run, role) {
         } else if (target.matches('#back-to-list')) {
             console.log("🔄 Back button clicked via delegation!");
             backToList(role);
+        } else if (target.matches('#update-progress')) {
+            console.log("Update progress clicked");
+            updateVerificationProgress(runId, collectionName, role);
         }
     }
 
@@ -848,6 +896,25 @@ async function claimRun(runId, collectionName, role) {
     }
 }
 
+async function updateVerificationProgress(runId, collectionName, role) {
+    const user = auth.currentUser;
+    const currentUpdateProgress = document.getElementById('verification-progress');
+    if (user) {
+        const runRef = doc(db, collectionName, runId);
+        await updateDoc(runRef, {
+            verificationProgress: Number(currentUpdateProgress.value)
+        })
+        .then(() => {
+            alert('Verification progress updated successfully.');
+            console.log(`Verification progress for run ${runId} from ${collectionName} has been updated.`);
+            fetchUnverifiedRuns(role);
+        })
+        .catch((error) => {
+            console.error('Error updating verification progress for run:', error);
+        });
+    }
+}
+
 async function displayRecentlyVerifiedRuns() {
     const collections = [
         'leaderboards_hq',
@@ -934,4 +1001,89 @@ document.addEventListener('DOMContentLoaded', function() {
     removeRoleButton.addEventListener('click', removeRole);
     banUserButton.addEventListener('click', banUser);
     unbanUserButton.addEventListener('click', unbanUser);
+});
+
+function debounce(func, delay){
+  let timeoutId;
+  return function (...args){
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+
+document.addEventListener('input', debounce(async (e) => {
+  if (!e.target.classList.contains('username-input')) return;
+
+  const inputField = e.target;
+  const wrapper = inputField.closest('.username-input-group');
+  const localDropdown = wrapper.querySelector('.results-dropdown');
+  const searchTerm = inputField.value.trim().toLowerCase();
+
+  if (searchTerm.length < 2){
+    localDropdown.innerHTML = '';
+    localDropdown.style.display = 'none';
+    return;
+  }
+
+  try {
+    const usersRef = collection(db, 'users');
+    const q = query(
+      usersRef,
+      orderBy('usernameLower'),
+      startAt(searchTerm),
+      endAt(searchTerm + "\uf8ff"),
+      limit(10)
+    );
+
+    const querySnapshot = await getDocs(q);
+    localDropdown.innerHTML = '';
+
+    if (querySnapshot.empty) {
+      localDropdown.style.display = 'none';
+      return;
+    }
+
+    querySnapshot.forEach((doc) => {
+      const userData = doc.data();
+      const username = userData.username;
+
+      const li = document.createElement('li');
+      li.className = "suggestion-item";
+      li.textContent = username;
+
+      li.addEventListener('click', () => {
+        inputField.value = username;
+        localDropdown.innerHTML = '';
+        localDropdown.style.display = 'none';
+      });
+
+      localDropdown.appendChild(li);
+    });
+
+    localDropdown.style.display = 'block';
+    
+  } catch (error) {
+    console.error("Error matching usernames: ", error);
+  }
+}, 500));
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.search-wrapper')){
+    document.querySelectorAll('.results-dropdown').forEach(dropdown => {
+      dropdown.innerHTML = '';
+      dropdown.style.display = 'none';
+    });
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape'){
+    document.querySelectorAll('.results-dropdown').forEach(dropdown => {
+      dropdown.innerHTML = '';
+      dropdown.style.display = 'none';
+    });
+    if (document.activeElement.classList.contains('username-input')) {
+      document.activeElement.blur();
+    }
+  }
 });

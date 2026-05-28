@@ -58,6 +58,17 @@ authForm.addEventListener('submit', (e) => {
 async function register(email, username, password) {
   const usernameLower = username.trim().toLowerCase();
 
+  if (usernameLower.length < 3){
+    alert('This username is too short!');
+    return;
+  }
+
+  const isValidUsername = /^[a-z0-9_.-]+$/.test(usernameLower);
+  if (!isValidUsername){
+    warn('Invalid username. Available characters are A-z 0-9 _ . -');
+    return;
+  }
+
   const usersRef = collection(db, 'users');
   const q = query(usersRef, where('usernameLower', '==', usernameLower));
 

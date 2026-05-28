@@ -37,7 +37,7 @@
         <label for="quotaFulfilled">Quota Fulfilled</label>
         <input type="number" id="quotaFulfilled" name="quotaFulfilled" placeholder="Enter quota fulfilled">
 
-        <label for="quotaReached">Quota Reached</label>
+        <label for="quotaReached">Number of Quotas Reached</label>
         <input type="number" id="quotaReached" name="quotaReached" placeholder="Enter quota reached">
 
         <label for="totalScrap">Total Scrap</label>
@@ -102,42 +102,26 @@
       <label for="date">Date</label>
       <input type="date" id="date" name="date" required>
     
-      <!-- Player Entries (4 Optional Text Boxes) -->
-      <h3>Player Names</h3>
-      <input type="text" id="player1" name="player1" placeholder="Player 1">
-      <input type="text" id="player2" name="player2" placeholder="Player 2">
-      <input type="text" id="player3" name="player3" placeholder="Player 3">
-      <input type="text" id="player4" name="player4" placeholder="Player 4">
-    
-      <!-- Video Links for Each Player -->
-      <h3>Video Links</h3>
-      <div id="videoFields">
-        <label for="videos1">Videos for Player 1</label>
-        <textarea id="videos1" name="videos1" placeholder="Enter video links for Player 1, separated by commas"></textarea>
-    
-        <label for="videos2">Videos for Player 2</label>
-        <textarea id="videos2" name="videos2" placeholder="Enter video links for Player 2, separated by commas"></textarea>
-    
-        <label for="videos3">Videos for Player 3</label>
-        <textarea id="videos3" name="videos3" placeholder="Enter video links for Player 3, separated by commas"></textarea>
-    
-        <label for="videos4">Videos for Player 4</label>
-        <textarea id="videos4" name="videos4" placeholder="Enter video links for Player 4, separated by commas"></textarea>
-      </div>
+      <div id="playerFields"></div>
+      <button type="button" id="addPlayerBtn" class="add-player-btn">+ Add another player 👤</button>
       
-      <!-- Version -->
       <label for="version">Version</label>
       <select id="version" name="version" required>
         <option value="" disabled selected>Select a version</option>
       </select>
 
       <label for="logs">Logs</label>
-      <textarea id="logs" name="logs" placeholder="Enter link/s to player logs. If multiple, seperate with commas"></textarea>
+      <textarea id="logs" name="logs" placeholder="Enter link to log files. Make sure the logs are viewable to anyone."></textarea>
 
-      <label for="comments">Comments</label>
-      <textarea id="comments" name="comments" placeholder="Enter comments about the run"></textarea>
+      <label for="spreadsheet">Spreadsheet</label>
+      <textarea id="spreadsheet" name="spreadsheet" placeholder="Enter spreadsheet link here. Make sure it's viewable to anyone."></textarea>
+
+      <label for="publicComments">Public Comments</label>
+      <textarea id="publicComments" name="publicComments" placeholder="Enter comments that can be viewed by anyone."></textarea>
+
+      <label for="comments">Additional Notes</label>
+      <textarea id="comments" name="comments" placeholder="Enter notes that can only be viewed by verifiers and managers."></textarea>
       
-    
       <button type="submit">Submit Run</button>
     </form>
   </div>

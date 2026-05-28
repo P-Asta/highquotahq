@@ -22,145 +22,131 @@
         <option value="leaderboards_smhq">SMHQ Leaderboard</option>
       </select>
     
-<!-- HQ Fields -->
-<div id="hqFields">
-  <label for="quotaAmount">Quota Amount</label>
-  <input type="number" id="quotaAmount" name="quotaAmount" placeholder="Enter the quota amount">
+      <!-- HQ Fields -->
+      <div id="hqFields">
+        <label for="quotaAmount">Quota Amount</label>
+        <input type="number" id="quotaAmount" name="quotaAmount" placeholder="Enter the quota amount">
 
-  <label for="quotaFulfilled">Quota Fulfilled</label>
-  <input type="number" id="quotaFulfilled" name="quotaFulfilled" placeholder="Enter quota fulfilled">
+        <label for="quotaFulfilled">Quota Fulfilled</label>
+        <input type="number" id="quotaFulfilled" name="quotaFulfilled" placeholder="Enter quota fulfilled">
 
-  <label for="quotaReached">Quota Reached</label>
-  <input type="number" id="quotaReached" name="quotaReached" placeholder="Enter quota reached">
+        <label for="quotaReached">Number of Quotas Reached</label>
+        <input type="number" id="quotaReached" name="quotaReached" placeholder="Enter quota reached">
 
-  <label for="totalScrap">Total Scrap</label>
-  <input type="number" id="totalScrap" name="totalScrap" placeholder="Enter total scrap collected">
-</div>
+        <label for="totalScrap">Total Scrap</label>
+        <input type="number" id="totalScrap" name="totalScrap" placeholder="Enter total scrap collected">
+      </div>
 
-<!-- SDC Fields -->
-<div id="sdcFields" style="display:none;">
-  <label for="moon">Moon</label>
-  <select id="moon" name="moon">
-    <option value="">Select a moon</option>
-    <option value="41-Experimentation">41-Experimentation</option>
-    <option value="220-Assurance">220-Assurance</option>
-    <option value="56-Vow">56-Vow</option>
-    <option value="21-Offense">21-Offense</option>
-    <option value="61-March">61-March</option>
-    <option value="20-Adamance">20-Adamance</option>
-    <option value="85-Rend">85-Rend</option>
-    <option value="7-Dine">7-Dine</option>
-    <option value="8-Titan">8-Titan</option>
-    <option value="68-Artifice">68-Artifice</option>
-    <option value="5-Embrion">5-Embrion</option>
-  </select>
+      <!-- SDC Fields -->
+      <div id="sdcFields" style="display:none;">
+        <label for="moon">Moon</label>
+        <select id="moon" name="moon">
+          <option value="">Select a moon</option>
+          <option value="41-Experimentation">41-Experimentation</option>
+          <option value="220-Assurance">220-Assurance</option>
+          <option value="56-Vow">56-Vow</option>
+          <option value="21-Offense">21-Offense</option>
+          <option value="61-March">61-March</option>
+          <option value="20-Adamance">20-Adamance</option>
+          <option value="85-Rend">85-Rend</option>
+          <option value="7-Dine">7-Dine</option>
+          <option value="8-Titan">8-Titan</option>
+          <option value="68-Artifice">68-Artifice</option>
+          <option value="5-Embrion">5-Embrion</option>
+        </select>
 
-  <label for="scrapType">Scrap Type</label>
-  <select id="scrapType" name="scrapType">
-    <option value="">Select scrap type</option>
-    <option value="Regular">Regular</option>
-    <option value="Single">Single</option>
-  </select>
+        <label for="scrapType">Scrap Type</label>
+        <select id="scrapType" name="scrapType">
+          <option value="">Select scrap type</option>
+          <option value="Regular">Regular</option>
+          <option value="Single">Single</option>
+        </select>
 
-  <label for="totalScrapSDC">Total Scrap</label>
-  <input type="number" id="totalScrapSDC" name="totalScrapSDC" placeholder="Enter total scrap collected">
+        <label for="totalScrapSDC">Total Scrap</label>
+        <input type="number" id="totalScrapSDC" name="totalScrapSDC" placeholder="Enter total scrap collected">
 
-  <label for="equipment">Equipment</label>
-  <br>
-  <sub>Select the equipment used in the run that is the highest in the dropdown list.</sub>
-  <br>
-  <sub>Company Cruiser -> Jetpack -> TZP -> Shovel -> Miscellaneous -> None</sub>
-  <br>
-  <select id="equipment" name="equipment">
-    <option value="Company Cruiser">Company Cruiser</option>
-    <option value="Jetpack">Jetpack</option>
-    <option value="TZP">TZP</option>
-    <option value="Shovel">Shovel</option>
-    <option value="Miscellaneous">Miscellaneous</option>
-    <option value="None">None</option>
-  </select>
-</div>
+        <label for="equipment">Equipment</label>
+        <br>
+        <sub>Select the equipment used in the run that is the highest in the dropdown list.</sub>
+        <br>
+        <sub>Company Cruiser -> Jetpack -> TZP -> Shovel -> Miscellaneous -> None</sub>
+        <br>
+        <select id="equipment" name="equipment">
+          <option value="Company Cruiser">Company Cruiser</option>
+          <option value="Jetpack">Jetpack</option>
+          <option value="TZP">TZP</option>
+          <option value="Shovel">Shovel</option>
+          <option value="Miscellaneous">Miscellaneous</option>
+          <option value="None">None</option>
+        </select>
+      </div>
 
-<!-- SMHQ Fields -->
-<div id="smhqFields" style="display:none;">
-  <label for="moonSMHQ">Moon</label>
-  <select id="moonSMHQ" name="moonSMHQ">
-    <option value="">Select a moon</option>
-    <option value="41-Experimentation">41-Experimentation</option>
-    <option value="220-Assurance">220-Assurance</option>
-    <option value="56-Vow">56-Vow</option>
-    <option value="21-Offense">21-Offense</option>
-    <option value="61-March">61-March</option>
-    <option value="20-Adamance">20-Adamance</option>
-    <option value="85-Rend">85-Rend</option>
-    <option value="7-Dine">7-Dine</option>
-    <option value="8-Titan">8-Titan</option>
-    <option value="68-Artifice">68-Artifice</option>
-    <option value="5-Embrion">5-Embrion</option>
-  </select>
+      <!-- SMHQ Fields -->
+      <div id="smhqFields" style="display:none;">
+        <label for="moonSMHQ">Moon</label>
+        <select id="moonSMHQ" name="moonSMHQ">
+          <option value="">Select a moon</option>
+          <option value="41-Experimentation">41-Experimentation</option>
+          <option value="220-Assurance">220-Assurance</option>
+          <option value="56-Vow">56-Vow</option>
+          <option value="21-Offense">21-Offense</option>
+          <option value="61-March">61-March</option>
+          <option value="20-Adamance">20-Adamance</option>
+          <option value="85-Rend">85-Rend</option>
+          <option value="7-Dine">7-Dine</option>
+          <option value="8-Titan">8-Titan</option>
+          <option value="68-Artifice">68-Artifice</option>
+          <option value="5-Embrion">5-Embrion</option>
+        </select>
 
-  <label for="quotaAmountSMHQ">Quota Amount</label>
-  <input type="number" id="quotaAmountSMHQ" name="quotaAmountSMHQ" placeholder="Enter the quota amount">
+        <label for="quotaAmountSMHQ">Quota Amount</label>
+        <input type="number" id="quotaAmountSMHQ" name="quotaAmountSMHQ" placeholder="Enter the quota amount">
 
-  <label for="quotaFulfilledSMHQ">Quota Fulfilled</label>
-  <input type="number" id="quotaFulfilledSMHQ" name="quotaFulfilledSMHQ" placeholder="Enter quota fulfilled">
+        <label for="quotaFulfilledSMHQ">Quota Fulfilled</label>
+        <input type="number" id="quotaFulfilledSMHQ" name="quotaFulfilledSMHQ" placeholder="Enter quota fulfilled">
 
-  <label for="quotaReachedSMHQ">Quota Reached</label>
-  <input type="number" id="quotaReachedSMHQ" name="quotaReachedSMHQ" placeholder="Enter quota reached">
+        <label for="quotaReachedSMHQ">Quota Reached</label>
+        <input type="number" id="quotaReachedSMHQ" name="quotaReachedSMHQ" placeholder="Enter quota reached">
 
-  <label for="totalScrapSMHQ">Total Scrap</label>
-  <input type="number" id="totalScrapSMHQ" name="totalScrapSMHQ" placeholder="Enter total scrap collected">
-</div>
+        <label for="totalScrapSMHQ">Total Scrap</label>
+        <input type="number" id="totalScrapSMHQ" name="totalScrapSMHQ" placeholder="Enter total scrap collected">
+      </div>
 
     
       <!-- Date Input -->
       <label for="date">Date</label>
       <input type="date" id="date" name="date" required>
     
-      <!-- Player Entries (4 Optional Text Boxes) -->
-      <label for="players">Player Names</label>
-      <input type="text" id="player1" name="player1" placeholder="Player 1">
-      <input type="text" id="player2" name="player2" placeholder="Player 2">
-      <input type="text" id="player3" name="player3" placeholder="Player 3">
-      <input type="text" id="player4" name="player4" placeholder="Player 4">
-    
-      <!-- Video Links for Each Player -->
-      <label for="videos">Video Links</label>
-      <div id="videoFields">
-        <label for="videos1">Videos for Player 1</label>
-        <textarea id="videos1" name="videos1" placeholder="Enter video links for Player 1, separated by commas"></textarea>
-    
-        <label for="videos2">Videos for Player 2</label>
-        <textarea id="videos2" name="videos2" placeholder="Enter video links for Player 2, separated by commas"></textarea>
-    
-        <label for="videos3">Videos for Player 3</label>
-        <textarea id="videos3" name="videos3" placeholder="Enter video links for Player 3, separated by commas"></textarea>
-    
-        <label for="videos4">Videos for Player 4</label>
-        <textarea id="videos4" name="videos4" placeholder="Enter video links for Player 4, separated by commas"></textarea>
-      </div>
+      <div id="playerFields"></div>
+      <button type="button" id="addPlayerBtn" class="add-player-btn">+ Add another player 👤</button>
     
       <label for="version">Version</label>
       <select id="version" name="version" required>
         <option value="" disabled selected>Select a version</option>
-        <option value="v40">v40</option>
-        <option value="v45">v45</option>
-        <option value="v49">v49</option>
-        <option value="v50">v50</option>
-        <option value="v56">v56</option>
-        <option value="v62">v62</option>
-        <option value="v64">v64</option>
-        <option value="v69">v69</option>
-        <option value="v72">v72</option>
-        <option value="v73">v73</option>
         <option value="v81">v81</option>
+        <option value="v73">v73</option>
+        <option value="v72">v72</option>
+        <option value="v69">v69</option>
+        <option value="v64">v64</option>
+        <option value="v62">v62</option>
+        <option value="v56">v56</option>
+        <option value="v50">v50</option>
+        <option value="v49">v49</option>
+        <option value="v45">v45</option>
+        <option value="v40">v40</option>
       </select>
 
       <label for="logs">Logs</label>
-      <textarea id="logs" name="logs" placeholder="Enter link/s to player logs. If multiple, seperate with commas"></textarea>
+      <textarea id="logs" name="logs" placeholder="Enter link to log files. Make sure the logs are viewable to anyone."></textarea>
+      
+      <label for="spreadsheet">Spreadsheet</label>
+      <textarea id="spreadsheet" name="spreadsheet" placeholder="Enter spreadsheet link here. Make sure it's viewable to anyone."></textarea>
 
-      <label for="comments">Comments</label>
-      <textarea id="comments" name="comments" placeholder="Enter comments about the run"></textarea>
+      <label for="publicComments">Public Comments</label>
+      <textarea id="publicComments" name="publicComments" placeholder="Enter comments that can be viewed by anyone."></textarea>
+
+      <label for="comments">Additional Notes</label>
+      <textarea id="comments" name="comments" placeholder="Enter notes that can only be viewed by verifiers and managers."></textarea>
     
       <button type="submit">Submit Run</button>
     </form>

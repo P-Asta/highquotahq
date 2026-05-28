@@ -543,9 +543,21 @@ export function showRunDetails(run, index) {
   // Helper function to format timestamps
   const formatTimestamp = (timestamp) => {
     if (!timestamp) return 'N/A';
-    if (timestamp.toDate) return new Date(timestamp.toDate()).toLocaleString();
-    if (timestamp.seconds) return new Date(timestamp.seconds * 1000).toLocaleString();
-    return 'N/A';
+
+    let date;
+
+    if (typeof timestamp.toDate === 'function'){
+      date = timestamp.toDate();
+    }else if (timestamp.seconds){
+      date = new Date(timestamp.seconds * 1000);
+    }else if (timestamp instanceof Date) {
+      date = timestamp;
+    } else {
+      return 'N/A';
+    }
+
+    const hasTime = date.getUTCHours() !== 0 || date.getUTCMinutes() !== 0 || date.getUTCSeconds() !== 0 || date.getUTCMilliseconds() !== 0;
+    return hasTime ? date.toLocaleString() : date.toLocaleDateString();
   };
 
   // Helper function to format and display videos
@@ -604,11 +616,8 @@ export function showRunDetails(run, index) {
     runDetailsHtml += `
       <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
       <p><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
-      <p><strong>Quota Reached:</strong> ${run.quotaReached}</p>
+      <p><strong>Number of Quotas Reached:</strong> ${run.quotaReached}</p>
       <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
-      <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-      <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
-      <p><strong>Version:</strong> ${run.version}</p>
     `;
   }
   else if (activeCollection.endsWith('_sdc')) {
@@ -617,9 +626,6 @@ export function showRunDetails(run, index) {
         <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
         <p><strong>Equipment:</strong> ${run.equipment}</p>
         <p><strong>Moon:</strong> ${run.moon}</p>
-        <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-        <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
-        <p><strong>Version:</strong> ${run.version}</p>
       `;
     } else {
       runDetailsHtml += `
@@ -627,22 +633,16 @@ export function showRunDetails(run, index) {
         <p><strong>Scrap Type:</strong> ${run.scrapType}</p>
         <p><strong>Equipment:</strong> ${run.equipment}</p>
         <p><strong>Moon:</strong> ${run.moon}</p>
-        <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-        <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
-        <p><strong>Version:</strong> ${run.version}</p>
       `;
     }
   }
-  else if (activeCollection === '_smhq') {
+  else if (activeCollection.endsWith('_smhq')) {
     runDetailsHtml += `
       <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
       <p><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>
-      <p><strong>Quota Reached:</strong> ${run.quotaReached}</p>
+      <p><strong>Number of Quotas Reached:</strong> ${run.quotaReached}</p>
       <p><strong>Total Scrap:</strong> ${run.totalScrap}</p>
       <p><strong>Moon:</strong> ${run.moon}</p>
-      <p><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-      <p><strong>Verified By:</strong> ${run.verifiedBy}</p>
-      <p><strong>Version:</strong> ${run.version}</p>
     `;
   }
   else {
@@ -651,8 +651,29 @@ export function showRunDetails(run, index) {
     `;
   }
 
-  
+  runDetailsHtml += `
+    <p class="run-stat"><strong>Version:</strong> ${run.version}</p>
+    <p class="run-stat"><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
+    <p class="run-stat"><strong>Verified By:</strong> ${run.verifiedBy}</p>
+    <p class="run-stat"><strong>Submitted By:</strong> ${run.submitter}</p>
+    <p class="run-stat"><strong>Submitted At:</strong> ${formatTimestamp(run.submissionDate)}</p>
+  `;
+
   detailsPanel.innerHTML = runDetailsHtml;
+
+  if (run.publicComments){
+    const commentsDiv = document.createElement('div');
+    commentsDiv.classList.add('comments-div');
+    const commentsLabel = document.createElement('h3');
+    commentsLabel.classList.add('comments-title');
+    commentsLabel.textContent = "Comments:";
+    const commentsContent = document.createElement('p');
+    commentsContent.classList.add('public-comment');
+    commentsContent.textContent = run.publicComments;
+    commentsDiv.appendChild(commentsLabel);
+    commentsDiv.appendChild(commentsContent);
+    detailsPanel.appendChild(commentsDiv);
+  }
 
   setTimeout(() => {
     detailsPanel.classList.add('active');

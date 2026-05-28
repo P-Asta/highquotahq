@@ -636,7 +636,7 @@ export function showRunDetails(run, index) {
       `;
     }
   }
-  else if (activeCollection === '_smhq') {
+  else if (activeCollection.endsWith('_smhq')) {
     runDetailsHtml += `
       <p><strong>Quota Amount:</strong> ${run.quotaAmount}</p>
       <p><strong>Quota Fulfilled:</strong> ${run.quotaFulfilled}</p>

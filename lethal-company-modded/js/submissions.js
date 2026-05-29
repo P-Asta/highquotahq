@@ -77,7 +77,7 @@ const gameData = {
   brutal_versions: ["v73", "v72", "v69", "v64", "v62", "v56", "v50", "v49"],
   eclipsed_versions: ["v81", "v73", "v72", "v69", "v64", "v62", "v56", "v50", "v49", "v45", "v40"],
   wesleys_versions: ["v73", "v72", "v69"],
-  classic_versions: ["v73", "v72", "v69", "v64", "v62", "v56"]
+  classic_versions: ["v81", "v73", "v72", "v69", "v64", "v62", "v56"]
 }
 
 const playersContainer = document.getElementById('playerFields');

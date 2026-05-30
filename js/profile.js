@@ -347,7 +347,7 @@ export function showRunDetails(run, index, collectionName) {
     if (typeof timestamp.toDate === 'function'){
       date = timestamp.toDate();
     }else if (timestamp.seconds){
-      date = new Date(timestamp.seconds);
+      date = new Date(timestamp.seconds * 1000);
     }else if (timestamp instanceof Date) {
       date = timestamp;
     } else {

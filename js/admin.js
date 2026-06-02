@@ -817,6 +817,10 @@ async function verifyRun(runId, collectionName, role) {
         queryConstraints.push(where("moon", "==", newRun.moon));
     }
 
+    if (newRun.hasOwnProperty("scrapType")){
+        queryConstraints.push(where("scrapType", "==", newRun.scrapType));
+    }
+
     const obsoleteRunsQuery = query(collection(db, collectionName), ...queryConstraints);
     const obsoleteRunsSnap = await getDocs(obsoleteRunsQuery);
 

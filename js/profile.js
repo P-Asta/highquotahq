@@ -445,8 +445,10 @@ export function showRunDetails(run, index, collectionName) {
 
   runDetailsHtml += `
     <p class="run-stat"><strong>Version:</strong> ${run.version}</p>
-    <p class="run-stat"><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
-    <p class="run-stat"><strong>Verified By:</strong> ${run.verifiedBy}</p>
+    ${run.verified ? 
+      `<p class="run-stat"><strong>Verified At:</strong> ${formatTimestamp(run.verifiedAt)}</p>
+      <p class="run-stat"><strong>Verified By:</strong> ${run.verifiedBy}</p>` 
+      : ''}
     <p class="run-stat"><strong>Submitted By:</strong> ${run.submitter}</p>
     <p class="run-stat"><strong>Submitted At:</strong> ${formatTimestamp(run.submissionDate)}</p>
   `;

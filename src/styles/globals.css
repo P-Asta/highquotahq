@@ -1,0 +1,366 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+:root {
+  --font-sans: WantedSans, "Wanted Sans", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: D2Coding, "D2Coding ligature", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --background: 0 0% 100%;
+  --foreground: 0 0% 9%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 9%;
+  --primary: 0 0% 9%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 98%;
+  --secondary-foreground: 0 0% 9%;
+  --muted: 0 0% 98%;
+  --muted-foreground: 0 0% 30%;
+  --accent: 0 0% 98%;
+  --accent-foreground: 0 0% 9%;
+  --border: 0 0% 92%;
+  --input: 0 0% 92%;
+  --ring: 212 100% 48%;
+  --app-bg: #ffffff;
+  --panel-bg: #ffffff;
+  --panel-muted: #fafafa;
+  --panel-border: rgba(0, 0, 0, 0.08);
+  --panel-border-strong: rgba(0, 0, 0, 0.08);
+  --text-strong: #171717;
+  --text-muted: #4d4d4d;
+  --text-soft: #666666;
+  --shadow-card-contrast: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 2px rgba(0, 0, 0, 0.04), 0 8px 8px -8px rgba(0, 0, 0, 0.04), 0 0 0 1px #fafafa;
+  --shadow-border-contrast: 0 0 0 1px var(--panel-border);
+  --motion-fast: 120ms;
+  --motion-base: 180ms;
+  --motion-ease: cubic-bezier(0.2, 0, 0, 1);
+  --interactive-hover-shadow: 0 0 0 1px var(--panel-border), 0 2px 2px rgba(0, 0, 0, 0.04), 0 8px 16px -8px rgba(0, 0, 0, 0.08);
+  --interactive-active-shadow: 0 0 0 1px var(--panel-border-strong), inset 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.dark {
+  --background: 0 0% 0%;
+  --foreground: 0 0% 93%;
+  --card: 0 0% 0%;
+  --card-foreground: 0 0% 93%;
+  --primary: 0 0% 93%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 0 0% 0%;
+  --secondary-foreground: 0 0% 93%;
+  --muted: 0 0% 4%;
+  --muted-foreground: 0 0% 63%;
+  --accent: 0 0% 4%;
+  --accent-foreground: 0 0% 93%;
+  --border: 0 0% 20%;
+  --input: 0 0% 20%;
+  --ring: 212 100% 62%;
+  --app-bg: #000000;
+  --panel-bg: #000000;
+  --panel-muted: #0a0a0a;
+  --panel-border: rgba(255, 255, 255, 0.16);
+  --panel-border-strong: rgba(255, 255, 255, 0.28);
+  --text-strong: #ffffff;
+  --text-muted: #a3a3a3;
+  --text-soft: #8a8a8a;
+  --shadow-card-contrast: 0 0 0 1px var(--panel-border), 0 16px 48px rgba(0, 0, 0, 0.45);
+  --shadow-border-contrast: 0 0 0 1px var(--panel-border);
+  --interactive-hover-shadow: 0 0 0 1px var(--panel-border-strong), 0 0 0 3px rgba(255, 255, 255, 0.04);
+  --interactive-active-shadow: 0 0 0 1px var(--panel-border-strong), inset 0 1px 2px rgba(255, 255, 255, 0.08);
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--app-bg);
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--app-bg);
+  color: var(--text-strong);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: #ededed;
+  color: #171717;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+a,
+button,
+[role="button"],
+.shadow-card,
+.shadow-border {
+  transition-duration: var(--motion-base);
+  transition-property: background-color, border-color, box-shadow, color, opacity, transform;
+  transition-timing-function: var(--motion-ease);
+}
+
+button,
+[role="button"],
+a[href],
+summary,
+select,
+input[type="checkbox"],
+input[type="radio"] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:not(:disabled),
+[role="button"],
+a[href],
+summary,
+select:not(:disabled),
+input[type="checkbox"]:not(:disabled),
+input[type="radio"]:not(:disabled) {
+  cursor: pointer;
+}
+
+button:not(:disabled):not([data-control-trigger]):active,
+[role="button"]:not([data-control-trigger]):active,
+a[href]:active,
+summary:active {
+  box-shadow: var(--interactive-active-shadow);
+  transition-duration: var(--motion-fast);
+}
+
+button:not(:disabled):hover,
+[role="button"]:hover {
+  box-shadow: var(--interactive-hover-shadow);
+}
+
+button[data-control-trigger],
+button[data-control-trigger]:hover,
+button[data-control-trigger]:active,
+[data-control-trigger][role="button"],
+[data-control-trigger][role="button"]:hover,
+[data-control-trigger][role="button"]:active {
+  box-shadow: var(--shadow-border-contrast) !important;
+}
+
+a[href] {
+  text-underline-offset: 4px;
+}
+
+a[href]:hover {
+  text-decoration: underline;
+}
+
+@keyframes surface-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes surface-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+code,
+kbd,
+pre,
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.focus-ring {
+  @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a72ef];
+}
+
+.section-shell {
+  @apply container py-20 md:py-28;
+}
+
+.shadow-system-card {
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 2px rgba(0, 0, 0, 0.04), 0 8px 8px -8px rgba(0, 0, 0, 0.04), 0 0 0 1px #fafafa;
+}
+
+.shadow-system-border {
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.shadow-card,
+.shadow-system-card {
+  box-shadow: var(--shadow-card-contrast) !important;
+}
+
+.shadow-border,
+.shadow-system-border,
+.shadow-light {
+  box-shadow: var(--shadow-border-contrast) !important;
+}
+
+.dark body,
+.dark .min-h-screen {
+  background: var(--app-bg) !important;
+  color: var(--text-strong) !important;
+}
+
+.dark .bg-white,
+.dark [class*="bg-[#ffffff]"],
+.dark [class*="bg-\\[\\#ffffff\\]"] {
+  background-color: var(--panel-bg) !important;
+}
+
+.dark [class*="bg-[#fafafa]"],
+.dark [class*="bg-\\[\\#fafafa\\]"] {
+  background-color: var(--panel-muted) !important;
+}
+
+.dark [class*="text-[#171717]"],
+.dark [class*="text-\\[\\#171717\\]"] {
+  color: var(--text-strong) !important;
+}
+
+.dark [class*="text-[#4d4d4d]"],
+.dark [class*="text-\\[\\#4d4d4d\\]"],
+.dark [class*="text-[#666]"],
+.dark [class*="text-\\[\\#666\\]"],
+.dark [class*="text-[#808080]"],
+.dark [class*="text-\\[\\#808080\\]"] {
+  color: var(--text-muted) !important;
+}
+
+.dark [class*="text-[#0072f5]"],
+.dark [class*="text-\\[\\#0072f5\\]"] {
+  color: #7ab7ff !important;
+}
+
+.dark .shadow-\[0_0_0_1px_rgb\(235\2c 235\2c 235\)\],
+.dark [class*="shadow-[0_0_0_1px_rgb(235,235,235)]"],
+.dark [class*="shadow-\\[0_0_0_1px_rgb"] {
+  box-shadow: var(--shadow-border-contrast) !important;
+}
+
+.dark [class*="shadow-[inset_0_-1px_0_#ebebeb]"] {
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+.dark [class*="shadow-[inset_1px_0_0_#ebebeb]"] {
+  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+.dark input,
+.dark select,
+.dark textarea {
+  background: #000000 !important;
+  color: var(--text-strong) !important;
+  box-shadow: var(--shadow-border-contrast) !important;
+}
+
+.dark button:not(:disabled):hover,
+.dark [role="button"]:hover {
+  box-shadow: var(--interactive-hover-shadow) !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #8a8a8a;
+}
+
+.dark .focus-ring:focus-visible {
+  outline-color: #ffffff;
+}
+
+.dark table {
+  color: var(--text-strong);
+}
+
+.dark code,
+.dark kbd {
+  background: #000000;
+  color: var(--text-strong);
+  box-shadow: var(--shadow-border-contrast);
+}
+
+.record-row:hover {
+  background: #f5f5f5;
+  box-shadow: none !important;
+}
+
+.dark .record-row:hover {
+  background: #101010;
+  box-shadow: none !important;
+}
+
+.record-row[data-top-rank="true"],
+.record-row[data-top-rank="true"]:hover {
+  box-shadow: inset 3px 0 0 #171717 !important;
+}
+
+.dark .record-row[data-top-rank="true"],
+.dark .record-row[data-top-rank="true"]:hover {
+  box-shadow: inset 3px 0 0 #ffffff !important;
+}
+
+.rdp button:active {
+  box-shadow: inherit !important;
+  transition-duration: var(--motion-fast);
+}
+
+.rdp [data-selected="true"] button {
+  background: #171717 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 1px #171717 !important;
+}
+
+.dark .rdp [data-selected="true"] button {
+  background: #ffffff !important;
+  color: #000000 !important;
+  box-shadow: 0 0 0 1px #ffffff !important;
+}
+
+.rdp [data-today="true"]:not([data-selected="true"]) button {
+  box-shadow: inset 0 0 0 1px #171717 !important;
+}
+
+.dark .rdp [data-today="true"]:not([data-selected="true"]) button {
+  box-shadow: inset 0 0 0 1px #ffffff !important;
+}
